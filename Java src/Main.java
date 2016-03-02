@@ -11,9 +11,11 @@ import java.util.regex.Pattern;
 
 public class Main {
 	
+	//[start] user interface related
+	
 	static final String move_input_format_msg = "<SQUARE> <X> <Y> <ROT SQUARE> <ROT DIR>";
 	static final String invalid_move_msg = "Invalid move";
-	
+
 	 static String read_from_console() {
 	        Scanner scanner = new Scanner(System.in);
 	        scanner.useDelimiter("\n");
@@ -55,7 +57,12 @@ public class Main {
 			System.out.println(move_input_format_msg);
 			get_user_move_input(player_move_input,user_input_pattern);
 			
-			move.set_move_from_user_input(player_move_input);
+			try {
+				move.set_move_from_user_input(player_move_input);
+			} catch (Exception e1) {
+				System.out.println(invalid_move_msg);
+				continue;
+			}
 			if(!move.is_move_possible(game_board)){
 				System.out.println(invalid_move_msg);
 				continue;
@@ -71,6 +78,8 @@ public class Main {
 		}
 	}
 	
+	//[end] user interface related
+	 
 	public static void main(String[] args) throws IOException {
 
 		run_game_multiplayer();
