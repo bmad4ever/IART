@@ -13,7 +13,7 @@ namespace Pentago_Tests
             Pentago_GameBoard gb = new Pentago_GameBoard();
             bool? winning_player = null;
 
-            while(!gb.game_ended(ref winning_player))
+            while(!gb.game_ended(out winning_player))
             {
                 Console.Clear();
                 gb.print_board();
