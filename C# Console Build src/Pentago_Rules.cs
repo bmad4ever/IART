@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 public class Pentago_Rules : GameRules<Pentago_GameBoard,Pentago_Move> {
 
@@ -57,7 +58,7 @@ public class Pentago_Rules : GameRules<Pentago_GameBoard,Pentago_Move> {
     {
         typeA = true; typeB = true;
         typeC = new bool[] { false, false, false, false };
-
+        
         Pentago_GameBoard.hole_state[] aux = (Pentago_GameBoard.hole_state[]) board.Clone();
         typeC[0] = square0_has_maindiagonal_symmetry(aux);
 
