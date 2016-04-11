@@ -1,6 +1,7 @@
 using System;
+using System.Collections.Generic;
 
-public class Pentago_GameBoard
+public class Pentago_GameBoard 
 {
 
     /* indexes in the game board
@@ -79,6 +80,17 @@ public class Pentago_GameBoard
         return index + x + y * 6;
     }
 
+    public static void board_index_to_position(int index, out int x , out int y, out int outsquare)
+    {
+        outsquare = 0;
+        int line = index / 6;
+        int row = index % 6;
+        if (line > 2) outsquare = 2;
+        if (row > 2) outsquare++;
+
+        x = row % 3;
+        y = line % 3;
+    }
 
     public static bool compare_boards(hole_state[] b1, hole_state[] b2)
     {
@@ -89,7 +101,8 @@ public class Pentago_GameBoard
 
     public static bool operator ==(Pentago_GameBoard b1, Pentago_GameBoard b2)
     {
-        if (b1.turn_state != b2.turn_state || b1.player_turn != b2.turn_state) return false;
+
+        if (b1.turn_state != b2.turn_state || b1.player_turn != b2.player_turn) return false;
 
         for (int i = 0; i < 36; i++)
             if (b1.board[i] != b2.board[i]) return false;
@@ -102,6 +115,15 @@ public class Pentago_GameBoard
         return !(b1 == b2);
     }
 
+ /*   public override bool Equals(object obj) {
+       
+        if (obj is Pentago_GameBoard)
+            return (Pentago_GameBoard)obj == this;
+        else return false;
+    }
+
+    public override int GetHashCode()
+    {  }*/
 
     public void print_board()
     {
@@ -284,5 +306,6 @@ public class Pentago_GameBoard
 
         return board_full || black_made_a_line || white_made_a_line;
     }
+
 
 }

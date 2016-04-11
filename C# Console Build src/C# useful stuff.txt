@@ -2,7 +2,11 @@
 por defeito os metodos de classe sao privados, devido ao principio de encapsulamento
 (em java sao publicos por default)
 e preciso meter a keyword public ou protected
-
+-----------------------------------------------
+func (int abc, bool foo= false)
+podemos atribuir valores defaults (so nos argumentos finais, sem buracos)
+chamando func(4) a funcao e chamada com foo = false
+chamando func(3,true) ja altera o valor de foo
 -----------------------------------------------
 nullable types:
 int? , bool?, float?, etc...

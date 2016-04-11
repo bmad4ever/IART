@@ -55,7 +55,7 @@ public class Pentago_Move {
     /// DEPRECATED !!! USE move with 3 args!!! (can still be used fr debug and what not)
     /// </summary>
     /// <returns></returns>
-    public Pentago_GameBoard.hole_state[] move(Pentago_GameBoard.hole_state[] gb,bool turn) 
+   /* public Pentago_GameBoard.hole_state[] move(Pentago_GameBoard.hole_state[] gb,bool turn) 
 	{
 		gb[index]//Pentago_GameBoard.board_postion_to_index(hole2place_x, hole2place_y,square2place)] 
 		= turn == Pentago_GameBoard.blacks_turn? Pentago_GameBoard.hole_state.has_black: Pentago_GameBoard.hole_state.has_white;
@@ -72,7 +72,7 @@ public class Pentago_Move {
 				=gb[Pentago_GameBoard.board_position_to_index(x,y ,square2rotate)];
 		
 		return new_gb;
-	}
+	}*/
 
     /// <summary>
     /// Applies the play to the gameboard. Use apply_move2board instead unless you want to reutilize the Pentago_Move instance (usefull in aux methods to process stuff faster)
@@ -107,15 +107,27 @@ public class Pentago_Move {
 
     public Pentago_GameBoard state_after_move(Pentago_GameBoard gb) 
 	{
-		return new Pentago_GameBoard( this.move(gb.board,gb.get_player_turn()) ,
+		return new Pentago_GameBoard( this.move(gb.board,gb.get_player_turn(),gb.get_turn_state()) ,
             gb.get_turn_state()==Pentago_GameBoard.turn_state_rotate? !gb.get_player_turn()  : gb.get_player_turn()
             , !gb.get_turn_state());
 	}
 	
 	public void apply_move2board(Pentago_GameBoard gb) 
 	{
-		gb.board = this.move(gb.board,gb.get_player_turn(),gb.get_turn_state());
+        gb.board = this.move(gb.board, gb.get_player_turn(), gb.get_turn_state());
         if(gb.get_turn_state()==Pentago_GameBoard.turn_state_rotate) gb.switch_player_turn();
         gb.switch_turn_state();
     }
+
+    public override string ToString()
+    {
+        int x, y, sqr;
+        Pentago_GameBoard.board_index_to_position(index,out x,out y,out sqr);
+
+        return "place(" + x + "," + y + "," + sqr + ")" +
+            "  rot(" + square2rotate + ","
+            + (rotDir==rotate_anticlockwise? "anticlock":"clock")
+            + "," + ")";
+    }
+
 }

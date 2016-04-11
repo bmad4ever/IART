@@ -12,7 +12,7 @@ interface GameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 	GAME_MOVE_DESCRIPTION[] possible_plays(GAME_BOARD gb);
 	
 	//retorna o board resultante após a realização de 1 jogada
-	GAME_BOARD board_after_play(GAME_MOVE_DESCRIPTION gmd);
+	GAME_BOARD board_after_play(GAME_BOARD gb, GAME_MOVE_DESCRIPTION gmd);
 	
 	//retorna os estados possiveis seguintes
 	GAME_BOARD[] next_states(GAME_BOARD gb);
