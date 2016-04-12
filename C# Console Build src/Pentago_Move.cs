@@ -30,6 +30,12 @@ public class Pentago_Move {
         rotDir = rot_dir;
     }
 
+    public Pentago_Move(int ind, int s2r, bool rot_dir)
+    {
+        index = ind;
+        square2rotate = s2r;
+        rotDir = rot_dir;
+    }
 
     void set_move_from_user_input(int[] move) 
 	{

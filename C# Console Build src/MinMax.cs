@@ -2,7 +2,7 @@
 //GAME_BOARD deve contar 
 //tabuleiro ; peças ; qual o jogador a jogar ; auxiliares ao display do jogo (ex: dizer qual a peça a mover-se se for preciso animar no display)
 
-interface GameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
+interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 	
 	//return false p/ usar game_over
 	//return true p/ usar game_over_evaluate

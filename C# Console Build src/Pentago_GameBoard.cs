@@ -307,5 +307,8 @@ public class Pentago_GameBoard
         return board_full || black_made_a_line || white_made_a_line;
     }
 
-
+    public Pentago_GameBoard Clone()
+    {
+        return new Pentago_GameBoard((hole_state[]) board.Clone(), player_turn, turn_state);
+    }
 }

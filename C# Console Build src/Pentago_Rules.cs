@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Pentago_Rules : GameRules<Pentago_GameBoard, Pentago_Move>
+public class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 {
 
     public enum EvaluationFunction { func1, blabla2, blabla3 };
@@ -12,8 +12,8 @@ public class Pentago_Rules : GameRules<Pentago_GameBoard, Pentago_Move>
     public enum NextStatesFunction { all_states, removeSym_A_B, removeSym_A_B_C, someotherxpto };
     NextStatesFunction nsf;
 
-    static Pentago_Move[] all_possible_place_piece_moves = null;
-    static Pentago_Move[] all_possible_rotate_squares_moves = null;
+    public static Pentago_Move[] all_possible_place_piece_moves = null;
+    public static Pentago_Move[] all_possible_rotate_squares_moves = null;
 
     public Pentago_Rules(EvaluationFunction ef, NextStatesFunction nsf, bool remove_repeated_states_on_nextStates = false)
     {
@@ -154,15 +154,15 @@ public class Pentago_Rules : GameRules<Pentago_GameBoard, Pentago_Move>
         Pentago_Move[] result = null;
         if (gb.get_turn_state() == Pentago_GameBoard.turn_state_addpiece)
         {
-            result = all_possible_place_piece_moves.Where(move => move.is_move_possible(gb)).ToArray();
+            return all_possible_place_piece_moves.Where(move => move.is_move_possible(gb)).ToArray();
         }
         else
         {
-            result = all_possible_rotate_squares_moves.Where(move => move.is_move_possible(gb)).ToArray();
+            //it is allways possible to rotate! no need to check
+            return all_possible_rotate_squares_moves;//result = all_possible_rotate_squares_moves.Where(move => move.is_move_possible(gb)).ToArray();
         }
 
-        return result;
-        throw new NotImplementedException();
+       // return result;
     }
 
     /// <summary>
