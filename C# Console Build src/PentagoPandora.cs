@@ -1,5 +1,7 @@
 ﻿#define V2
 //#define FORCE_GC
+#define ONLY_SAVE_BELOW_MAXDEPTH
+//#define OPEN_ON_START_CLOSE_ON_END_ONLY
 
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,65 @@ namespace Pentago_Tests
 {
     static class PentagoPandora
     {
+#if ONLY_SAVE_BELOW_MAXDEPTH
+        const int MAX_FILE_NUM_USED = 15;
+        const int MAX_DEPTH_2_SAVE = MAX_FILE_NUM_USED * 2;
+# else
+        const int MAX_FILE_NUM_USED = 18;
+#endif
+
+#if OPEN_ON_START_CLOSE_ON_END_ONLY
+
+        static FileStream[] filestreams;
+        static BinaryWriter[] writers;
+
+        static void OpenFiles()
+        {
+            filestreams = new FileStream[MAX_FILE_NUM_USED];
+            writers = new BinaryWriter[MAX_FILE_NUM_USED];
+
+            for (int i = 0; i < MAX_FILE_NUM_USED; i++)
+            {
+                filestreams[i] = new FileStream("pent_" + i, FileMode.Append, FileAccess.Write, FileShare.None);
+                writers[i] = new BinaryWriter(filestreams[i]);
+            }
+        }
+
+        static void CloseFiles()
+        {
+            for (int i = 0; i < MAX_FILE_NUM_USED; i++)
+            {
+                writers[i].Close();
+                filestreams[i].Close();
+            }
+        }
+
+        static int get_board_file_index(Pentago_GameBoard gb)
+        {
+            Pentago_GameBoard.hole_state[] board = gb.board;
+            int numWhites = 0;
+            // numBlacks = 0;
+            for (int i = 0; i < 36; i++)
+            {
+                if (board[i] == Pentago_GameBoard.hole_state.is_empty) continue;
+                if (board[i] == Pentago_GameBoard.hole_state.has_white) numWhites++;
+                //else numBlacks++;
+            }
+
+            return numWhites;
+        }
+
+        static void appendData2(int file_index, byte id1, ulong id2, short index, byte square2rotate, bool rotDir)
+        {
+            writers[file_index].Write(id1);
+            writers[file_index].Write(id2);
+            writers[file_index].Write(index);
+            writers[file_index].Write(square2rotate);
+            writers[file_index].Write(rotDir);
+        }
+
+#endif
+
         //only possible because we already know there is a winning strategy
         //the ultimate Pentago AI is about to be born !!!
 
@@ -108,10 +169,24 @@ namespace Pentago_Tests
         {
             createDataFiles();
             rules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.func1, Pentago_Rules.NextStatesFunction.all_states);
+
+#if OPEN_ON_START_CLOSE_ON_END_ONLY
+            OpenFiles();
+#endif
+
             BUILD_PANDORA_MINIMAX_MAX(new Pentago_GameBoard());
+
+#if OPEN_ON_START_CLOSE_ON_END_ONLY
+            CloseFiles();
+#endif
+
         }
 
-        static bool BUILD_PANDORA_MINIMAX_MAX(Pentago_GameBoard gb)
+#if ONLY_SAVE_BELOW_MAXDEPTH
+        static bool BUILD_PANDORA_MINIMAX_MAX(Pentago_GameBoard gb,int depth=0)
+#else
+       static bool BUILD_PANDORA_MINIMAX_MAX(Pentago_GameBoard gb)
+#endif
         {
             bool? winner;
             if (gb.game_ended(out winner))
@@ -140,16 +215,47 @@ namespace Pentago_Tests
                 foreach (Pentago_Move pm2 in plays2)
                     if (
 #if V2
-                        BUILD_PANDORA_MINIMAX_MIN_V2(pm2.state_after_move(pm1.state_after_move(auxOriginal)))
+#if ONLY_SAVE_BELOW_MAXDEPTH
+                        BUILD_PANDORA_MINIMAX_MIN_V2(pm2.state_after_move(pm1.state_after_move(auxOriginal)),depth+1)
 #else
-                        BUILD_PANDORA_MINIMAX_MIN(pm2.state_after_move(pm1.state_after_move(auxOriginal)))
+        BUILD_PANDORA_MINIMAX_MIN_V2(pm2.state_after_move(pm1.state_after_move(auxOriginal)))
+#endif
+
+#else
+#if ONLY_SAVE_BELOW_MAXDEPTH
+        BUILD_PANDORA_MINIMAX_MIN(pm2.state_after_move(pm1.state_after_move(auxOriginal)),depth+1)
+#else
+        BUILD_PANDORA_MINIMAX_MIN(pm2.state_after_move(pm1.state_after_move(auxOriginal)))
+#endif
+                        
 #endif
 
                         )
                     {
-                        byte id1; ulong id2;
+#if ONLY_SAVE_BELOW_MAXDEPTH
+                        if (depth < MAX_DEPTH_2_SAVE)
+                        {
+                            byte id1; ulong id2;
+                            get_board_identifier(auxOriginal, out id1, out id2);
+
+#if OPEN_ON_START_CLOSE_ON_END_ONLY
+                            appendData2(get_board_file_index(auxOriginal), id1, id2, (short)pm1.index, (byte)pm2.square2rotate, pm2.rotDir);
+#else
+                            appendData(get_board_file(auxOriginal), id1, id2, (short)pm1.index, (byte)pm2.square2rotate, pm2.rotDir);
+#endif
+                        }
+#else
+                            byte id1; ulong id2;
                         get_board_identifier(auxOriginal, out id1, out id2);
-                        appendData(get_board_file(auxOriginal), id1, id2, (short)pm1.index, (byte)pm2.square2rotate, pm2.rotDir);
+
+#if OPEN_ON_START_CLOSE_ON_END_ONLY
+                            appendData2(get_board_file_index(auxOriginal), id1, id2, (short)pm1.index, (byte)pm2.square2rotate, pm2.rotDir);
+#else
+                            appendData(get_board_file(auxOriginal), id1, id2, (short)pm1.index, (byte)pm2.square2rotate, pm2.rotDir);
+#endif
+
+#endif
+
                         return true;
                     }
             }
@@ -157,7 +263,11 @@ namespace Pentago_Tests
             return false;
         }
 
+#if ONLY_SAVE_BELOW_MAXDEPTH
+        static bool BUILD_PANDORA_MINIMAX_MIN(Pentago_GameBoard gb,int depth)
+#else
         static bool BUILD_PANDORA_MINIMAX_MIN(Pentago_GameBoard gb)
+#endif
         {
             bool? winner;
             if (gb.game_ended(out winner))
@@ -184,7 +294,15 @@ namespace Pentago_Tests
             foreach (Pentago_Move pm1 in plays1)
             {
                 foreach (Pentago_Move pm2 in plays2)
-                    if (!BUILD_PANDORA_MINIMAX_MAX(pm2.state_after_move(pm1.state_after_move(auxOriginal))))
+                    if (
+#if ONLY_SAVE_BELOW_MAXDEPTH
+         !BUILD_PANDORA_MINIMAX_MAX(pm2.state_after_move(pm1.state_after_move(auxOriginal)),depth+1)
+#else
+        !BUILD_PANDORA_MINIMAX_MAX(pm2.state_after_move(pm1.state_after_move(auxOriginal)))
+#endif
+
+
+                        )
                     {
                         return false;
                     }
@@ -193,8 +311,11 @@ namespace Pentago_Tests
             return true;
         }
 
-
-        static bool BUILD_PANDORA_MINIMAX_MIN_V2(Pentago_GameBoard gb)
+#if ONLY_SAVE_BELOW_MAXDEPTH
+       static bool BUILD_PANDORA_MINIMAX_MIN_V2(Pentago_GameBoard gb,int depth)
+#else
+       static bool BUILD_PANDORA_MINIMAX_MIN_V2(Pentago_GameBoard gb)
+#endif
         {
             bool? winner;
             if (gb.game_ended(out winner))
@@ -229,7 +350,16 @@ namespace Pentago_Tests
             gbs = Pentago_Rules.removeDuplicates(gbs);
 
             foreach (Pentago_GameBoard brd in gbs)
-                if (!BUILD_PANDORA_MINIMAX_MAX(brd))
+                if (
+
+#if ONLY_SAVE_BELOW_MAXDEPTH
+        !BUILD_PANDORA_MINIMAX_MAX(brd,depth+1)
+#else
+        !BUILD_PANDORA_MINIMAX_MAX(brd)
+#endif
+
+
+                    )
                 {
 #if FORCE_GC
                     GC.Collect();
@@ -240,6 +370,9 @@ namespace Pentago_Tests
 
             return true;
         }
+
+
+
 
         public static void test_simple_save_read()
         {

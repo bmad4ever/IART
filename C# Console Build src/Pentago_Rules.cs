@@ -145,6 +145,7 @@ public class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         return newlist.ToArray();
     }
 
+
     #endregion
 
     //Interface Related --------------------------------------------------------------------
