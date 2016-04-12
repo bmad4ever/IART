@@ -125,6 +125,47 @@ public class Pentago_Move {
         gb.switch_turn_state();
     }
 
+
+    #region USEFULL HACKS
+
+    /// <summary>
+    /// applies 2 steps immiditaly, not made for standard minimax
+    /// </summary>
+    /// <param name="gb"></param>
+    /// <returns></returns>
+    public Pentago_GameBoard.hole_state[] move2steped(Pentago_GameBoard.hole_state[] gb, bool turn, bool turnstate)
+    {
+        Pentago_GameBoard.hole_state[] new_gb = (Pentago_GameBoard.hole_state[])gb.Clone();
+
+            new_gb[index]//Pentago_GameBoard.board_postion_to_index(hole2place_x, hole2place_y,square2place)] 
+            = turn == Pentago_GameBoard.blacks_turn ? Pentago_GameBoard.hole_state.has_black : Pentago_GameBoard.hole_state.has_white;
+
+            if (rotDir == rotate_clockwise)
+                for (int x = 0; x < 3; ++x) for (int y = 0; y < 3; ++y)
+                        new_gb[Pentago_GameBoard.board_position_to_index(Math.Abs(2 - y), x, square2rotate)]
+                            = gb[Pentago_GameBoard.board_position_to_index(x, y, square2rotate)];
+            else
+                for (int x = 0; x < 3; ++x) for (int y = 0; y < 3; ++y)
+                        new_gb[Pentago_GameBoard.board_position_to_index(y, Math.Abs(2 - x), square2rotate)]
+                        = gb[Pentago_GameBoard.board_position_to_index(x, y, square2rotate)];
+
+        return new_gb;
+    }
+
+    /// <summary>
+    /// applies 2 steps immiditaly, not made for standard minimax
+    /// </summary>
+    /// <param name="gb"></param>
+    /// <returns></returns>
+    public Pentago_GameBoard state_after_move_2steped(Pentago_GameBoard gb)
+    {
+        return new Pentago_GameBoard(this.move2steped(gb.board, gb.get_player_turn(), gb.get_turn_state()),
+            !gb.get_player_turn() 
+            , Pentago_GameBoard.turn_state_addpiece);
+    }
+
+    #endregion
+
     public override string ToString()
     {
         int x, y, sqr;

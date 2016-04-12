@@ -1,4 +1,7 @@
-﻿using System;
+﻿#define V2
+//#define FORCE_GC
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -100,6 +103,7 @@ namespace Pentago_Tests
             }
         }
 
+
         public static void BUILD_PANDORA()
         {
             createDataFiles();
@@ -134,7 +138,14 @@ namespace Pentago_Tests
             foreach (Pentago_Move pm1 in plays1)
             {
                 foreach (Pentago_Move pm2 in plays2)
-                    if (BUILD_PANDORA_MINIMAX_MIN(pm2.state_after_move(pm1.state_after_move(auxOriginal))))
+                    if (
+#if V2
+                        BUILD_PANDORA_MINIMAX_MIN_V2(pm2.state_after_move(pm1.state_after_move(auxOriginal)))
+#else
+                        BUILD_PANDORA_MINIMAX_MIN(pm2.state_after_move(pm1.state_after_move(auxOriginal)))
+#endif
+
+                        )
                     {
                         byte id1; ulong id2;
                         get_board_identifier(auxOriginal, out id1, out id2);
@@ -182,6 +193,53 @@ namespace Pentago_Tests
             return true;
         }
 
+
+        static bool BUILD_PANDORA_MINIMAX_MIN_V2(Pentago_GameBoard gb)
+        {
+            bool? winner;
+            if (gb.game_ended(out winner))
+            {
+                if (winner != null && winner == Pentago_GameBoard.whites_turn) return true;
+                else return false;
+            }
+
+            Pentago_GameBoard auxOriginal = gb.Clone();
+
+            Pentago_Move[] plays1 = rules.possible_plays(gb);
+            Pentago_GameBoard[] gbs = new Pentago_GameBoard[plays1.Length * 8];
+            //check for victory on 1st step
+            for (int i = plays1.Length-1;i>=0;i--)
+            {
+                gbs[i] = plays1[i].state_after_move(auxOriginal);
+                if (gbs[i].game_ended(out winner))
+                {
+                    if (winner != null && winner == Pentago_GameBoard.blacks_turn) return false;
+                }
+            }
+
+            //no victory found
+            //apply second step for each possible
+            for (int i = plays1.Length - 1; i >= 0; i--)
+            {
+                Pentago_GameBoard[] aux = Pentago_Rules.all_possible_rotate_squares_moves.Select(o=>o.state_after_move(gbs[i])).ToArray();
+                for(int a = 0; a<8; a++)
+                gbs[i+a* plays1.Length] = aux[a];
+            }
+
+            gbs = Pentago_Rules.removeDuplicates(gbs);
+
+            foreach (Pentago_GameBoard brd in gbs)
+                if (!BUILD_PANDORA_MINIMAX_MAX(brd))
+                {
+#if FORCE_GC
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+#endif
+                    return false;
+                }
+
+            return true;
+        }
 
         public static void test_simple_save_read()
         {

@@ -125,7 +125,7 @@ public class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     /// </summary>
     /// <param name="list"></param>
     /// <returns></returns>
-    static Pentago_GameBoard[] removeDuplicates(Pentago_GameBoard[] list)
+    public static Pentago_GameBoard[] removeDuplicates(Pentago_GameBoard[] list)
     {
         List<Pentago_GameBoard> newlist = new List<Pentago_GameBoard>();
         for (int i = list.Length - 1; i >= 0; i--)
