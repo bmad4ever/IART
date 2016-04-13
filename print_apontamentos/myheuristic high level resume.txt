@@ -16,6 +16,9 @@ does not consider "play canceling"
 (when many possibilities are blocked in current rotation and the
 opponent always cancels the rotation with it's inverse we endup
 considering possibilities that will never occur)
+only focus on placement and not on rotations
+
+maybe heavy to compute often
 
 THE GOOD
 
@@ -23,6 +26,12 @@ long term planning
 (just like tempi for example. 
 does not goes towards a victory but tries to keep the odds in favor)
 
+compatible - can be given a certain "weight"(importance) and used with other heuristics "easily"
+(functioning as the long term sight)
+
 considers the entire board 
 
-compatible - can be given a certain "weight"(importance) and used with other heuristics
+--------------------------
+heuristics may be combined
+
+HEURISTICA XPTO= min(HEURISTICA_1,HEURISTICA_2)
