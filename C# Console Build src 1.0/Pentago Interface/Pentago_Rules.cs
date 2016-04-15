@@ -3,6 +3,9 @@ using System.Linq;
 
 public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 {
+    const bool IA_PIECES_WHITES = Pentago_GameBoard.whites_turn;
+    const bool IA_PIECES_BLACKS = Pentago_GameBoard.blacks_turn;
+    bool IA_PIECES;
 
     public enum EvaluationFunction { func1, blabla2, blabla3 };
     EvaluationFunction ef;
@@ -14,14 +17,18 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     public static Pentago_Move[] all_possible_place_piece_moves = null;
     public static Pentago_Move[] all_possible_rotate_squares_moves = null;
 
-    public Pentago_Rules(EvaluationFunction ef, NextStatesFunction nsf, bool remove_repeated_states_on_nextStates = false)
+    public Pentago_Rules(EvaluationFunction ef = EvaluationFunction.func1, NextStatesFunction nsf = NextStatesFunction.all_states , bool iapieces = IA_PIECES_WHITES, bool remove_repeated_states_on_nextStates = false)
     {
         this.ef = ef;
         this.nsf = nsf;
         this.remove_repeated_states_on_nextStates = remove_repeated_states_on_nextStates;
+
+        IA_PIECES = iapieces;
+
         //create all possible plays.
         //since we are using a class, there is no need to initialize them again
         //when we are getting possible moves in a board
+        //just filter the impossible ones
 
         if (all_possible_place_piece_moves == null)
         {

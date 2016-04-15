@@ -12,18 +12,42 @@ using HOLESTATE = Pentago_GameBoard.hole_state;
 
 public partial class Pentago_Rules
 {
-
-    static public int select_min(params int[] values)
+    float heuristic1_bias = .5f;
+    /// <summary>
+    /// <para>set a bias to better define heuristic's 1 priorities (default is 0.5) </para>
+    /// <para>set a value towards 0 to prioritize minimization of adversary possible lines</para>
+    /// <para>set 1 to only prioritize maximizing own chances</para>
+    /// </summary>
+    /// <param name="bias">value from 0 to 1</param>
+    public void setHeuristic1Bias(float bias)
     {
-        return values.Min();
+        heuristic1_bias = bias;
     }
 
-    static public void calculate_available_classes(Pentago_GameBoard gb, out int available4whites, out int available4blacks)
+    /// <summary>
+    /// gets utility of a gameboard using heuristic1
+    /// </summary>
+    /// <param name="gb"></param>
+    /// <returns></returns>
+    public float heuristic1(HOLESTATE[] gb)
+    {
+        int whites, blacks;
+        calculate_available_classes(gb, out whites, out blacks);
+
+        float value = ((float)whites) * heuristic1_bias - ((float)blacks) * (1.0f - heuristic1_bias);
+        if (IA_PIECES == IA_PIECES_BLACKS) value *= -1;
+
+        return value;
+    }
+
+
+
+    public static void calculate_available_classes(Pentago_GameBoard gb, out int available4whites, out int available4blacks)
     {
         calculate_available_classes(gb.board, out available4whites, out available4blacks);
     }
 
-    static public void calculate_available_classes(HOLESTATE[] gb, out int available4whites, out int available4blacks)
+    static void calculate_available_classes(HOLESTATE[] gb, out int available4whites, out int available4blacks)
     {
         //int[] allsquares = new int[] { 0, 1, 2, 3 };
         available4whites = 0;
@@ -129,16 +153,16 @@ public partial class Pentago_Rules
 
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void available_pluscross(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
+    static void available_pluscross(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
     {
         available4whites = 0;
         available4blacks = 0;
 
-        HOLESTATE H11 = gb[Pentago_GameBoard.board_position_to_index(1, 1,square)];
-        HOLESTATE H10 = gb[Pentago_GameBoard.board_position_to_index(1, 0,square)];
-        HOLESTATE H12 = gb[Pentago_GameBoard.board_position_to_index(1, 2,square)];
-        HOLESTATE H01 = gb[Pentago_GameBoard.board_position_to_index(0, 1,square)];
-        HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1,square)];
+        HOLESTATE H11 = gb[Pentago_GameBoard.board_position_to_index(1, 1, square)];
+        HOLESTATE H10 = gb[Pentago_GameBoard.board_position_to_index(1, 0, square)];
+        HOLESTATE H12 = gb[Pentago_GameBoard.board_position_to_index(1, 2, square)];
+        HOLESTATE H01 = gb[Pentago_GameBoard.board_position_to_index(0, 1, square)];
+        HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1, square)];
 
         bool h11w = H11 != HOLESTATE.has_black;
         if (h11w && H10 != HOLESTATE.has_black) available4whites++;
@@ -155,16 +179,16 @@ public partial class Pentago_Rules
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void available_mulcross(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
+    static void available_mulcross(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
     {
         available4whites = 0;
         available4blacks = 0;
 
         HOLESTATE H11 = gb[Pentago_GameBoard.board_position_to_index(1, 1, square)];
-        HOLESTATE H00 = gb[Pentago_GameBoard.board_position_to_index(0, 0,square)];
-        HOLESTATE H02 = gb[Pentago_GameBoard.board_position_to_index(0, 2,square)];
-        HOLESTATE H20 = gb[Pentago_GameBoard.board_position_to_index(2, 0,square)];
-        HOLESTATE H22 = gb[Pentago_GameBoard.board_position_to_index(2, 2,square)];
+        HOLESTATE H00 = gb[Pentago_GameBoard.board_position_to_index(0, 0, square)];
+        HOLESTATE H02 = gb[Pentago_GameBoard.board_position_to_index(0, 2, square)];
+        HOLESTATE H20 = gb[Pentago_GameBoard.board_position_to_index(2, 0, square)];
+        HOLESTATE H22 = gb[Pentago_GameBoard.board_position_to_index(2, 2, square)];
 
         bool h11w = H11 != HOLESTATE.has_black;
         if (h11w && H00 != HOLESTATE.has_black) available4whites++;
@@ -180,15 +204,15 @@ public partial class Pentago_Rules
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void available_diamond(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
+    static void available_diamond(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
     {
         available4whites = 0;
         available4blacks = 0;
 
         HOLESTATE H10 = gb[Pentago_GameBoard.board_position_to_index(1, 0, square)];
-        HOLESTATE H12 = gb[Pentago_GameBoard.board_position_to_index(1, 2,square)];
-        HOLESTATE H01 = gb[Pentago_GameBoard.board_position_to_index(0, 1,square)];
-        HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1,square)];
+        HOLESTATE H12 = gb[Pentago_GameBoard.board_position_to_index(1, 2, square)];
+        HOLESTATE H01 = gb[Pentago_GameBoard.board_position_to_index(0, 1, square)];
+        HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1, square)];
 
         if (H10 != HOLESTATE.has_black) available4whites++;
         if (H12 != HOLESTATE.has_black) available4whites++;
@@ -202,15 +226,15 @@ public partial class Pentago_Rules
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void available_corners(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
+    static void available_corners(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
     {
         available4whites = 0;
         available4blacks = 0;
 
         HOLESTATE H00 = gb[Pentago_GameBoard.board_position_to_index(0, 0, square)];
-        HOLESTATE H02 = gb[Pentago_GameBoard.board_position_to_index(0, 2,square)];
-        HOLESTATE H20 = gb[Pentago_GameBoard.board_position_to_index(2, 0,square)];
-        HOLESTATE H22 = gb[Pentago_GameBoard.board_position_to_index(2, 2,square)];
+        HOLESTATE H02 = gb[Pentago_GameBoard.board_position_to_index(0, 2, square)];
+        HOLESTATE H20 = gb[Pentago_GameBoard.board_position_to_index(2, 0, square)];
+        HOLESTATE H22 = gb[Pentago_GameBoard.board_position_to_index(2, 2, square)];
 
         if (H00 != HOLESTATE.has_black) available4whites++;
         if (H02 != HOLESTATE.has_black) available4whites++;
@@ -224,19 +248,19 @@ public partial class Pentago_Rules
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void available_box1(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
+    static void available_box1(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
     {
         available4whites = 0;
         available4blacks = 0;
 
         HOLESTATE H00 = gb[Pentago_GameBoard.board_position_to_index(0, 0, square)];
-        HOLESTATE H02 = gb[Pentago_GameBoard.board_position_to_index(0, 2,square)];
-        HOLESTATE H20 = gb[Pentago_GameBoard.board_position_to_index(2, 0,square)];
-        HOLESTATE H22 = gb[Pentago_GameBoard.board_position_to_index(2, 2,square)];
-        HOLESTATE H10 = gb[Pentago_GameBoard.board_position_to_index(1, 0,square)];
-        HOLESTATE H12 = gb[Pentago_GameBoard.board_position_to_index(1, 2,square)];
-        HOLESTATE H01 = gb[Pentago_GameBoard.board_position_to_index(0, 1,square)];
-        HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1,square)];
+        HOLESTATE H02 = gb[Pentago_GameBoard.board_position_to_index(0, 2, square)];
+        HOLESTATE H20 = gb[Pentago_GameBoard.board_position_to_index(2, 0, square)];
+        HOLESTATE H22 = gb[Pentago_GameBoard.board_position_to_index(2, 2, square)];
+        HOLESTATE H10 = gb[Pentago_GameBoard.board_position_to_index(1, 0, square)];
+        HOLESTATE H12 = gb[Pentago_GameBoard.board_position_to_index(1, 2, square)];
+        HOLESTATE H01 = gb[Pentago_GameBoard.board_position_to_index(0, 1, square)];
+        HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1, square)];
 
         if (H00 != HOLESTATE.has_black && H01 != HOLESTATE.has_black) available4whites++;
         if (H10 != HOLESTATE.has_black && H20 != HOLESTATE.has_black) available4whites++;
@@ -251,19 +275,19 @@ public partial class Pentago_Rules
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void available_box2(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
+    static void available_box2(HOLESTATE[] gb, int square, out int available4whites, out int available4blacks)
     {
         available4whites = 0;
         available4blacks = 0;
 
         HOLESTATE H00 = gb[Pentago_GameBoard.board_position_to_index(0, 0, square)];
-        HOLESTATE H02 = gb[Pentago_GameBoard.board_position_to_index(0, 2,square)];
-        HOLESTATE H20 = gb[Pentago_GameBoard.board_position_to_index(2, 0,square)];
-        HOLESTATE H22 = gb[Pentago_GameBoard.board_position_to_index(2, 2,square)];
-        HOLESTATE H10 = gb[Pentago_GameBoard.board_position_to_index(1, 0,square)];
-        HOLESTATE H12 = gb[Pentago_GameBoard.board_position_to_index(1, 2,square)];
-        HOLESTATE H01 = gb[Pentago_GameBoard.board_position_to_index(0, 1,square)];
-        HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1,square)];
+        HOLESTATE H02 = gb[Pentago_GameBoard.board_position_to_index(0, 2, square)];
+        HOLESTATE H20 = gb[Pentago_GameBoard.board_position_to_index(2, 0, square)];
+        HOLESTATE H22 = gb[Pentago_GameBoard.board_position_to_index(2, 2, square)];
+        HOLESTATE H10 = gb[Pentago_GameBoard.board_position_to_index(1, 0, square)];
+        HOLESTATE H12 = gb[Pentago_GameBoard.board_position_to_index(1, 2, square)];
+        HOLESTATE H01 = gb[Pentago_GameBoard.board_position_to_index(0, 1, square)];
+        HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1, square)];
 
         if (H00 != HOLESTATE.has_black && H10 != HOLESTATE.has_black) available4whites++;
         if (H20 != HOLESTATE.has_black && H12 != HOLESTATE.has_black) available4whites++;
