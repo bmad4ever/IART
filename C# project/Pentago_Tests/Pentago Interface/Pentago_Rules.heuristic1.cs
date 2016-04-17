@@ -72,7 +72,7 @@ public partial class Pentago_Rules
         int[] mulcross_1 = new int[4];
         int[] mulcross_2 = new int[4];
         for (int i = 0; i < 4; i++)
-            available_pluscross(gb, i, out pluscross_1[i], out pluscross_2[i]);
+            available_mulcross(gb, i, out mulcross_1[i], out mulcross_2[i]);
 
         //diamond 1,2,3,4 P1 and P2
         int[] diamondcross_1 = new int[4];
@@ -171,10 +171,10 @@ public partial class Pentago_Rules
         if (h11w && H21 != HOLESTATE.has_black) available4whites++;
 
         bool h11b = H11 != HOLESTATE.has_white;
-        if (h11w && H10 != HOLESTATE.has_white) available4blacks++;
-        if (h11w && H12 != HOLESTATE.has_white) available4blacks++;
-        if (h11w && H01 != HOLESTATE.has_white) available4blacks++;
-        if (h11w && H21 != HOLESTATE.has_white) available4blacks++;
+        if (h11b && H10 != HOLESTATE.has_white) available4blacks++;
+        if (h11b && H12 != HOLESTATE.has_white) available4blacks++;
+        if (h11b && H01 != HOLESTATE.has_white) available4blacks++;
+        if (h11b && H21 != HOLESTATE.has_white) available4blacks++;
 
     }
 
@@ -197,10 +197,10 @@ public partial class Pentago_Rules
         if (h11w && H22 != HOLESTATE.has_black) available4whites++;
 
         bool h11b = H11 != HOLESTATE.has_white;
-        if (h11w && H00 != HOLESTATE.has_white) available4blacks++;
-        if (h11w && H02 != HOLESTATE.has_white) available4blacks++;
-        if (h11w && H20 != HOLESTATE.has_white) available4blacks++;
-        if (h11w && H22 != HOLESTATE.has_white) available4blacks++;
+        if (h11b && H00 != HOLESTATE.has_white) available4blacks++;
+        if (h11b && H02 != HOLESTATE.has_white) available4blacks++;
+        if (h11b && H20 != HOLESTATE.has_white) available4blacks++;
+        if (h11b && H22 != HOLESTATE.has_white) available4blacks++;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
