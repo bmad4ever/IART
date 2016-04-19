@@ -96,7 +96,7 @@ public partial class Pentago_Rules
         int[] corners_1 = new int[4];
         int[] corners_2 = new int[4];
         for (int i = 0; i < 4; i++)
-            available_box2(gb, i, out box2_1[i], out box2_2[i]);
+            available_corners(gb, i, out corners_1[i], out corners_2[i]);
 
         //CALCULATE 4 LINES
 
