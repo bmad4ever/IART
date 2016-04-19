@@ -290,12 +290,12 @@ public partial class Pentago_Rules
         HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1, square)];
 
         if (H00 != HOLESTATE.has_black && H10 != HOLESTATE.has_black) available4whites++;
-        if (H20 != HOLESTATE.has_black && H12 != HOLESTATE.has_black) available4whites++;
+        if (H20 != HOLESTATE.has_black && H21 != HOLESTATE.has_black) available4whites++;
         if (H22 != HOLESTATE.has_black && H12 != HOLESTATE.has_black) available4whites++;
         if (H02 != HOLESTATE.has_black && H01 != HOLESTATE.has_black) available4whites++;
 
         if (H00 != HOLESTATE.has_white && H10 != HOLESTATE.has_white) available4blacks++;
-        if (H20 != HOLESTATE.has_white && H12 != HOLESTATE.has_white) available4blacks++;
+        if (H20 != HOLESTATE.has_white && H21 != HOLESTATE.has_white) available4blacks++;
         if (H22 != HOLESTATE.has_white && H12 != HOLESTATE.has_white) available4blacks++;
         if (H02 != HOLESTATE.has_white && H01 != HOLESTATE.has_white) available4blacks++;
     }
