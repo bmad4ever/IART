@@ -107,6 +107,10 @@ public partial class Pentago_Rules
         return values.Min();
     }
 
+    static public int select_max(params int[] values)
+    {
+        return values.Max();
+    }
 
 }
 
