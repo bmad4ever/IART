@@ -47,10 +47,12 @@ interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
 public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
-    enum VERSION { minimax , alfabeta };
+    enum VERSION { minimax , alphabeta };
     IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules;
     const bool MAX_NODE = true;
     const bool MIN_NODE = false;
+
+    int max_depth;
     
     void a()
     {

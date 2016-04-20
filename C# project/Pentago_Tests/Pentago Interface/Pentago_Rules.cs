@@ -7,6 +7,9 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     const bool IA_PIECES_BLACKS = Pentago_GameBoard.blacks_turn;
     bool IA_PIECES;
 
+    const float MAX_HEURISTIC_VALUE = 1000000;
+    const float MIN_HEURISTIC_VALUE = -1000000;
+
     public enum EvaluationFunction { func1, blabla2, blabla3 };
     EvaluationFunction ef;
 
@@ -56,7 +59,6 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         }
     }
 
-
     #region Interface Related XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
     public Pentago_Move[] possible_plays(Pentago_GameBoard gb)
@@ -94,7 +96,15 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 
     public float? game_over(Pentago_GameBoard gb,int depth)
     {
-        throw new NotImplementedException();
+        bool? player;
+        if (gb.game_ended(out player))
+        {
+            if (player == null) return 0;
+            if (player == IA_PIECES)
+                return MAX_HEURISTIC_VALUE + 36 * 2 - depth;
+            else return MIN_HEURISTIC_VALUE - 36 * 2 + depth;
+        }
+        return null;
     }
 
     public float evaluate(Pentago_GameBoard gb)
