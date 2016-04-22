@@ -39,7 +39,7 @@ static partial class UnitTesting
           new HOLESTATE[]{
                 B,E,E, E,E,E,
                 E,E,E, E,W,E,
-                E,E,E, W,E,E,
+                E,E,E, E,E,E,
 
                 E,E,W, E,E,E,
                 E,W,E, E,E,E,

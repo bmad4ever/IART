@@ -34,9 +34,8 @@ public partial class Pentago_Rules
         int whites, blacks;
         calculate_available_classes(gb, out whites, out blacks);
 
-        float value;
-        if (IA_PIECES == IA_PIECES_WHITES) value = ((float)whites) * heuristic1_bias - ((float)blacks) * (1.0f - heuristic1_bias);
-        else value = ((float)blacks) * heuristic1_bias - ((float)whites) * (1.0f - heuristic1_bias);
+        float value = ((float)whites) * heuristic1_bias - ((float)blacks) * (1.0f - heuristic1_bias);
+        if (IA_PIECES == IA_PIECES_BLACKS) value *= -1;
 
         return value;
     }

@@ -148,6 +148,31 @@ public class Pentago_GameBoard
         Console.WriteLine(" --------------- ");
     }
 
+    public string toString()
+    {
+        string result = " --------------- \n";
+        int index = 0;
+        for (int i = 0; i < 12; ++i)
+        {
+            result += "| ";
+            while (index < i * 3 + 3)
+            {
+                switch (board[index])
+                {
+                    case hole_state.is_empty: result += "0 "; break;
+                    case hole_state.has_white: result += "W "; break;
+                    case hole_state.has_black:result += "B "; break;
+                    default: result += "X "; break;
+                }
+                index++;
+            }
+            if (i % 2 == 1) result += "| \n";
+            if (i == 5) result += "|---------------|\n";
+        }
+        result += " --------------- \n";
+        return result;
+    }
+
     private void check_small_diagonal(int diagonal, ref bool white_made_a_line, ref bool black_made_a_line)
     {
         int sequence_size = 0;

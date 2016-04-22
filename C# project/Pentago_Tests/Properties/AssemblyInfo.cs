@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Pentago Code")]
-[assembly: AssemblyDescription("Implementation of the Pentago Game with IA players")]
+[assembly: AssemblyTitle("pentago")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FEUP")]
-[assembly: AssemblyProduct("Pentago")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("pentago")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -17,10 +17,10 @@ using System.Runtime.InteropServices;
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(true)]
+[assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9a615a2d-c149-4047-89eb-a2aa9fc3cde4")]
+[assembly: Guid("5b152cd1-4d10-4fa3-9cd3-e613811b021e")]
 
 // Version information for an assembly consists of the following four values:
 //
