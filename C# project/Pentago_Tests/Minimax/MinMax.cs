@@ -8,7 +8,7 @@
 /// </summary>
 /// <typeparam name="GAME_BOARD">Class with the representation of the game's board</typeparam>
 /// <typeparam name="GAME_MOVE_DESCRIPTION">Class with that is used to represent the game's player allowed moves/plays</typeparam>
-interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
+public interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 	
 	GAME_MOVE_DESCRIPTION[] possible_plays(GAME_BOARD gb);
 	
@@ -47,21 +47,33 @@ interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
 public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
-    enum VERSION { minimax , alphabeta };
+    public enum VERSION { minimax , alphabeta };
+    VERSION version;
     IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules;
     const bool MAX_NODE = true;
     const bool MIN_NODE = false;
 
     int max_depth;
     
-    void a()
+    public MinMax(VERSION version, IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules, int max_depth)
     {
+        this.version = version;
+        this.rules = rules;
+        this.max_depth = max_depth;
+
     }
 
-    //TODO
+    public GAME_MOVE_DESCRIPTION[] run(GAME_BOARD gb)
+    {
+        switch (version)
+        {
+            case VERSION.minimax:
+                return null;
+            case VERSION.alphabeta:
+                return alpha_beta_minmax_init(gb);
+            default:
+                return null;
+        }
+    }
 
-    //max(...
-    //{...  rules.selectMINMAX}
-    //min(...
-    //{...  rules.selectMINMAX}
-}
+ }

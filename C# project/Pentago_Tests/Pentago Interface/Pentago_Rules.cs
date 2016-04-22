@@ -3,14 +3,14 @@ using System.Linq;
 
 public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 {
-    const bool IA_PIECES_WHITES = Pentago_GameBoard.whites_turn;
-    const bool IA_PIECES_BLACKS = Pentago_GameBoard.blacks_turn;
+    public const bool IA_PIECES_WHITES = Pentago_GameBoard.whites_turn;
+    public const bool IA_PIECES_BLACKS = Pentago_GameBoard.blacks_turn;
     bool IA_PIECES;
 
     const float MAX_HEURISTIC_VALUE = 1000000;
     const float MIN_HEURISTIC_VALUE = -1000000;
 
-    public enum EvaluationFunction { func1, blabla2, blabla3 };
+    public enum EvaluationFunction { controlHeuristic, blabla2, blabla3 };
     EvaluationFunction ef;
 
     public bool remove_repeated_states_on_nextStates = false;
@@ -20,7 +20,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     public static Pentago_Move[] all_possible_place_piece_moves = null;
     public static Pentago_Move[] all_possible_rotate_squares_moves = null;
 
-    public Pentago_Rules(EvaluationFunction ef = EvaluationFunction.func1, NextStatesFunction nsf = NextStatesFunction.all_states , bool iapieces = IA_PIECES_WHITES, bool remove_repeated_states_on_nextStates = false)
+    public Pentago_Rules(EvaluationFunction ef = EvaluationFunction.controlHeuristic, NextStatesFunction nsf = NextStatesFunction.all_states , bool iapieces = IA_PIECES_WHITES, bool remove_repeated_states_on_nextStates = false)
     {
         this.ef = ef;
         this.nsf = nsf;
@@ -89,7 +89,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     {
         Pentago_Move[] moves = possible_plays(gb);
 
-        if (remove_repeated_states_on_nextStates)
+        if (remove_repeated_states_on_nextStates && gb.get_turn_state() == Pentago_GameBoard.turn_state_rotate)
             return removeDuplicates(moves.Select(m => m.state_after_move(gb)).ToArray());//.Distinct().ToArray();
         else return moves.Select(m => m.state_after_move(gb)).ToArray();
     }
@@ -109,11 +109,10 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 
     public float evaluate(Pentago_GameBoard gb)
     {
-        throw new NotImplementedException();
         switch (ef)
         {
-            case EvaluationFunction.func1:
-                break;
+            case EvaluationFunction.controlHeuristic:
+                return ControlHeuristic();
             case EvaluationFunction.blabla2:
                 break;
             case EvaluationFunction.blabla3:
@@ -121,6 +120,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
             default:
                 break;
         }
+        return 0;
     }
 
     public bool selectMINMAX(Pentago_GameBoard thisnode_gb, bool currentIterationNode)

@@ -37,14 +37,14 @@ static partial class UnitTesting
 
         boardAlphaBeta = new Pentago_GameBoard(
           new HOLESTATE[]{
-                B,B,B, E,E,E,
-                W,W,W, B,B,B,
-                B,B,B, W,W,W,
+                B,E,E, E,E,E,
+                E,E,E, E,W,E,
+                E,E,E, W,E,E,
 
-                W,W,W, B,B,B,
-                B,B,B, W,W,W,
-                W,W,W, E,E,E }
-          , Pentago_GameBoard.whites_turn, Pentago_GameBoard.turn_state_rotate);
+                E,E,W, E,E,E,
+                E,W,E, E,E,E,
+                E,E,E, E,E,E }
+          , Pentago_GameBoard.whites_turn, Pentago_GameBoard.turn_state_addpiece);
 
     }
 
@@ -56,9 +56,9 @@ static partial class UnitTesting
         Console.WriteLine("test_auxiliar_methods()");
         initialize_test_gameboards();
 
-        Pentago_Rules pr_110 = new Pentago_Rules(Pentago_Rules.EvaluationFunction.func1, Pentago_Rules.NextStatesFunction.all_states, false);
+        Pentago_Rules pr_110 = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic, Pentago_Rules.NextStatesFunction.all_states, false);
 
-        Pentago_Rules pr_111 = new Pentago_Rules(Pentago_Rules.EvaluationFunction.func1, Pentago_Rules.NextStatesFunction.all_states, true);
+        Pentago_Rules pr_111 = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic, Pentago_Rules.NextStatesFunction.all_states, true);
 
         Console.WriteLine("test1");
         foreach (Pentago_Move pm in pr_110.possible_plays(board1))
@@ -99,7 +99,7 @@ static partial class UnitTesting
 
         Pentago_Rules rulestest = new Pentago_Rules();
         for (int i = 0; i < 100; i++)
-            Console.WriteLine(rulestest.ControlHeuristic(null));
+            Console.WriteLine(rulestest.ControlHeuristic());
 
     }
 

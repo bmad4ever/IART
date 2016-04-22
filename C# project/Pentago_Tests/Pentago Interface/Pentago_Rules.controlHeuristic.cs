@@ -8,7 +8,7 @@ partial class Pentago_Rules
     /// </summary>
     /// <param name="gb"></param>
     /// <returns></returns>
-    public float ControlHeuristic(HOLESTATE[] gb)
+    public float ControlHeuristic()
     {
         System.Random r = new System.Random();
         return (float) r.NextDouble();

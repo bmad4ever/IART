@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define DEBUG_ALPHA_BETA
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +37,11 @@ public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
 
     float alpha_beta_minimax_init_aux(float alpha, float beta, GAME_BOARD gb, int depth, out GAME_MOVE_DESCRIPTION[] moves)
     {
+        moves = new GAME_MOVE_DESCRIPTION[0];
+        float? gover = rules.game_over(gb, depth);
+        if (gover != null) return gover.Value;
+        if (depth >= max_depth) return rules.evaluate(gb);
+
         GAME_MOVE_DESCRIPTION[] nplays = rules.possible_plays(gb);
         bool nminmax = rules.selectMINMAX(gb, MAX_NODE);
         GAME_MOVE_DESCRIPTION[] result = null;
@@ -49,12 +56,22 @@ public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
                 temp = new GAME_MOVE_DESCRIPTION[0];
             }
             else next_value = alpha_beta_minimax_init_aux(alpha, beta, ngb, depth + 1, out temp);
+#if DEBUG_ALPHA_BETA
+            Console.WriteLine("alpha " + alpha + " depth " + depth);
+#endif
             if (alpha < next_value)
             {
                 alpha = next_value;
                 result = new GAME_MOVE_DESCRIPTION[temp.Length + 1];
                 result[0] = nplay;
                 Array.Copy(temp, 0, result, 1, temp.Length);
+#if DEBUG_ALPHA_BETA
+                Console.WriteLine(depth);
+                Console.WriteLine("temp");
+                temp.All(o => { Console.WriteLine(o.ToString()); return true; });
+                Console.WriteLine("result");
+                result.All(o => { Console.WriteLine(o.ToString()); return true; });
+#endif
             }
         }
         moves = result;
