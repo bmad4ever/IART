@@ -8,17 +8,20 @@ using System.Threading.Tasks;
 
 public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
 {
-    public delegate void DebugBoard(GAME_BOARD gb);
+#if DEBUG_ALPHA_BETA
+   public delegate void DebugBoard(GAME_BOARD gb);
 
     public DebugBoard debugBoard;
-
+#endif
     float alpha_beta_minmax(float alpha, float beta, GAME_BOARD gb, int depth, bool node)
     {
         float? gover = rules.game_over(gb, depth);
         if (gover != null)
         {
+#if DEBUG_ALPHA_BETA
             Console.WriteLine("depth " + depth + " wins " + gover);
             debugBoard(gb);
+#endif
             return gover.Value;
         }
         if (depth >= max_depth) return rules.evaluate(gb);

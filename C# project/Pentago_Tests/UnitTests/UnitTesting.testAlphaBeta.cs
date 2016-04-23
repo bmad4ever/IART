@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define PLAY_AGAINST_HUMAN
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,20 +11,24 @@ static partial class UnitTesting
 {
     static public void testAlphaBeta()
     {
-
-        Pentago_Rules prules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic,
+        initialize_test_gameboards();
+        Pentago_Rules wrules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic,
             Pentago_Rules.NextStatesFunction.all_states,
             Pentago_Rules.IA_PIECES_WHITES, false);
-        MINMAX alpha_beta_test = new MINMAX(MINMAX.VERSION.alphabeta, prules, 6);
-        initialize_test_gameboards();
+        MINMAX alpha_beta_test_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, 6);
+        Pentago_Rules brules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic,
+            Pentago_Rules.NextStatesFunction.all_states,
+            Pentago_Rules.IA_PIECES_BLACKS, false);
+        MINMAX alpha_beta_test_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 6);
+        bool? player;
         boardAlphaBeta.print_board();
-        alpha_beta_test.debugBoard = (o) => { o.print_board(); };
-        Pentago_Move[] moves = alpha_beta_test.run(boardAlphaBeta);
-        foreach (Pentago_Move move in moves)
+        while (!boardAlphaBeta.game_ended(out player))
         {
-            move.apply_move2board(boardAlphaBeta);
-            boardAlphaBeta.print_board();
-        }
+#if DEBUG_ALPHA_BETA
+        alpha_beta_test.debugBoard = (o) => { o.print_board(); };
+#endif
+            applyPrintMoves(alpha_beta_test_w.run(boardAlphaBeta));
+#if PLAY_AGAINST_HUMAN
         Console.WriteLine("Place a piece: square,x,y     square E[0,3]      x,y E[0,2]");
         int[] input = Console.ReadLine().Split(',').Select<string, int>(o => Convert.ToInt32(o)).ToArray();
         Pentago_Move pm = new Pentago_Move(input[0], input[1], input[2]);
@@ -32,12 +38,18 @@ static partial class UnitTesting
         pm = new Pentago_Move(input[0], input[1] == 0 ? Pentago_Move.rotate_anticlockwise : Pentago_Move.rotate_clockwise);
         pm.apply_move2board(boardAlphaBeta);
         boardAlphaBeta.print_board();
-        moves = alpha_beta_test.run(boardAlphaBeta);
+#else
+            applyPrintMoves(alpha_beta_test_b.run(boardAlphaBeta));
+#endif
+        }
+    }
+
+    static void applyPrintMoves(Pentago_Move[] moves)
+    {
         foreach (Pentago_Move move in moves)
         {
             move.apply_move2board(boardAlphaBeta);
             boardAlphaBeta.print_board();
         }
-
     }
 }
