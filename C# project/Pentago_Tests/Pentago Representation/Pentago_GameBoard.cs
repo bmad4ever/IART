@@ -194,13 +194,13 @@ public class Pentago_GameBoard
 
             if (hole == hole_state.has_white && sequence_size >= 0)
             {
-                if (sequence_size < 0) sequence_size = 0;
+                if (sequence_size < 0) return; //speedup
                 ++sequence_size;
                 if (sequence_size == 5) { white_made_a_line = true; break; }
             }
             else if (hole == hole_state.has_black && sequence_size <= 0)
             {
-                if (sequence_size > 0) sequence_size = 0;
+                if (sequence_size > 0) return; //speedup
                 --sequence_size;
                 if (sequence_size == -5) { black_made_a_line = true; break; }
             }
