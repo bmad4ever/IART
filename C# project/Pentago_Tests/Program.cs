@@ -2,7 +2,7 @@
 {
     static void Main(string[] args)
     {
-        UnitTesting.testAlphaBeta();
+        UnitTesting.testHeuristicA();
 
         //UnitTesting.test_auxiliar_methods();
 
