@@ -15,11 +15,11 @@ static partial class UnitTesting
         Pentago_Rules wrules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic,
             Pentago_Rules.NextStatesFunction.all_states,
             Pentago_Rules.IA_PIECES_WHITES, false);
-        MINMAX test_w = new MINMAX(MINMAX.VERSION.minimax, wrules, 6);
+        MINMAX test_w = new MINMAX(MINMAX.VERSION.minmax, wrules, 6);
         Pentago_Rules brules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic,
             Pentago_Rules.NextStatesFunction.all_states,
             Pentago_Rules.IA_PIECES_BLACKS, false);
-        MINMAX test_b = new MINMAX(MINMAX.VERSION.minimax, brules, 6);
+        MINMAX test_b = new MINMAX(MINMAX.VERSION.minmax, brules, 6);
         bool? player;
         boardMinMax.print_board();
         while (!boardMinMax.game_ended(out player))
@@ -52,4 +52,5 @@ static partial class UnitTesting
             boardMinMax.print_board();
         }
     }
+
 }

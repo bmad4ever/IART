@@ -5,7 +5,7 @@ static partial class UnitTesting
 {
     #region CUSTOM GAME BOARDS 2 BE USED IN TESTS
 
-    static Pentago_GameBoard board1, board1r, boardAlphaBeta, boardMinMax,boardHeuristicA;
+    static Pentago_GameBoard board1, board1r, boardAlphaBeta, boardMinMax, boardHeuristicA;
 
     static void initialize_test_gameboards()
     {

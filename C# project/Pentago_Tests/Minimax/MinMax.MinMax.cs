@@ -1,4 +1,4 @@
-﻿//#define DEBUG_ALPHA_BETA
+﻿//#define DEBUG_MIN_MAX
 
 using System;
 using System.Collections.Generic;
@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public partial class MinMax<GAME_BOARD, GAME_MOVE_DESCRIPTION>
+public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
 {
 #if DEBUG_MIN_MAX
-   public delegate void DebugBoard(GAME_BOARD gb);
+    public delegate void DebugBoard(GAME_BOARD gb);
 
     public DebugBoard debugBoard;
 #endif
@@ -29,7 +29,6 @@ public partial class MinMax<GAME_BOARD, GAME_MOVE_DESCRIPTION>
         bool nminmax = rules.selectMINMAX(gb, node);
         float next_value;
         float temp_value;
-
         if (node == MIN_NODE) temp_value = float.PositiveInfinity;
         else temp_value = float.NegativeInfinity;
         foreach (GAME_BOARD ngb in nstates)

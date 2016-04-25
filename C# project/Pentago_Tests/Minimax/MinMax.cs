@@ -47,7 +47,7 @@ public interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
 public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
-    public enum VERSION { minimax , alphabeta };
+    public enum VERSION { minmax , alphabeta };
     VERSION version;
     IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules;
     const bool MAX_NODE = true;
@@ -67,8 +67,8 @@ public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
     {
         switch (version)
         {
-            case VERSION.minimax:
-                return null;
+            case VERSION.minmax:
+                return minmax_init(gb);
             case VERSION.alphabeta:
                 return alpha_beta_minmax_init(gb);
             default:
