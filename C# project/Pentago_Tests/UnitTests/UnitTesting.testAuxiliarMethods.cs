@@ -54,7 +54,7 @@ static partial class UnitTesting
                 B,E,W,B,E,E,
                 E,W,W,E,E,E,
                 E,E,E,E,E,E }
-          , Pentago_GameBoard.whites_turn, Pentago_GameBoard.turn_state_addpiece);
+          , Pentago_GameBoard.whites_turn, Pentago_GameBoard.turn_state_rotate);
 
     }
 

@@ -13,7 +13,7 @@ static partial class UnitTesting
             Pentago_Rules.NextStatesFunction.all_states,
             Pentago_Rules.IA_PIECES_WHITES, false);
 
-        Console.WriteLine(rules.heuristicA(boardHeuristicA.board));
+        Console.WriteLine(rules.heuristicA(boardHeuristicA));
     }
 
 }
