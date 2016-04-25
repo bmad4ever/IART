@@ -167,7 +167,7 @@ using System.Threading.Tasks;
         public static void BUILD_PANDORA()
         {
             createDataFiles();
-            rules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.func1, Pentago_Rules.NextStatesFunction.all_states);
+           // rules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.func1, Pentago_Rules.NextStatesFunction.all_states);
 
 #if OPEN_ON_START_CLOSE_ON_END_ONLY
             OpenFiles();

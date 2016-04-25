@@ -5,7 +5,7 @@ static partial class UnitTesting
 {
     #region CUSTOM GAME BOARDS 2 BE USED IN TESTS
 
-    static Pentago_GameBoard board1, board1r, boardAlphaBeta, boardHeuristicA;
+    static Pentago_GameBoard board1, board1r, boardAlphaBeta, boardMinMax,boardHeuristicA;
 
     static void initialize_test_gameboards()
     {
@@ -36,6 +36,17 @@ static partial class UnitTesting
           , Pentago_GameBoard.whites_turn, Pentago_GameBoard.turn_state_rotate);
 
         boardAlphaBeta = new Pentago_GameBoard(
+          new HOLESTATE[]{
+                B,E,E, E,E,E,
+                B,E,E, E,W,E,
+                E,E,E, E,E,E,
+
+                B,E,W, E,E,E,
+                E,W,E, E,E,E,
+                E,E,E, E,E,E }
+          , Pentago_GameBoard.whites_turn, Pentago_GameBoard.turn_state_addpiece);
+
+        boardMinMax = new Pentago_GameBoard(
           new HOLESTATE[]{
                 B,E,E, E,E,E,
                 B,E,E, E,W,E,

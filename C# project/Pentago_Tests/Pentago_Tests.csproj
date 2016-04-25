@@ -43,9 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Minimax\MiniMax.MiniMax.cs" />
+    <Compile Include="Minimax\MinMax.AlphaBeta.cs" />
     <Compile Include="Minimax\MinMax.cs" />
     <Compile Include="Pentago Extras\Pentago2P.cs" />
     <Compile Include="Pentago Extras\PentagoPandora.cs" />
+    <Compile Include="Pentago Extras\PentagoRules.heuristicA.cs" />
     <Compile Include="Pentago Interface\Pentago_Rules.controlHeuristic.cs" />
     <Compile Include="Pentago Representation\Pentago_GameBoard.cs" />
     <Compile Include="Pentago Representation\Pentago_Move.cs" />
@@ -54,7 +57,10 @@
     <Compile Include="Pentago Interface\Pentago_Rules.auxiliar.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTests\UnitTesting.testMinMax.cs" />
+    <Compile Include="UnitTests\UnitTesting.testAlphaBeta.cs" />
     <Compile Include="UnitTests\UnitTesting.testAuxiliarMethods.cs" />
+    <Compile Include="UnitTests\UnitTesting.testHeuristicA.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
