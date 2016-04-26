@@ -1,16 +1,10 @@
-﻿using System;
-
-class Program
+﻿class Program
 {
     static void Main(string[] args)
     {
-        //UnitTesting.testHeuristicA();
         //UnitTesting.testMinMax();
-        UnitTesting.testAlphaBeta();
-
-        Console.WriteLine("-------------");
-
-        UnitTesting.testMinMax();
+        //UnitTesting.testAlphaBeta();
+        UnitTesting.testHeuristicA();
 
         //UnitTesting.test_auxiliar_methods();
 

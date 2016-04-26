@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
 {
+    private Random random = new Random();
+
 #if DEBUG_ALPHA_BETA
-   public delegate void DebugBoard(GAME_BOARD gb);
+    public delegate void DebugBoard(GAME_BOARD gb);
 
     public DebugBoard debugBoard;
 #endif
@@ -28,8 +30,9 @@ public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
         GAME_BOARD[] nstates = rules.next_states(gb);
         bool nminmax = rules.selectMINMAX(gb, node);
         float next_value;
-        foreach (GAME_BOARD ngb in nstates)
+        foreach (int i in Enumerable.Range(0, nstates.Length).OrderBy(x => random.Next()))
         {
+            GAME_BOARD ngb = nstates[i];
             next_value = alpha_beta_minmax(alpha, beta, ngb, depth + 1, nminmax);
             if (node == MIN_NODE && beta > next_value) beta = next_value;
             else if (node == MAX_NODE && alpha < next_value) alpha = next_value;
@@ -43,11 +46,11 @@ public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
         float alpha = float.NegativeInfinity;
         float beta = float.PositiveInfinity;
         GAME_MOVE_DESCRIPTION[] result;
-        alpha_beta_minimax_init_aux(alpha, beta, gb, 0, out result);
+        alpha_beta_minmax_init_aux(alpha, beta, gb, 0, out result);
         return result;
     }
 
-    float alpha_beta_minimax_init_aux(float alpha, float beta, GAME_BOARD gb, int depth, out GAME_MOVE_DESCRIPTION[] moves)
+    float alpha_beta_minmax_init_aux(float alpha, float beta, GAME_BOARD gb, int depth, out GAME_MOVE_DESCRIPTION[] moves)
     {
         moves = new GAME_MOVE_DESCRIPTION[0];
         float? gover = rules.game_over(gb, depth);
@@ -56,27 +59,22 @@ public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
 
         GAME_MOVE_DESCRIPTION[] nplays = rules.possible_plays(gb);
         bool nminmax = rules.selectMINMAX(gb, MAX_NODE);
-        GAME_MOVE_DESCRIPTION[] result = null;
-        GAME_MOVE_DESCRIPTION[] temp;
+        GAME_MOVE_DESCRIPTION[] temp_moves = new GAME_MOVE_DESCRIPTION[0];
         float next_value;
-        foreach (GAME_MOVE_DESCRIPTION nplay in nplays)
-        {
+        foreach (int i in Enumerable.Range(0, nplays.Length).OrderBy(x => random.Next())) {
+            GAME_MOVE_DESCRIPTION nplay = nplays[i];
             GAME_BOARD ngb = rules.board_after_play(gb, nplay);
-            if (nminmax == MIN_NODE)
-            {
-                next_value = alpha_beta_minmax(alpha, beta, ngb, depth + 1, MIN_NODE);
-                temp = new GAME_MOVE_DESCRIPTION[0];
-            }
-            else next_value = alpha_beta_minimax_init_aux(alpha, beta, ngb, depth + 1, out temp);
+            if (nminmax == MIN_NODE) next_value = alpha_beta_minmax(alpha, beta, ngb, depth + 1, MIN_NODE);
+            else next_value = alpha_beta_minmax_init_aux(alpha, beta, ngb, depth + 1, out temp_moves);
 #if DEBUG_ALPHA_BETA
             Console.WriteLine("alpha " + alpha + " depth " + depth);
 #endif
             if (alpha < next_value)
             {
                 alpha = next_value;
-                result = new GAME_MOVE_DESCRIPTION[temp.Length + 1];
-                result[0] = nplay;
-                Array.Copy(temp, 0, result, 1, temp.Length);
+                moves = new GAME_MOVE_DESCRIPTION[temp_moves.Length + 1];
+                moves[0] = nplay;
+                Array.Copy(temp_moves, 0, moves, 1, temp_moves.Length);
 #if DEBUG_ALPHA_BETA
                 Console.WriteLine(depth);
                 Console.WriteLine("temp");
@@ -86,7 +84,6 @@ public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
 #endif
             }
         }
-        moves = result;
         return alpha;
     }
 }

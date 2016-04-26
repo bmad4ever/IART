@@ -135,7 +135,7 @@ public class Pentago_GameBoard
             {
                 switch (board[index])
                 {
-                    case hole_state.is_empty: Console.Write("0 "); break;
+                    case hole_state.is_empty: Console.Write("  "); break;
                     case hole_state.has_white: Console.Write("W "); break;
                     case hole_state.has_black: Console.Write("B "); break;
                     default: Console.Write("X "); break;
@@ -159,7 +159,7 @@ public class Pentago_GameBoard
             {
                 switch (board[index])
                 {
-                    case hole_state.is_empty: result += "0 "; break;
+                    case hole_state.is_empty: result += "  "; break;
                     case hole_state.has_white: result += "W "; break;
                     case hole_state.has_black:result += "B "; break;
                     default: result += "X "; break;

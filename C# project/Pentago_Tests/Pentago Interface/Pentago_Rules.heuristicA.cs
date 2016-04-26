@@ -13,9 +13,7 @@ public partial class Pentago_Rules
     public float heuristicA(Pentago_GameBoard gb)
     {
         if (gb.get_turn_state() == Pentago_GameBoard.turn_state_addpiece) return boardValue(gb.board);
-        float result;
-        if (gb.get_player_turn() == IA_PIECES) result = float.NegativeInfinity;
-        else result = float.PositiveInfinity;
+        float result = gb.get_player_turn() == IA_PIECES ? float.NegativeInfinity : float.PositiveInfinity;
         Pentago_Move[] nplays = possible_plays(gb);
         float value;
         Pentago_GameBoard ngb;
@@ -23,8 +21,9 @@ public partial class Pentago_Rules
         {
             ngb = move.state_after_move(gb);
             value = boardValue(ngb.board);
-            if (gb.get_player_turn() == IA_PIECES && value > result) result = value;
-            else if (gb.get_player_turn() != IA_PIECES && value < result) result = value; 
+            if ((gb.get_player_turn() == IA_PIECES && value > result) 
+                || (gb.get_player_turn() != IA_PIECES && value < result))
+                result = value;
         }
         return result;
     }
@@ -62,28 +61,42 @@ public partial class Pentago_Rules
 #if DEBUG_HEURISTIC_A
         Console.WriteLine("monica");
 #endif
+        int whiteCount;
+        int blackCount;
         foreach (int[] monica in monicas)
-            result += countLine(gb, monica) * 3;
+        {
+            countLine(gb, monica, out whiteCount, out blackCount);
+            result += (float)(Math.Pow(1.3, whiteCount) - Math.Pow(1.3, blackCount));
+        }
 #if DEBUG_HEURISTIC_A
         Console.WriteLine("middle");
 #endif
         foreach (int[] middle in middles)
-            result += countLine(gb, middle) * 5;
+        {
+            countLine(gb, middle, out whiteCount, out blackCount);
+            result += (float)(Math.Pow(1.5, whiteCount) - Math.Pow(1.5, blackCount));
+        }
 #if DEBUG_HEURISTIC_A
         Console.WriteLine("straight");
 #endif
         foreach (int[] straight in straights)
-            result += countLine(gb, straight) * 7;
+        {
+            countLine(gb, straight, out whiteCount, out blackCount);
+            result += (float)(Math.Pow(1.7, whiteCount) - Math.Pow(1.7, blackCount));
+        }
 #if DEBUG_HEURISTIC_A
         Console.WriteLine("triple");
 #endif
         foreach (int[] triple in triples)
-            result += countShortLine(gb, triple) * 9;
+        {
+            countLine(gb, triple, out whiteCount, out blackCount);
+            result += (float)(Math.Pow(1.9, whiteCount) - Math.Pow(1.9, blackCount));
+        }
         if (IA_PIECES == IA_PIECES_BLACKS) result *= -1;
         return result;
     }
 
-    int countLine(HOLESTATE[] gb, int[] line) {
+    void countLine(HOLESTATE[] gb, int[] line, out int whiteCount, out int blackCount) {
         int interiorWhites = 0;
         int interiorBlacks = 0;
         int borderWhites = 0;
@@ -97,18 +110,19 @@ public partial class Pentago_Rules
             if (gb[line[i]] == HOLESTATE.has_white) interiorWhites++;
             else if (gb[line[i]] == HOLESTATE.has_black) interiorBlacks++;
         }
-        int whiteCount = 0;
-        int blackCount = 0;
+        whiteCount = 0;
+        blackCount = 0;
         if (interiorBlacks == 0 && borderBlacks < 2)
             whiteCount += borderWhites + interiorWhites;
-        if (whiteCount > 0) whiteCount += 1 - borderBlacks;
+        if (whiteCount > 0 && borderWhites == 0) whiteCount += 1 - borderBlacks;
+        if (whiteCount == 5) whiteCount = 10;
         if (interiorWhites == 0 && borderWhites < 2)
             blackCount += borderBlacks + interiorBlacks;
-        if (blackCount > 0) blackCount += 1 - borderWhites;
+        if (blackCount > 0 && borderBlacks == 0) blackCount += 1 - borderWhites;
+        if (blackCount == 5) blackCount = 10;
 #if DEBUG_HEURISTIC_A
         Console.WriteLine("W " + whiteCount + "  B " + blackCount);
 #endif
-        return whiteCount - blackCount;
     }
 
     int countShortLine(HOLESTATE[] gb, int[] line)

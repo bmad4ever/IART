@@ -22,34 +22,43 @@ static partial class UnitTesting
         MINMAX alpha_beta_test_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 6);
         bool? player;
         boardAlphaBeta.print_board();
+        Console.WriteLine("-----------------");
         while (!boardAlphaBeta.game_ended(out player))
         {
 #if DEBUG_ALPHA_BETA
         alpha_beta_test.debugBoard = (o) => { o.print_board(); };
 #endif
-            applyPrintMoves(alpha_beta_test_w.run(boardAlphaBeta));
+            applyPrintMoves(alpha_beta_test_w.run(boardAlphaBeta), boardAlphaBeta);
+            Console.WriteLine("-----------------");
 #if PLAY_AGAINST_HUMAN
         Console.WriteLine("Place a piece: square,x,y     square E[0,3]      x,y E[0,2]");
         int[] input = Console.ReadLine().Split(',').Select<string, int>(o => Convert.ToInt32(o)).ToArray();
         Pentago_Move pm = new Pentago_Move(input[0], input[1], input[2]);
         pm.apply_move2board(boardAlphaBeta);
         Console.WriteLine("Rotate a square: square,dir     square E[0,3]      dir E[0-anti,1-clock]");
-        input = Console.ReadLine().Split(',').Select<string, int>(o => Convert.ToInt32(o)).ToArray();
+        input = Console.ReadLine().Split
+            (',').Select<string, int>(o => Convert.ToInt32(o)).ToArray();
         pm = new Pentago_Move(input[0], input[1] == 0 ? Pentago_Move.rotate_anticlockwise : Pentago_Move.rotate_clockwise);
         pm.apply_move2board(boardAlphaBeta);
         boardAlphaBeta.print_board();
 #else
-            applyPrintMoves(alpha_beta_test_b.run(boardAlphaBeta));
+            applyPrintMoves(alpha_beta_test_b.run(boardAlphaBeta), boardAlphaBeta);
+            Console.WriteLine("-----------------");
 #endif
         }
     }
 
-    static void applyPrintMoves(Pentago_Move[] moves)
+    static void applyPrintMoves(Pentago_Move[] moves, Pentago_GameBoard board)
     {
         foreach (Pentago_Move move in moves)
         {
-            move.apply_move2board(boardAlphaBeta);
-            boardAlphaBeta.print_board();
+            if (board.get_player_turn() == Pentago_GameBoard.whites_turn) Console.Write("White ");
+            else Console.Write("Black ");
+            if (board.get_turn_state() == Pentago_GameBoard.turn_state_rotate)
+                Console.WriteLine("rotate");
+            else Console.WriteLine("place");
+            move.apply_move2board(board);
+            board.print_board();
         }
     }
 }
