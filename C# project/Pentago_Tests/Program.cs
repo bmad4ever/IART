@@ -2,10 +2,11 @@
 {
     static void Main(string[] args)
     {
-        //UnitTesting.testMinMax();
         //UnitTesting.testAlphaBeta();
-        UnitTesting.testHeuristicA();
+        //UnitTesting.testHeuristicA();
+        UnitTesting.testHeuristicAGood();
 
+        //UnitTesting.testMinMax();
         //UnitTesting.test_auxiliar_methods();
 
         //PentagoPandora.BUILD_PANDORA();

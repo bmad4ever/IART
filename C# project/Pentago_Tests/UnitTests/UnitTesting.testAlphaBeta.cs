@@ -16,20 +16,20 @@ static partial class UnitTesting
             Pentago_Rules.NextStatesFunction.all_states,
             Pentago_Rules.IA_PIECES_WHITES, false);
         MINMAX alpha_beta_test_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, 6);
-        Pentago_Rules brules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic,
+        Pentago_Rules brules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.heuristicA,
             Pentago_Rules.NextStatesFunction.all_states,
             Pentago_Rules.IA_PIECES_BLACKS, false);
-        MINMAX alpha_beta_test_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 6);
+        MINMAX alpha_beta_test_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 4);
         bool? player;
-        boardAlphaBeta.print_board();
-        Console.WriteLine("-----------------");
-        while (!boardAlphaBeta.game_ended(out player))
+/*        boardAlphaBeta.print_board();
+        Console.WriteLine("|-|-|-|-|-|-|-|-|");*/
+        while (!emptyBoard.game_ended(out player))
         {
 #if DEBUG_ALPHA_BETA
         alpha_beta_test.debugBoard = (o) => { o.print_board(); };
 #endif
-            applyPrintMoves(alpha_beta_test_w.run(boardAlphaBeta), boardAlphaBeta);
-            Console.WriteLine("-----------------");
+            applyPrintMoves(alpha_beta_test_w.run(emptyBoard), emptyBoard);
+            Console.WriteLine("|-|-|-|-|-|-|-|-|");
 #if PLAY_AGAINST_HUMAN
         Console.WriteLine("Place a piece: square,x,y     square E[0,3]      x,y E[0,2]");
         int[] input = Console.ReadLine().Split(',').Select<string, int>(o => Convert.ToInt32(o)).ToArray();
@@ -42,10 +42,13 @@ static partial class UnitTesting
         pm.apply_move2board(boardAlphaBeta);
         boardAlphaBeta.print_board();
 #else
-            applyPrintMoves(alpha_beta_test_b.run(boardAlphaBeta), boardAlphaBeta);
-            Console.WriteLine("-----------------");
+            applyPrintMoves(alpha_beta_test_b.run(emptyBoard), emptyBoard);
+            Console.WriteLine("|-|-|-|-|-|-|-|-|");
 #endif
         }
+        if (player == null) Console.WriteLine("Tie");
+        else if (player == Pentago_Rules.IA_PIECES_BLACKS) Console.WriteLine("Black wins");
+        else Console.WriteLine("White wins");
     }
 
     static void applyPrintMoves(Pentago_Move[] moves, Pentago_GameBoard board)
