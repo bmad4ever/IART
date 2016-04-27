@@ -48,8 +48,8 @@ public partial class Pentago_Rules
             ((float)whites)* heuristic1dot2_own_possibilities_weigth - ((float)blacks)* heuristic1dot2_oponent_possibilities_weigth
             + ((float)whitesS)* heuristic1dot2_own_strongChances_weigth - ((float)blacksS)* heuristic1dot2_oponent_strongChances_weigth;
         else value =
-            ((float)whites) * heuristic1dot2_oponent_possibilities_weigth - ((float)blacks) * heuristic1dot2_own_possibilities_weigth 
-            + ((float)whitesS) * heuristic1dot2_oponent_strongChances_weigth - ((float)blacksS) * heuristic1dot2_own_strongChances_weigth ;
+           - ((float)whites) * heuristic1dot2_oponent_possibilities_weigth + ((float)blacks) * heuristic1dot2_own_possibilities_weigth 
+            - ((float)whitesS) * heuristic1dot2_oponent_strongChances_weigth + ((float)blacksS) * heuristic1dot2_own_strongChances_weigth ;
 
         value = value / (
             heuristic1dot2_own_possibilities_weigth + heuristic1dot2_oponent_possibilities_weigth +
