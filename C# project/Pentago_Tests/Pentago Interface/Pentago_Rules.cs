@@ -20,11 +20,14 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     public static Pentago_Move[] all_possible_place_piece_moves = null;
     public static Pentago_Move[] all_possible_rotate_squares_moves = null;
 
-    public Pentago_Rules(EvaluationFunction ef = EvaluationFunction.controlHeuristic, NextStatesFunction nsf = NextStatesFunction.all_states , bool iapieces = IA_PIECES_WHITES, bool remove_repeated_states_on_nextStates = false)
+    float draw_value;
+
+    public Pentago_Rules(EvaluationFunction ef = EvaluationFunction.controlHeuristic, NextStatesFunction nsf = NextStatesFunction.all_states , bool iapieces = IA_PIECES_WHITES, bool remove_repeated_states_on_nextStates = false, float draw_value = 0)
     {
         this.ef = ef;
         this.nsf = nsf;
         this.remove_repeated_states_on_nextStates = remove_repeated_states_on_nextStates;
+        this.draw_value = draw_value;
 
         IA_PIECES = iapieces;
 
@@ -99,7 +102,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         bool? player;
         if (gb.game_ended(out player))
         {
-            if (player == null) return 0;
+            if (player == null) return draw_value;
             if (player == IA_PIECES)
                 return MAX_HEURISTIC_VALUE + 36 * 2 - depth;
             else return MIN_HEURISTIC_VALUE - 36 * 2 + depth;

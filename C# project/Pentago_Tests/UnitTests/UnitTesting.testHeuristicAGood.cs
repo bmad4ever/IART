@@ -10,11 +10,11 @@ static partial class UnitTesting
 {
     static public void testHeuristicAGood()
     {
-        Pentago_Rules wrules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic,
+        Pentago_Rules wrules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.heuristic1,
             Pentago_Rules.NextStatesFunction.all_states,
-            Pentago_Rules.IA_PIECES_WHITES, false);
+            Pentago_Rules.IA_PIECES_WHITES, false, float.NegativeInfinity);
         MINMAX alpha_beta_test_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, 4);
-        Pentago_Rules brules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.heuristicA,
+        Pentago_Rules brules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic,
             Pentago_Rules.NextStatesFunction.all_states,
             Pentago_Rules.IA_PIECES_BLACKS, false);
         MINMAX alpha_beta_test_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 4);
