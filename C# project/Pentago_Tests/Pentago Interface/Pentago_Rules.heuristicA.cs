@@ -1,5 +1,6 @@
 ﻿//#define DEBUG_HEURISTIC_A
 //#define NO_ROTATE_WHEN_ADD
+//#define FAST_A
 
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,13 @@ public partial class Pentago_Rules
     {
         float value;
         bool? player;
+#if FAST_A
+        player = boardValue(gb, out value);
+        if (player != null)
+            return (player == IA_PIECES) ? 100 : -100;
+        return value;
+#else
+        float result = gb.get_player_turn() == IA_PIECES ? float.NegativeInfinity : float.PositiveInfinity;
 #if NO_ROTATE_WHEN_ADD
         if (gb.get_turn_state() == Pentago_GameBoard.turn_state_addpiece)
         {
@@ -26,8 +34,6 @@ public partial class Pentago_Rules
 #else
         if (gb.get_turn_state() == Pentago_GameBoard.turn_state_addpiece)
             gb = new Pentago_GameBoard(gb.board, gb.get_player_turn(), Pentago_GameBoard.turn_state_rotate);
-#endif
-        float result = gb.get_player_turn() == IA_PIECES ? float.NegativeInfinity : float.PositiveInfinity;
         Pentago_Move[] nplays = possible_plays(gb);
         Pentago_GameBoard ngb;
         foreach (Pentago_Move move in nplays)
@@ -45,6 +51,7 @@ public partial class Pentago_Rules
                 result = value;
         }
         return result;
+#endif
     }
 
     bool? boardValue(Pentago_GameBoard gb, out float value)
@@ -83,9 +90,13 @@ public partial class Pentago_Rules
         int whiteCount;
         int blackCount;
         bool? player;
+        int whiteAlmost = 0;
+        int blackAlmost = 0;
         foreach (int[] monica in monicas)
         {
             player = countLine(gb, monica, out whiteCount, out blackCount);
+            if (player != null) return player;
+            player = checkAlmost(gb, whiteCount, blackCount, ref whiteAlmost, ref blackAlmost);
             if (player != null) return player;
             value += (float)(Math.Pow(1.13, whiteCount) - Math.Pow(1.13, blackCount));
         }
@@ -96,6 +107,8 @@ public partial class Pentago_Rules
         {
             player = countLine(gb, middle, out whiteCount, out blackCount);
             if (player != null) return player;
+            player = checkAlmost(gb, whiteCount, blackCount, ref whiteAlmost, ref blackAlmost);
+            if (player != null) return player;
             value += (float)(Math.Pow(1.15, whiteCount) - Math.Pow(1.15, blackCount));
         }
 #if DEBUG_HEURISTIC_A
@@ -105,6 +118,8 @@ public partial class Pentago_Rules
         {
             player = countLine(gb, straight, out whiteCount, out blackCount);
             if (player != null) return player;
+            player = checkAlmost(gb, whiteCount, blackCount, ref whiteAlmost, ref blackAlmost);
+            if (player != null) return player;
             value += (float)(Math.Pow(1.17, whiteCount) - Math.Pow(1.17, blackCount));
         }
 #if DEBUG_HEURISTIC_A
@@ -113,9 +128,32 @@ public partial class Pentago_Rules
         foreach (int[] triple in triples)
         {
             countShortLine(gb, triple, out whiteCount, out blackCount);
+            player = checkAlmost(gb, whiteCount, blackCount, ref whiteAlmost, ref blackAlmost);
+            if (player != null) return player;
             value += (float)(Math.Pow(1.19, whiteCount) - Math.Pow(1.19, blackCount));
         }
         if (IA_PIECES == IA_PIECES_BLACKS) value *= -1;
+        return null;
+    }
+
+    bool? checkAlmost(Pentago_GameBoard gb, int whiteCount, int blackCount, ref int whiteAlmost, ref int blackAlmost)
+    {
+        if (whiteCount > 4)
+        {
+            whiteAlmost++;
+#if DEBUG_HEURISTIC_A
+            Console.WriteLine("white almost");
+#endif
+        }
+        if (blackCount > 4)
+        {
+            blackAlmost++;
+#if DEBUG_HEURISTIC_A
+            Console.WriteLine("black almost");
+#endif
+        }
+        if (whiteAlmost >= 2 && gb.get_player_turn() == IA_PIECES_WHITES) return IA_PIECES_WHITES;
+        if (blackAlmost >= 2 && gb.get_player_turn() == IA_PIECES_BLACKS) return IA_PIECES_BLACKS;
         return null;
     }
 
@@ -137,23 +175,25 @@ public partial class Pentago_Rules
         blackCount = 0;
         if (interiorBlacks == 0 && borderBlacks < 2)
             whiteCount += borderWhites + interiorWhites;
-        if (whiteCount > 0 && borderWhites == 0) whiteCount += 1 - borderBlacks;
+        //if (whiteCount > 0 && borderWhites == 0) whiteCount += 1 - borderBlacks;
         if (interiorWhites == 0 && borderWhites < 2)
             blackCount += borderBlacks + interiorBlacks;
-        if (blackCount > 0 && borderBlacks == 0) blackCount += 1 - borderWhites;
+        //if (blackCount > 0 && borderBlacks == 0) blackCount += 1 - borderWhites;
 #if DEBUG_HEURISTIC_A
         Console.WriteLine("W " + whiteCount + "  B " + blackCount);
 #endif
-        if (whiteCount == 5 && borderWhites < 2 || whiteCount > 5)
+        if (whiteCount == 4 && borderWhites == 0 || whiteCount > 4)
         {
             if (gb.get_player_turn() == IA_PIECES_WHITES) return IA_PIECES_WHITES;
             else whiteCount = 10;
         }
-        if (blackCount == 5 && borderBlacks < 2 || whiteCount > 5)
+        else if (whiteCount == 4 && borderWhites < 2) whiteCount++;
+        if (blackCount == 4 && borderBlacks == 0 || blackCount > 4)
         {
             if (gb.get_player_turn() == IA_PIECES_BLACKS) return IA_PIECES_BLACKS;
             else blackCount = 10;
         }
+        else if (blackCount == 4 && borderBlacks < 2) blackCount++;
         return null;
     }
 

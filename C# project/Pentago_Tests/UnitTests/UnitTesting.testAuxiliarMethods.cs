@@ -59,13 +59,13 @@ static partial class UnitTesting
 
         boardHeuristicA = new Pentago_GameBoard(
           new HOLESTATE[]{
-                W,W,W,W,W,W,
-                W,W,W,W,W,W,
-                W,W,W,W,W,W,
-                W,W,W,W,W,W,
-                W,W,W,W,W,W,
-                W,W,W,W,W,W }
-          , Pentago_GameBoard.whites_turn, Pentago_GameBoard.turn_state_rotate);
+                E,E,E,E,E,W,
+                E,E,E,E,E,W,
+                W,E,E,E,E,W,
+                W,E,E,E,E,W,
+                W,E,E,E,E,E,
+                W,E,E,E,E,E }
+          , Pentago_GameBoard.whites_turn, Pentago_GameBoard.turn_state_addpiece);
 
         emptyBoard = new Pentago_GameBoard(
           new HOLESTATE[]{
