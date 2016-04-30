@@ -34,6 +34,7 @@ public partial class Pentago_Rules
 #else
         if (gb.get_turn_state() == Pentago_GameBoard.turn_state_addpiece)
             gb = new Pentago_GameBoard(gb.board, gb.get_player_turn(), Pentago_GameBoard.turn_state_rotate);
+#endif
         Pentago_Move[] nplays = possible_plays(gb);
         Pentago_GameBoard ngb;
         foreach (Pentago_Move move in nplays)
