@@ -74,7 +74,7 @@ public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
     public GAME_MOVE_DESCRIPTION[] run(GAME_BOARD gb)
     {
-        max_depth = rules.smart_depth(gb);
+        if(useSmartDepth) max_depth = rules.smart_depth(gb);
         switch (version)
         {
             case VERSION.minmax:
