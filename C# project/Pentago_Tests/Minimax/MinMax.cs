@@ -43,6 +43,13 @@ public interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
     /// <param name="currentIterationNode"></param>
     /// <returns></returns>
     bool selectMINMAX(GAME_BOARD thisnode_gb, bool currentIterationNode);
+
+    /// <summary>
+    /// decide what depth to use on minimax depending on the game board
+    /// </summary>
+    /// <param name="gb"></param>
+    /// <returns></returns>
+    int smart_depth(GAME_BOARD gb);
 }
 
 public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
@@ -53,18 +60,21 @@ public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
     const bool MAX_NODE = true;
     const bool MIN_NODE = false;
 
+    int USE_SMART_DEPTH = 0;
+    bool useSmartDepth;
     int max_depth;
     
-    public MinMax(VERSION version, IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules, int max_depth)
+    public MinMax(VERSION version, IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules, int max_depth = 0)
     {
         this.version = version;
         this.rules = rules;
         this.max_depth = max_depth;
-
+        useSmartDepth = max_depth == USE_SMART_DEPTH;
     }
 
     public GAME_MOVE_DESCRIPTION[] run(GAME_BOARD gb)
     {
+        max_depth = rules.smart_depth(gb);
         switch (version)
         {
             case VERSION.minmax:
