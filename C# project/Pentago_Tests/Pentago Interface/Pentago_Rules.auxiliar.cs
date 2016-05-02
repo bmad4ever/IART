@@ -4,6 +4,148 @@ using HOLESTATE = Pentago_GameBoard.hole_state;
 
 public partial class Pentago_Rules
 {
+
+    bool check_rotation_90(HOLESTATE[] board)
+    {
+        if (board[0] != board[30]) return false;
+        if (board[0] != board[35]) return false;
+        if (board[0] != board[5]) return false;
+        if (board[1] != board[24]) return false;
+        if (board[1] != board[34]) return false;
+        if (board[1] != board[11]) return false;
+        if (board[2] != board[18]) return false;
+        if (board[2] != board[33]) return false;
+        if (board[2] != board[17]) return false;
+        if (board[6] != board[31]) return false;
+        if (board[6] != board[29]) return false;
+        if (board[6] != board[4]) return false;
+        if (board[7] != board[25]) return false;
+        if (board[7] != board[28]) return false;
+        if (board[7] != board[10]) return false;
+        if (board[8] != board[19]) return false;
+        if (board[8] != board[27]) return false;
+        if (board[8] != board[16]) return false;
+        if (board[12] != board[32]) return false;
+        if (board[12] != board[23]) return false;
+        if (board[12] != board[3]) return false;
+        if (board[13] != board[26]) return false;
+        if (board[13] != board[22]) return false;
+        if (board[13] != board[9]) return false;
+        if (board[14] != board[20]) return false;
+        if (board[14] != board[21]) return false;
+        if (board[14] != board[15]) return false;
+        return true;
+    }
+
+    bool check_rotation_180(HOLESTATE[] board)
+    {
+        if (board[0] != board[35]) return false;
+        if (board[1] != board[34]) return false;
+        if (board[2] != board[33]) return false;
+        if (board[3] != board[32]) return false;
+        if (board[4] != board[31]) return false;
+        if (board[5] != board[30]) return false;
+        if (board[6] != board[29]) return false;
+        if (board[7] != board[28]) return false;
+        if (board[8] != board[27]) return false;
+        if (board[9] != board[26]) return false;
+        if (board[10] != board[25]) return false;
+        if (board[11] != board[24]) return false;
+        if (board[12] != board[23]) return false;
+        if (board[13] != board[22]) return false;
+        if (board[14] != board[21]) return false;
+        if (board[15] != board[20]) return false;
+        if (board[16] != board[19]) return false;
+        if (board[17] != board[18]) return false;
+        return true;
+    }
+
+    bool check_reflection_ver(HOLESTATE[] board)
+    {
+        if (board[0] != board[5]) return false;
+        if (board[1] != board[4]) return false;
+        if (board[2] != board[3]) return false;
+        if (board[6] != board[11]) return false;
+        if (board[7] != board[10]) return false;
+        if (board[8] != board[9]) return false;
+        if (board[12] != board[17]) return false;
+        if (board[13] != board[16]) return false;
+        if (board[14] != board[15]) return false;
+        if (board[18] != board[23]) return false;
+        if (board[19] != board[22]) return false;
+        if (board[20] != board[21]) return false;
+        if (board[24] != board[29]) return false;
+        if (board[25] != board[28]) return false;
+        if (board[26] != board[27]) return false;
+        if (board[30] != board[35]) return false;
+        if (board[31] != board[34]) return false;
+        if (board[32] != board[33]) return false;
+        return true;
+    }
+
+    bool check_reflection_hor(HOLESTATE[] board)
+    {
+        if (board[0] != board[30]) return false;
+        if (board[1] != board[31]) return false;
+        if (board[2] != board[32]) return false;
+        if (board[3] != board[33]) return false;
+        if (board[4] != board[34]) return false;
+        if (board[5] != board[35]) return false;
+        if (board[6] != board[24]) return false;
+        if (board[7] != board[25]) return false;
+        if (board[8] != board[26]) return false;
+        if (board[9] != board[27]) return false;
+        if (board[10] != board[28]) return false;
+        if (board[11] != board[29]) return false;
+        if (board[12] != board[18]) return false;
+        if (board[13] != board[19]) return false;
+        if (board[14] != board[20]) return false;
+        if (board[15] != board[21]) return false;
+        if (board[16] != board[22]) return false;
+        if (board[17] != board[23]) return false;
+        return true;
+    }
+
+    bool check_reflection_main(HOLESTATE[] board)
+    {
+        if (board[1] != board[6]) return false;
+        if (board[2] != board[12]) return false;
+        if (board[3] != board[18]) return false;
+        if (board[4] != board[24]) return false;
+        if (board[5] != board[30]) return false;
+        if (board[8] != board[13]) return false;
+        if (board[9] != board[19]) return false;
+        if (board[10] != board[25]) return false;
+        if (board[11] != board[31]) return false;
+        if (board[15] != board[20]) return false;
+        if (board[16] != board[26]) return false;
+        if (board[17] != board[32]) return false;
+        if (board[22] != board[27]) return false;
+        if (board[23] != board[33]) return false;
+        if (board[29] != board[34]) return false;
+        return true;
+    }
+
+    bool check_reflection_anti(HOLESTATE[] board)
+    {
+        if (board[0] != board[35]) return false;
+        if (board[1] != board[29]) return false;
+        if (board[2] != board[23]) return false;
+        if (board[3] != board[17]) return false;
+        if (board[4] != board[11]) return false;
+        if (board[6] != board[34]) return false;
+        if (board[7] != board[28]) return false;
+        if (board[8] != board[22]) return false;
+        if (board[9] != board[16]) return false;
+        if (board[12] != board[33]) return false;
+        if (board[13] != board[27]) return false;
+        if (board[14] != board[21]) return false;
+        if (board[18] != board[32]) return false;
+        if (board[19] != board[26]) return false;
+        if (board[24] != board[31]) return false;
+        return true;
+    }
+
     /// <summary>
     /// copies a square from one board to a square in another board
     /// </summary>

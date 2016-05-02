@@ -14,7 +14,7 @@ static partial class UnitTesting
     {
         Pentago_Rules wrules = new Pentago_Rules(ef1,
             Pentago_Rules.NextStatesFunction.all_states,
-            Pentago_Rules.IA_PIECES_WHITES, false/*, float.NegativeInfinity*/);
+            Pentago_Rules.IA_PIECES_WHITES, false/*, -100*/);
         MINMAX alpha_beta_test_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, depth1);
         Pentago_Rules brules = new Pentago_Rules(ef2,
             Pentago_Rules.NextStatesFunction.all_states,

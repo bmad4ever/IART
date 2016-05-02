@@ -4,7 +4,7 @@
     {
         //UnitTesting.testAlphaBeta();
         //UnitTesting.testHeuristicA();
-        UnitTesting.testHeuristicAGood(100, Pentago_Rules.EvaluationFunction.heuristicA, 4, Pentago_Rules.EvaluationFunction.controlHeuristic, 6, UnitTesting.testFirst);
+        UnitTesting.testHeuristicAGood(1000, Pentago_Rules.EvaluationFunction.controlHeuristic, 4, Pentago_Rules.EvaluationFunction.heuristicA, 4, UnitTesting.testSecond, false, false);
         //Pentago1P.play();
 
         //UnitTesting.testMinMax();
