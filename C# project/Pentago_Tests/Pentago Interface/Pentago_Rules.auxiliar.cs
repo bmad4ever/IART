@@ -5,7 +5,7 @@ using HOLESTATE = Pentago_GameBoard.hole_state;
 public partial class Pentago_Rules
 {
 
-    bool check_rotation_90(HOLESTATE[] board)
+   /* bool check_rotation_90(HOLESTATE[] board)
     {
         if (board[0] != board[30]) return false;
         if (board[0] != board[35]) return false;
@@ -35,8 +35,40 @@ public partial class Pentago_Rules
         if (board[14] != board[21]) return false;
         if (board[14] != board[15]) return false;
         return true;
+    }*/
+	
+	    bool check_rotation_90_after180ok(HOLESTATE[] board)
+    {
+        if (board[0] != board[30]) return false;
+        //if (board[0] != board[35]) return false;
+        //if (board[0] != board[5]) return false;//0-5-30
+        if (board[1] != board[24]) return false;
+        //if (board[1] != board[34]) return false;
+        //if (board[1] != board[11]) return false;1-11-24
+        if (board[2] != board[18]) return false;
+        //if (board[2] != board[33]) return false; 
+        //if (board[2] != board[17]) return false;//2-17-18
+        if (board[6] != board[31]) return false;
+        //if (board[6] != board[29]) return false;
+        //if (board[6] != board[4]) return false;//4-6-31
+        if (board[7] != board[25]) return false;
+       // if (board[7] != board[28]) return false;
+       // if (board[7] != board[10]) return false;//7-10-25
+        if (board[8] != board[19]) return false;
+       // if (board[8] != board[27]) return false;
+        //if (board[8] != board[16]) return false;//8-16-19
+        if (board[12] != board[32]) return false;
+       //if (board[12] != board[23]) return false;
+       // if (board[12] != board[3]) return false;//3-12-32
+        if (board[13] != board[26]) return false;
+        //if (board[13] != board[22]) return false;
+        //if (board[13] != board[9]) return false;//9-13-26
+        if (board[14] != board[20]) return false;
+        //if (board[14] != board[21]) return false; 
+        //if (board[14] != board[15]) return false;//14-15-20
+        return true;
     }
-
+	
     bool check_rotation_180(HOLESTATE[] board)
     {
         if (board[0] != board[35]) return false;
