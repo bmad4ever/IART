@@ -49,9 +49,9 @@
     <Compile Include="Minimax\MinMax.MinMax.cs" />
     <Compile Include="Pentago Extras\Pentago1P.cs" />
     <Compile Include="Pentago Extras\Pentago2P.cs" />
-    <Compile Include="Pentago Extras\Pentago_Rules.heuristicA.cs" />
     <Compile Include="Pentago Interface\Pentago_Rules.controlHeuristic.cs" />
     <Compile Include="Pentago Interface\Pentago_Rules.heuristic1.2.cs" />
+    <Compile Include="Pentago Interface\Pentago_Rules.heuristicA.cs" />
     <Compile Include="Pentago Representation\GenerateRandomBoard.cs" />
     <Compile Include="Pentago Representation\Pentago_GameBoard.cs" />
     <Compile Include="Pentago Representation\Pentago_Move.cs" />
