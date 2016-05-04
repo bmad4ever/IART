@@ -10,11 +10,26 @@ using HOLESTATE = Pentago_GameBoard.hole_state;
 public partial class Pentago_Rules
 {
     //std
-     float heuristic1dot2_own_possibilities_weigth = 1.0f;
-     float heuristic1dot2_oponent_possibilities_weigth = 2.0f;
-     float heuristic1dot2_own_strongChances_weigth = 2.0f;
-     float heuristic1dot2_oponent_strongChances_weigth = 4.0f;
+    /*float heuristic1dot2_own_possibilities_weigth = 1.0f;
+    float heuristic1dot2_oponent_possibilities_weigth = 2.0f;
+    float heuristic1dot2_own_strongChances_weigth = 2.0f;
+    float heuristic1dot2_oponent_strongChances_weigth = 4.0f;*/
 
+    //USING DIAGONAL HACK(no longer the 1.2 heuristic if used
+    //highly improves winning rate when playing 1st (combined with A)
+   /* float heuristic1dot2_own_possibilities_weigth = 0.0f;
+    float heuristic1dot2_oponent_possibilities_weigth = 0.0f;
+    float heuristic1dot2_own_strongChances_weigth = 1.0f;
+    float heuristic1dot2_oponent_strongChances_weigth = 0.0f;*/
+    //highly improves winning rate when playing 2nd (combined with A)
+    float heuristic1dot2_own_possibilities_weigth = 0.0f;
+    float heuristic1dot2_oponent_possibilities_weigth = 0.0f;
+    float heuristic1dot2_own_strongChances_weigth = 1.0f;
+    float heuristic1dot2_oponent_strongChances_weigth = 2.0f;
+
+    bool diagonal_hack = true; //only get diagonals info
+
+    //NOT USING DIAGONAL HACK
     //improves when playing 2nd (combined with A)
     /* float heuristic1dot2_own_possibilities_weigth=0.0f;
      float heuristic1dot2_oponent_possibilities_weigth=2.0f;
@@ -52,7 +67,7 @@ public partial class Pentago_Rules
     public float heuristic1dot2(HOLESTATE[] gb)
     {
         int whites, blacks,whitesS,blacksS;
-        calculate_available_classes2(gb, out whites, out blacks,out whitesS, out blacksS);
+        calculate_available_classes2(gb, out whites, out blacks,out whitesS, out blacksS, diagonal_hack);
 
         float value;
         if (IA_PIECES == IA_PIECES_WHITES) value =
@@ -71,12 +86,12 @@ public partial class Pentago_Rules
 
 
 
-    public static void calculate_available_classes2(Pentago_GameBoard gb, out int available4whites, out int available4blacks, out int strongWhites, out int strongBlacks)
+    public static void calculate_available_classes2(Pentago_GameBoard gb, out int available4whites, out int available4blacks, out int strongWhites, out int strongBlacks,bool diagonal_hack)
     {
-        calculate_available_classes2(gb.board, out available4whites, out available4blacks, out strongWhites, out strongBlacks);
+        calculate_available_classes2(gb.board, out available4whites, out available4blacks, out strongWhites, out strongBlacks, diagonal_hack);
     }
 
-    static void calculate_available_classes2(HOLESTATE[] gb, out int available4whites, out int available4blacks, out int strongWhites, out int strongBlacks)
+    static void calculate_available_classes2(HOLESTATE[] gb, out int available4whites, out int available4blacks, out int strongWhites, out int strongBlacks,bool diagonal_hack)
     {
         //int[] allsquares = new int[] { 0, 1, 2, 3 };
        /* available4whites = 0;
@@ -161,66 +176,67 @@ public partial class Pentago_Rules
         //for (int i = 0; i < 4; i++)
         // available_box2_v2(gb, i, out box2_1[i], out box2_2[i]);
 
-        //CALCULATE 4 LINES
+        if (!diagonal_hack)
+        {
+            //CALCULATE 4 LINES
+            L_P1[0] = select_min(box1_1[0], box2_1[1]);
+            L_P1[1] = select_min(pluscross_1[0], pluscross_1[1]);
+            L_P1[2] = select_min(box2_1[0], box1_1[1]);
+            L_P1[3] = select_min(box1_1[2], box2_1[3]);
+            L_P1[4] = select_min(pluscross_1[2], pluscross_1[3]);
+            L_P1[5] = select_min(box2_1[2], box1_1[3]);
 
-        L_P1[0] = select_min(box1_1[0], box2_1[1]);
-        L_P1[1] = select_min(pluscross_1[0], pluscross_1[1]);
-        L_P1[2] = select_min(box2_1[0], box1_1[1]);
-        L_P1[3] = select_min(box1_1[2], box2_1[3]);
-        L_P1[4] = select_min(pluscross_1[2], pluscross_1[3]);
-        L_P1[5] = select_min(box2_1[2], box1_1[3]);
+            L_P1M[0] = select_max(select_min(box1_1m[0], box2_1ms[1]), select_min(box1_1ms[0], box2_1m[1]));
+            L_P1M[1] = select_max(select_min(pluscross_1m[0], pluscross_1sm[1]), select_min(pluscross_1sm[0], pluscross_1m[1]));
+            L_P1M[2] = select_max(select_min(box2_1m[0], box1_1ms[1]), select_min(box2_1ms[0], box1_1[1]));
+            L_P1M[3] = select_max(select_min(box1_1m[2], box2_1ms[3]), select_min(box1_1ms[2], box2_1m[3]));
+            L_P1M[4] = select_max(select_min(pluscross_1m[2], pluscross_1sm[3]), select_min(pluscross_1sm[2], pluscross_1m[3]));
+            L_P1M[5] = select_max(select_min(box2_1m[2], box1_1ms[3]), select_min(box2_1ms[2], box1_1m[3]));
 
-        L_P1M[0] = select_max(select_min(box1_1m[0], box2_1ms[1]), select_min(box1_1ms[0], box2_1m[1]));
-        L_P1M[1] = select_max(select_min(pluscross_1m[0], pluscross_1sm[1]), select_min(pluscross_1sm[0], pluscross_1m[1]));
-        L_P1M[2] = select_max(select_min(box2_1m[0], box1_1ms[1]), select_min(box2_1ms[0], box1_1[1]));
-        L_P1M[3] = select_max(select_min(box1_1m[2], box2_1ms[3]), select_min(box1_1ms[2], box2_1m[3]));
-        L_P1M[4] = select_max(select_min(pluscross_1m[2], pluscross_1sm[3]), select_min(pluscross_1sm[2], pluscross_1m[3]));
-        L_P1M[5] = select_max(select_min(box2_1m[2], box1_1ms[3]), select_min(box2_1ms[2], box1_1m[3]));
+            L_P2[0] = select_min(box1_2[0], box2_2[1]);
+            L_P2[1] = select_min(pluscross_2[0], pluscross_2[1]);
+            L_P2[2] = select_min(box2_2[0], box1_2[1]);
+            L_P2[3] = select_min(box1_2[2], box2_2[3]);
+            L_P2[4] = select_min(pluscross_2[2], pluscross_2[3]);
+            L_P2[5] = select_min(box2_2[2], box1_2[3]);
 
-        L_P2[0] = select_min(box1_2[0], box2_2[1]);
-        L_P2[1] = select_min(pluscross_2[0], pluscross_2[1]);
-        L_P2[2] = select_min(box2_2[0], box1_2[1]);
-        L_P2[3] = select_min(box1_2[2], box2_2[3]);
-        L_P2[4] = select_min(pluscross_2[2], pluscross_2[3]);
-        L_P2[5] = select_min(box2_2[2], box1_2[3]);
+            L_P2M[0] = select_max(select_min(box1_2m[0], box2_2ms[1]), select_min(box1_2ms[0], box2_2m[1]));
+            L_P2M[1] = select_max(select_min(pluscross_2m[0], pluscross_2sm[1]), select_min(pluscross_2sm[0], pluscross_2m[1]));
+            L_P2M[2] = select_max(select_min(box2_2m[0], box1_2ms[1]), select_min(box2_2ms[0], box1_2[1]));
+            L_P2M[3] = select_max(select_min(box1_2m[2], box2_2ms[3]), select_min(box1_2ms[2], box2_2m[3]));
+            L_P2M[4] = select_max(select_min(pluscross_2m[2], pluscross_2sm[3]), select_min(pluscross_2sm[2], pluscross_2m[3]));
+            L_P2M[5] = select_max(select_min(box2_2m[2], box1_2ms[3]), select_min(box2_2ms[2], box1_2m[3]));
 
-        L_P2M[0] = select_max(select_min(box1_2m[0], box2_2ms[1]), select_min(box1_2ms[0], box2_2m[1]));
-        L_P2M[1] = select_max(select_min(pluscross_2m[0], pluscross_2sm[1]), select_min(pluscross_2sm[0], pluscross_2m[1]));
-        L_P2M[2] = select_max(select_min(box2_2m[0], box1_2ms[1]), select_min(box2_2ms[0], box1_2[1]));
-        L_P2M[3] = select_max(select_min(box1_2m[2], box2_2ms[3]), select_min(box1_2ms[2], box2_2m[3]));
-        L_P2M[4] = select_max(select_min(pluscross_2m[2], pluscross_2sm[3]), select_min(pluscross_2sm[2], pluscross_2m[3]));
-        L_P2M[5] = select_max(select_min(box2_2m[2], box1_2ms[3]), select_min(box2_2ms[2], box1_2m[3]));
+            //CALCULATE 4 ROWS
 
-        //CALCULATE 4 ROWS
+            R_P1[0] = select_min(box2_1[0], box1_1[2]);
+            R_P1[1] = select_min(pluscross_1[0], pluscross_1[2]);
+            R_P1[2] = select_min(box1_1[0], box2_1[2]);
+            R_P1[3] = select_min(box2_1[1], box1_1[3]);
+            R_P1[4] = select_min(pluscross_1[1], pluscross_1[3]);
+            R_P1[5] = select_min(box1_1[1], box2_1[3]);
 
-        R_P1[0] = select_min(box2_1[0], box1_1[2]);
-        R_P1[1] = select_min(pluscross_1[0], pluscross_1[2]);
-        R_P1[2] = select_min(box1_1[0], box2_1[2]);
-        R_P1[3] = select_min(box2_1[1], box1_1[3]);
-        R_P1[4] = select_min(pluscross_1[1], pluscross_1[3]);
-        R_P1[5] = select_min(box1_1[1], box2_1[3]);
+            R_P1M[0] = select_max(select_min(box2_1m[0], box1_1ms[2]), select_min(box2_1ms[0], box1_1m[2]));
+            R_P1M[1] = select_max(select_min(pluscross_1m[0], pluscross_1sm[2]), select_min(pluscross_1sm[0], pluscross_1m[2]));
+            R_P1M[2] = select_max(select_min(box1_1m[0], box2_1ms[2]), select_min(box1_1ms[0], box2_1m[2]));
+            R_P1M[3] = select_max(select_min(box2_1m[1], box1_1ms[3]), select_min(box2_1ms[1], box1_1m[3]));
+            R_P1M[4] = select_max(select_min(pluscross_1m[1], pluscross_1sm[3]), select_min(pluscross_1sm[1], pluscross_1m[3]));
+            R_P1M[5] = select_max(select_min(box1_1m[1], box2_1ms[3]), select_min(box1_1ms[1], box2_1m[3]));
 
-        R_P1M[0] = select_max(   select_min(box2_1m[0], box1_1ms[2]), select_min(box2_1ms[0], box1_1m[2]));
-        R_P1M[1] = select_max(   select_min(pluscross_1m[0], pluscross_1sm[2]), select_min(pluscross_1sm[0], pluscross_1m[2]) );
-        R_P1M[2] = select_max(   select_min(box1_1m[0], box2_1ms[2]) , select_min(box1_1ms[0], box2_1m[2]));
-        R_P1M[3] = select_max(   select_min(box2_1m[1], box1_1ms[3]), select_min(box2_1ms[1], box1_1m[3]) );
-        R_P1M[4] = select_max(   select_min(pluscross_1m[1], pluscross_1sm[3]), select_min(pluscross_1sm[1], pluscross_1m[3]));
-        R_P1M[5] = select_max(   select_min(box1_1m[1], box2_1ms[3]), select_min(box1_1ms[1], box2_1m[3])) ;
+            R_P2[0] = select_min(box2_2[0], box1_2[2]);
+            R_P2[1] = select_min(pluscross_2[0], pluscross_2[2]);
+            R_P2[2] = select_min(box1_2[0], box2_2[2]);
+            R_P2[3] = select_min(box2_2[1], box1_2[3]);
+            R_P2[4] = select_min(pluscross_2[1], pluscross_2[3]);
+            R_P2[5] = select_min(box1_2[1], box2_2[3]);
 
-        R_P2[0] = select_min(box2_2[0], box1_2[2]);
-        R_P2[1] = select_min(pluscross_2[0], pluscross_2[2]);
-        R_P2[2] = select_min(box1_2[0], box2_2[2]);
-        R_P2[3] = select_min(box2_2[1], box1_2[3]);
-        R_P2[4] = select_min(pluscross_2[1], pluscross_2[3]);
-        R_P2[5] = select_min(box1_2[1], box2_2[3]);
-
-        R_P2M[0] = select_max(select_min(box2_2m[0], box1_2ms[2]), select_min(box2_2ms[0], box1_2m[2]));
-        R_P2M[1] = select_max(select_min(pluscross_2m[0], pluscross_2sm[2]), select_min(pluscross_2sm[0], pluscross_2m[2]));
-        R_P2M[2] = select_max(select_min(box1_2m[0], box2_2ms[2]), select_min(box1_2ms[0], box2_2m[2]));
-        R_P2M[3] = select_max(select_min(box2_2m[1], box1_2ms[3]), select_min(box2_2ms[1], box1_2m[3]));
-        R_P2M[4] = select_max(select_min(pluscross_2m[1], pluscross_2sm[3]), select_min(pluscross_2sm[1], pluscross_2m[3]));
-        R_P2M[5] = select_max(select_min(box1_2m[1], box2_2ms[3]), select_min(box1_2ms[1], box2_2m[3]));
-
+            R_P2M[0] = select_max(select_min(box2_2m[0], box1_2ms[2]), select_min(box2_2ms[0], box1_2m[2]));
+            R_P2M[1] = select_max(select_min(pluscross_2m[0], pluscross_2sm[2]), select_min(pluscross_2sm[0], pluscross_2m[2]));
+            R_P2M[2] = select_max(select_min(box1_2m[0], box2_2ms[2]), select_min(box1_2ms[0], box2_2m[2]));
+            R_P2M[3] = select_max(select_min(box2_2m[1], box1_2ms[3]), select_min(box2_2ms[1], box1_2m[3]));
+            R_P2M[4] = select_max(select_min(pluscross_2m[1], pluscross_2sm[3]), select_min(pluscross_2sm[1], pluscross_2m[3]));
+            R_P2M[5] = select_max(select_min(box1_2m[1], box2_2ms[3]), select_min(box1_2ms[1], box2_2m[3]));
+        } 
         //CALCULATE 4 DIAGONALS
         D_1[0] = select_min(mulcross_1[0], mulcross_1[3]);
         D_1[1] = select_min(diamondcross_1[0], diamondcross_1[3], corners_1[1]);
@@ -250,10 +266,20 @@ public partial class Pentago_Rules
         D_2M[4] = select_min(diamondcross_2m[1], diamondcross_2m[2], corners_2m[3]);
         D_2M[5] = select_min(diamondcross_2m[1], diamondcross_2m[2], corners_2m[0]);
 
-        available4whites = L_P1.Sum() + R_P1.Sum() + D_1.Sum();
-        available4blacks = L_P2.Sum() + R_P2.Sum() + D_2.Sum();
-        strongWhites = L_P1M.Sum() + R_P1M.Sum() + D_1M.Sum();
-        strongBlacks = L_P2M.Sum() + R_P2M.Sum() + D_2M.Sum();
+        if (!diagonal_hack)
+        {
+            available4whites = L_P1.Sum() + R_P1.Sum() + D_1.Sum();
+            available4blacks = L_P2.Sum() + R_P2.Sum() + D_2.Sum();
+            strongWhites = L_P1M.Sum() + R_P1M.Sum() + D_1M.Sum();
+            strongBlacks = L_P2M.Sum() + R_P2M.Sum() + D_2M.Sum();
+        }
+        else
+        {
+            available4whites = D_1.Sum();
+            available4blacks = D_2.Sum();
+            strongWhites =  D_1M.Sum();
+            strongBlacks =  D_2M.Sum();
+        }
     }
 
 
