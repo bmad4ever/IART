@@ -1,9 +1,6 @@
-﻿//<copyright file="Pentago_Rules_HEURISTIC_1.cs">
-//Copyright (c) 12/04/2016 10:06:17 All Right Reserved
-//</copyright>
-//<author>Bruno Madeira</author>
-//<date> 12/04/2016 10:06:17 </date>
-//<summary>Implementation of a possible heuristic for the game Pentago</summary>
+﻿#define HEUR12RELAXED
+
+//use heuristicA(gb)*2 + heuristic1dot2(gb.board) 
 
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -12,11 +9,25 @@ using HOLESTATE = Pentago_GameBoard.hole_state;
 
 public partial class Pentago_Rules
 {
+    //std
+     float heuristic1dot2_own_possibilities_weigth = 1.0f;
+     float heuristic1dot2_oponent_possibilities_weigth = 2.0f;
+     float heuristic1dot2_own_strongChances_weigth = 2.0f;
+     float heuristic1dot2_oponent_strongChances_weigth = 4.0f;
 
-    float heuristic1dot2_own_possibilities_weigth=1.0f;
-    float heuristic1dot2_oponent_possibilities_weigth=1.0f;
-    float heuristic1dot2_own_strongChances_weigth=2.0f;
-    float heuristic1dot2_oponent_strongChances_weigth=3.0f;
+    //improves when playing 2nd (combined with A)
+    /* float heuristic1dot2_own_possibilities_weigth=0.0f;
+     float heuristic1dot2_oponent_possibilities_weigth=2.0f;
+     float heuristic1dot2_own_strongChances_weigth=0.0f;
+     float heuristic1dot2_oponent_strongChances_weigth=3.0f;
+     */
+
+    //improves when playing 1st (combined with A)
+    /* float heuristic1dot2_own_possibilities_weigth = 2.0f;
+      float heuristic1dot2_oponent_possibilities_weigth = 1.0f;
+      float heuristic1dot2_own_strongChances_weigth = 4.0f;
+      float heuristic1dot2_oponent_strongChances_weigth = 2.0f;*/
+
 
     /// <summary>
     /// set biases for the 1dot2 heuristic
@@ -274,6 +285,7 @@ public partial class Pentago_Rules
         if (h11b && H01 != HOLESTATE.has_white) available4blacks++;
         if (h11b && H21 != HOLESTATE.has_white) available4blacks++;
 
+        #if !HEUR12RELAXED
         bool h11hasB = H11 == HOLESTATE.has_black;
         if (h11hasB && H10 == HOLESTATE.has_black) { made4blacks++; if (H12 != HOLESTATE.has_white) stronglymade4blacks++; }
         if (h11hasB && H12 == HOLESTATE.has_black) { made4blacks++; if (H10 != HOLESTATE.has_white) stronglymade4blacks++; }
@@ -285,7 +297,19 @@ public partial class Pentago_Rules
         if (h11hasW && H12 == HOLESTATE.has_white) { made4whites++; if (H10 != HOLESTATE.has_black) stronglymade4whites++; }
         if (h11hasW && H01 == HOLESTATE.has_white) { made4whites++; if (H21 != HOLESTATE.has_black) stronglymade4whites++; }
         if (h11hasW && H21 == HOLESTATE.has_white) { made4whites++; if (H01 != HOLESTATE.has_black) stronglymade4whites++; }
+#else        //relaxed
+        bool h11hasB = H11 == HOLESTATE.has_black;
+        if (h11hasB && H10 != HOLESTATE.has_white) { made4blacks++; if (H12 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if (h11hasB && H12 != HOLESTATE.has_white) { made4blacks++; if (H10 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if (h11hasB && H01 != HOLESTATE.has_white) { made4blacks++; if (H21 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if (h11hasB && H21 != HOLESTATE.has_white) { made4blacks++; if (H01 != HOLESTATE.has_white) stronglymade4blacks++; }
 
+        bool h11hasW = H11 == HOLESTATE.has_white;
+        if (h11hasW && H10 != HOLESTATE.has_black) { made4whites++; if (H12 != HOLESTATE.has_black) stronglymade4whites++; }
+        if (h11hasW && H12 != HOLESTATE.has_black) { made4whites++; if (H10 != HOLESTATE.has_black) stronglymade4whites++; }
+        if (h11hasW && H01 != HOLESTATE.has_black) { made4whites++; if (H21 != HOLESTATE.has_black) stronglymade4whites++; }
+        if (h11hasW && H21 != HOLESTATE.has_black) { made4whites++; if (H01 != HOLESTATE.has_black) stronglymade4whites++; }
+#endif
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -317,6 +341,8 @@ public partial class Pentago_Rules
         if (h11b && H22 != HOLESTATE.has_white) available4blacks++;
 
         bool h11hasB = H11 == HOLESTATE.has_black;
+
+#if !HEUR12RELAXED
         if (h11hasB && H00 == HOLESTATE.has_black) { made4blacks++; if (H22 != HOLESTATE.has_white) stronglymade4blacks++; }
         if (h11hasB && H02 == HOLESTATE.has_black) { made4blacks++; if (H20 != HOLESTATE.has_white) stronglymade4blacks++; }
         if (h11hasB && H20 == HOLESTATE.has_black) { made4blacks++; if (H02 != HOLESTATE.has_white) stronglymade4blacks++; }
@@ -327,7 +353,18 @@ public partial class Pentago_Rules
         if (h11hasW && H02 == HOLESTATE.has_white) { made4whites++; if (H20 != HOLESTATE.has_black) stronglymade4whites++; }
         if (h11hasW && H20 == HOLESTATE.has_white) { made4whites++; if (H02 != HOLESTATE.has_black) stronglymade4whites++; }
         if (h11hasW && H22 == HOLESTATE.has_white) { made4whites++; if (H00 != HOLESTATE.has_black) stronglymade4whites++; }
+#else //relaxed
+        if (h11hasB && H00 != HOLESTATE.has_white) { made4blacks++; if (H22 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if (h11hasB && H02 != HOLESTATE.has_white) { made4blacks++; if (H20 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if (h11hasB && H20 != HOLESTATE.has_white) { made4blacks++; if (H02 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if (h11hasB && H22 != HOLESTATE.has_white) { made4blacks++; if (H00 != HOLESTATE.has_white) stronglymade4blacks++; }
 
+        bool h11hasW = H11 != HOLESTATE.has_white;
+        if (h11hasW && H00 != HOLESTATE.has_black) { made4whites++; if (H22 != HOLESTATE.has_black) stronglymade4whites++; }
+        if (h11hasW && H02 != HOLESTATE.has_black) { made4whites++; if (H20 != HOLESTATE.has_black) stronglymade4whites++; }
+        if (h11hasW && H20 != HOLESTATE.has_black) { made4whites++; if (H02 != HOLESTATE.has_black) stronglymade4whites++; }
+        if (h11hasW && H22 != HOLESTATE.has_black) { made4whites++; if (H00 != HOLESTATE.has_black) stronglymade4whites++; }
+#endif
 
     }
 
@@ -428,16 +465,28 @@ public partial class Pentago_Rules
         if (H21 != HOLESTATE.has_white && H22 != HOLESTATE.has_white) available4blacks++;
         if (H02 != HOLESTATE.has_white && H12 != HOLESTATE.has_white) available4blacks++;
 
+#if !HEUR12RELAXED
         if (H00 == HOLESTATE.has_black && H01 == HOLESTATE.has_black) { made4blacks++; if (H02 != HOLESTATE.has_white) stronglymade4blacks++; }
         if (H10 == HOLESTATE.has_black && H20 == HOLESTATE.has_black) { made4blacks++; if (H00 != HOLESTATE.has_white) stronglymade4blacks++; }
         if (H21 == HOLESTATE.has_black && H22 == HOLESTATE.has_black) { made4blacks++; if (H20 != HOLESTATE.has_white) stronglymade4blacks++; }
         if (H02 == HOLESTATE.has_black && H12 == HOLESTATE.has_black) { made4blacks++; if (H22 != HOLESTATE.has_white) stronglymade4blacks++; }
-
+                                       
         if (H00 == HOLESTATE.has_white && H01 == HOLESTATE.has_white) { made4whites++; if (H02 != HOLESTATE.has_black) stronglymade4whites++; }
         if (H10 == HOLESTATE.has_white && H20 == HOLESTATE.has_white) { made4whites++; if (H00 != HOLESTATE.has_black) stronglymade4whites++; }
         if (H21 == HOLESTATE.has_white && H22 == HOLESTATE.has_white) { made4whites++; if (H20 != HOLESTATE.has_black) stronglymade4whites++; }
         if (H02 == HOLESTATE.has_white && H12 == HOLESTATE.has_white) { made4whites++; if (H22 != HOLESTATE.has_black) stronglymade4whites++; }
 
+#else//relaxed
+        if ((H00 == HOLESTATE.has_black || H01 == HOLESTATE.has_black) && H00 != HOLESTATE.has_white && H01 != HOLESTATE.has_white) { made4blacks++; if (H02 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if ((H10 == HOLESTATE.has_black || H20 == HOLESTATE.has_black) && H10 != HOLESTATE.has_white && H20 != HOLESTATE.has_white) { made4blacks++; if (H00 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if ((H21 == HOLESTATE.has_black || H22 == HOLESTATE.has_black) && H21 != HOLESTATE.has_white && H22 != HOLESTATE.has_white) { made4blacks++; if (H20 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if ((H02 == HOLESTATE.has_black || H12 == HOLESTATE.has_black) && H02 != HOLESTATE.has_white && H12 != HOLESTATE.has_white) { made4blacks++; if (H22 != HOLESTATE.has_white) stronglymade4blacks++; }
+
+        if ((H00 == HOLESTATE.has_white || H01 == HOLESTATE.has_white) && H00 != HOLESTATE.has_black && H01 != HOLESTATE.has_black) { made4whites++; if (H02 != HOLESTATE.has_black) stronglymade4whites++; }
+        if ((H10 == HOLESTATE.has_white || H20 == HOLESTATE.has_white) && H10 != HOLESTATE.has_black && H20 != HOLESTATE.has_black) { made4whites++; if (H00 != HOLESTATE.has_black) stronglymade4whites++; }
+        if ((H21 == HOLESTATE.has_white || H22 == HOLESTATE.has_white) && H21 != HOLESTATE.has_black && H22 != HOLESTATE.has_black) { made4whites++; if (H20 != HOLESTATE.has_black) stronglymade4whites++; }
+        if ((H02 == HOLESTATE.has_white || H12 == HOLESTATE.has_white) && H02 != HOLESTATE.has_black && H12 != HOLESTATE.has_black) { made4whites++; if (H22 != HOLESTATE.has_black) stronglymade4whites++; }
+#endif
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -469,6 +518,7 @@ public partial class Pentago_Rules
         if (H22 != HOLESTATE.has_white && H12 != HOLESTATE.has_white) available4blacks++;
         if (H02 != HOLESTATE.has_white && H01 != HOLESTATE.has_white) available4blacks++;
 
+#if !HEUR12RELAXED
         if (H00 == HOLESTATE.has_black && H10 == HOLESTATE.has_black) { made4blacks++; if (H20 != HOLESTATE.has_white) stronglymade4blacks++; }
         if (H20 == HOLESTATE.has_black && H21 == HOLESTATE.has_black) { made4blacks++; if (H22 != HOLESTATE.has_white) stronglymade4blacks++; }
         if (H22 == HOLESTATE.has_black && H12 == HOLESTATE.has_black) { made4blacks++; if (H00 != HOLESTATE.has_white) stronglymade4blacks++; }
@@ -478,6 +528,18 @@ public partial class Pentago_Rules
         if (H20 == HOLESTATE.has_white && H21 == HOLESTATE.has_white) { made4whites++; if (H22 != HOLESTATE.has_black) stronglymade4whites++; }
         if (H22 == HOLESTATE.has_white && H12 == HOLESTATE.has_white) { made4whites++; if (H00 != HOLESTATE.has_black) stronglymade4whites++; }
         if (H02 == HOLESTATE.has_white && H01 == HOLESTATE.has_white) { made4whites++; if (H00 != HOLESTATE.has_black) stronglymade4whites++; }
+#else //relaxed
+        if ((H00 == HOLESTATE.has_black || H10 == HOLESTATE.has_black) && H00 != HOLESTATE.has_white && H10 != HOLESTATE.has_white) { made4blacks++; if (H20 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if ((H20 == HOLESTATE.has_black || H21 == HOLESTATE.has_black) && H20 != HOLESTATE.has_white && H21 != HOLESTATE.has_white) { made4blacks++; if (H22 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if ((H22 == HOLESTATE.has_black || H12 == HOLESTATE.has_black) && H22 != HOLESTATE.has_white && H12 != HOLESTATE.has_white) { made4blacks++; if (H00 != HOLESTATE.has_white) stronglymade4blacks++; }
+        if ((H02 == HOLESTATE.has_black || H01 == HOLESTATE.has_black) && H02 != HOLESTATE.has_white && H01 != HOLESTATE.has_white) { made4blacks++; if (H00 != HOLESTATE.has_white) stronglymade4blacks++; }
+
+        if ((H00 == HOLESTATE.has_white || H10 == HOLESTATE.has_white) && H00 != HOLESTATE.has_black && H10 != HOLESTATE.has_black) { made4whites++; if (H20 != HOLESTATE.has_black) stronglymade4whites++; }
+        if ((H20 == HOLESTATE.has_white || H21 == HOLESTATE.has_white) && H20 != HOLESTATE.has_black && H21 != HOLESTATE.has_black) { made4whites++; if (H22 != HOLESTATE.has_black) stronglymade4whites++; }
+        if ((H22 == HOLESTATE.has_white || H12 == HOLESTATE.has_white) && H22 != HOLESTATE.has_black && H12 != HOLESTATE.has_black) { made4whites++; if (H00 != HOLESTATE.has_black) stronglymade4whites++; }
+        if ((H02 == HOLESTATE.has_white || H01 == HOLESTATE.has_white) && H02 != HOLESTATE.has_black && H01 != HOLESTATE.has_black) { made4whites++; if (H00 != HOLESTATE.has_black) stronglymade4whites++; }
+#endif
+
     }
 
 
