@@ -5,11 +5,13 @@
         //UnitTesting.testAlphaBeta();
         //UnitTesting.testHeuristicA();
         //UnitTesting.testHeuristicAGood(1000, Pentago_Rules.EvaluationFunction.controlHeuristic, 4, Pentago_Rules.EvaluationFunction.heuristicA, 4, UnitTesting.testSecond, false, false);
-        //Pentago1P.play();
-
+        //Pentago1P.play(6, Pentago_Rules.EvaluationFunction.heuristicA, Pentago_Rules.NextStatesFunction.all_states, false, Pentago_Rules.IA_PIECES_WHITES);
+        //Pentago1P.play(6, Pentago_Rules.EvaluationFunction.heuristicA, Pentago_Rules.NextStatesFunction.check_symmetries, false, Pentago_Rules.IA_PIECES_WHITES);
+        Pentago1P.play(6, Pentago_Rules.EvaluationFunction.heuristicA, Pentago_Rules.NextStatesFunction.check_symmetries, true, Pentago_Rules.IA_PIECES_WHITES);
+        //Pentago1P.play(6, Pentago_Rules.EvaluationFunction.heuristicA, Pentago_Rules.NextStatesFunction.all_states, true, Pentago_Rules.IA_PIECES_WHITES);
         //UnitTesting.testMinMax();
         //UnitTesting.test_auxiliar_methods();
-        UnitTesting.testGenerateNewBoard();
+        //UnitTesting.testGenerateNewBoard();
         //PentagoPandora.BUILD_PANDORA();
         //Console.WriteLine("---ENDED---")
     }

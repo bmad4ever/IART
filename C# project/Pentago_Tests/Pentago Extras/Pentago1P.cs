@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Linq;
+using System.Diagnostics;
 
 using MINMAX = MinMax<Pentago_GameBoard, Pentago_Move>;
 
 static class Pentago1P
 {
-    public static void play()
+    public static void play(int depth, Pentago_Rules.EvaluationFunction ef, Pentago_Rules.NextStatesFunction nsf, bool remove_duplicates, bool ia_pieces)
     {
         Pentago_GameBoard gb = new Pentago_GameBoard();
         bool? winning_player = null;
-        Pentago_Rules brules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.heuristicA,
-            Pentago_Rules.NextStatesFunction.all_states,
-            Pentago_Rules.IA_PIECES_BLACKS, false);
-        MINMAX alpha_beta_test_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 6);
+        Pentago_Rules rules = new Pentago_Rules(ef, nsf, ia_pieces, remove_duplicates);
+        MINMAX alpha_beta_test = new MINMAX(MINMAX.VERSION.alphabeta, rules, depth);
+        Stopwatch sw = new Stopwatch();
 
         while (!gb.game_ended(out winning_player))
         {
-            Console.Clear();
             gb.print_board();
 
-            if (gb.get_player_turn() == Pentago_GameBoard.whites_turn)
+            if (gb.get_player_turn() != ia_pieces)
             {
-                Console.WriteLine("White's turn");
+                Console.WriteLine("Your turn");
                 if (gb.get_turn_state() == Pentago_GameBoard.turn_state_addpiece)
                 {
                     Console.WriteLine("Place a piece: square,x,y     square E[0,3]      x,y E[0,2]");
@@ -53,26 +52,23 @@ static class Pentago1P
             }
             else
             {
-                Console.WriteLine("Black's turn");
-                applyPrintMoves(alpha_beta_test_b.run(gb), gb);
+                Console.WriteLine("IA's turn");
+                sw.Start();
+                applyMoves(alpha_beta_test.run(gb), gb);
+                sw.Stop();
+                Console.WriteLine("Time={0}", sw.Elapsed);
             }
 
         }
-
-        Console.Clear();
-        gb.print_board();
         if (winning_player == null) Console.WriteLine("\nGAME ENDED IN DRAW");
-        else if (winning_player == Pentago_GameBoard.whites_turn) Console.WriteLine("\nGAME ENDED - WHITE WON");
-        else Console.WriteLine("\nGAME ENDED - BLACK WON");
+        else if (winning_player != ia_pieces) Console.WriteLine("\nGAME ENDED - YOU WON");
+        else Console.WriteLine("\nGAME ENDED - IA WON");
     }
 
-    static void applyPrintMoves(Pentago_Move[] moves, Pentago_GameBoard board)
+    static void applyMoves(Pentago_Move[] moves, Pentago_GameBoard board)
     {
         foreach (Pentago_Move move in moves)
-        {
             move.apply_move2board(board);
-            board.print_board();
-        }
     }
 
 }

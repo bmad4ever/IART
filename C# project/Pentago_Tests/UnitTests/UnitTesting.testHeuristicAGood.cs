@@ -13,12 +13,12 @@ static partial class UnitTesting
     static public void testHeuristicAGood(int numberTests, Pentago_Rules.EvaluationFunction ef1, int depth1, Pentago_Rules.EvaluationFunction ef2, int depth2, bool testHeuristic, bool printTies = false, bool printLosses = false)
     {
         Pentago_Rules wrules = new Pentago_Rules(ef1,
-            Pentago_Rules.NextStatesFunction.all_states,
-            Pentago_Rules.IA_PIECES_WHITES, false/*, -100*/);
+            Pentago_Rules.NextStatesFunction.check_symmetries,
+            Pentago_Rules.IA_PIECES_WHITES, true/*, -100*/);
         MINMAX alpha_beta_test_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, depth1);
         Pentago_Rules brules = new Pentago_Rules(ef2,
-            Pentago_Rules.NextStatesFunction.all_states,
-            Pentago_Rules.IA_PIECES_BLACKS, false);
+            Pentago_Rules.NextStatesFunction.check_symmetries,
+            Pentago_Rules.IA_PIECES_BLACKS, true);
         MINMAX alpha_beta_test_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, depth2);
         int black_wins = 0;
         int black_losses = 0;

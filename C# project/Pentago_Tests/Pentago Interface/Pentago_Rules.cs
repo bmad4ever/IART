@@ -14,7 +14,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     EvaluationFunction ef;
 
     public bool remove_repeated_states_on_nextStates = false;
-    public enum NextStatesFunction { all_states, removeSym_A_B, removeSym_A_B_C, someotherxpto };
+    public enum NextStatesFunction { all_states, check_symmetries, removeSym_A_B, removeSym_A_B_C, someotherxpto };
     NextStatesFunction nsf;
 
     public static Pentago_Move[] all_possible_place_piece_moves = null;
@@ -68,7 +68,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     {
         if (gb.get_turn_state() == Pentago_GameBoard.turn_state_addpiece)
         {
-            return all_possible_place_piece_moves.Where(move => move.is_move_possible(gb)).ToArray();
+            return sucessor(gb).Where(move => move.is_move_possible(gb)).ToArray();
         }
         else
         {
@@ -123,9 +123,21 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
             case EvaluationFunction.heuristic1dot2:
                 return heuristic1dot2(gb.board);
             default:
-                break;
+                return 0;
         }
-        return 0;
+    }
+
+    public Pentago_Move[] sucessor(Pentago_GameBoard gb)
+    {
+        switch (nsf)
+        {
+            case NextStatesFunction.all_states:
+                return all_possible_place_piece_moves;
+            case NextStatesFunction.check_symmetries:
+                return check_symmetries(gb.board);
+            default:
+                return null;
+        }
     }
 
     public bool selectMINMAX(Pentago_GameBoard thisnode_gb, bool currentIterationNode)
