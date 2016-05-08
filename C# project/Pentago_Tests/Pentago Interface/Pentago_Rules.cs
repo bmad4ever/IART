@@ -22,9 +22,9 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 
     float draw_value;
 
-    public Pentago_Rules(EvaluationFunction ef = EvaluationFunction.controlHeuristic, NextStatesFunction nsf = NextStatesFunction.all_states , bool iapieces = IA_PIECES_WHITES, bool remove_repeated_states_on_nextStates = false, float draw_value = 0)
+    public Pentago_Rules(EvaluationFunction ef = EvaluationFunction.controlHeuristic, NextStatesFunction nsf = NextStatesFunction.all_states, bool iapieces = IA_PIECES_WHITES, bool remove_repeated_states_on_nextStates = false, float draw_value = 0)
     {
-        this.ef = ef;		
+        this.ef = ef;
         this.nsf = nsf;
         this.remove_repeated_states_on_nextStates = remove_repeated_states_on_nextStates;
         this.draw_value = draw_value;
@@ -79,7 +79,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
             return all_possible_rotate_squares_moves;//result = all_possible_rotate_squares_moves.Where(move => move.is_move_possible(gb)).ToArray();
         }
 
-       // return result;
+        // return result;
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         else return moves.Select(m => m.state_after_move(gb)).ToArray();
     }
 
-    public float? game_over(Pentago_GameBoard gb,int depth)
+    public float? game_over(Pentago_GameBoard gb, int depth)
     {
         bool? player;
         if (gb.game_ended(out player))
@@ -125,8 +125,8 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
                 return heuristic1(gb.board);
             case EvaluationFunction.heuristic1dot2:
                 return heuristic1dot2(gb.board);
-			case EvaluationFunction.heuristicAplusDiagonalHack:
-				return heuristicA(gb)*2.0f + heuristic1dot2(gb.board);
+            case EvaluationFunction.heuristicAplusDiagonalHack:
+                return heuristicA(gb) * 2.0f + heuristic1dot2(gb.board);
             default:
                 return 0;
         }
@@ -157,6 +157,40 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         if (emptyholes <= 8) return 4;
         if (emptyholes <= 25) return 3;
         return 2;
+    }
+
+
+    public string toDisplayString()
+    {
+        string result;
+        result = "RULES> ";
+        result += "eval " + ef.ToString();
+        switch (ef)
+        {
+            case EvaluationFunction.controlHeuristic:
+                break;
+            case EvaluationFunction.heuristicA:
+                break;
+            case EvaluationFunction.heuristic1:
+                result += " - bias = " + heuristic1_bias;
+                break;
+            case EvaluationFunction.heuristic1dot2:
+                result += " - rel:" + (HEUR12RELAXED ? "Y" : "N") + " | D_HACK:" + (diagonal_hack ? "Y" : "N");
+                result += "\n biases: "
+                    + " bow=" + heuristic1dot2_own_possibilities_weigth
+                    + " bop=" + heuristic1dot2_oponent_possibilities_weigth
+                    + " bowS=" + heuristic1dot2_own_strongChances_weigth
+                    + " bopS=" + heuristic1dot2_oponent_strongChances_weigth;
+                break;
+            case EvaluationFunction.heuristicAplusDiagonalHack:
+                break;
+            default:
+                break;
+        }
+        result += "\nsym " + (nsf == NextStatesFunction.all_states ? "N" : "Y");
+        result += " | rdt " + (remove_repeated_states_on_nextStates ? "Y" : "N");//remove duplicate rotations
+        result += " |draw :" + draw_value.ToString();
+        return result;
     }
 
     #endregion

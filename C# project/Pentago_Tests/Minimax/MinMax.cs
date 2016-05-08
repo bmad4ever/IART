@@ -8,7 +8,7 @@
 /// </summary>
 /// <typeparam name="GAME_BOARD">Class with the representation of the game's board</typeparam>
 /// <typeparam name="GAME_MOVE_DESCRIPTION">Class with that is used to represent the game's player allowed moves/plays</typeparam>
-public interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
+public interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION> { 
 	
 	GAME_MOVE_DESCRIPTION[] possible_plays(GAME_BOARD gb);
 	
@@ -50,6 +50,13 @@ public interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION>{
     /// <param name="gb"></param>
     /// <returns></returns>
     int smart_depth(GAME_BOARD gb);
+
+    /// <summary>
+    /// get information about 'Rules' to print/display
+    /// </summary>
+    /// <param name=""></param>
+    /// <returns></returns>
+    string toDisplayString();
 }
 
 public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
@@ -85,5 +92,14 @@ public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
                 return null;
         }
     }
+
+    public void printConfigs()
+    {
+        System.Console.WriteLine("Version: " + version.ToString());
+        if (useSmartDepth) System.Console.WriteLine("Depth: Using Smart Depth");
+        else System.Console.WriteLine("Depth: "+ max_depth);
+        System.Console.WriteLine(rules.toDisplayString());
+    }
+
 
  }
