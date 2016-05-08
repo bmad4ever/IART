@@ -63,6 +63,14 @@ public partial class Pentago_Rules
     float straight_strength = 1.17f;
     float triple_strength = 1.19f;
 
+    public void setHeuristicAStrengths(float monica_strength, float middle_strength, float straight_strength, float triple_strength)
+    {
+        this.monica_strength = monica_strength;
+        this.middle_strength = middle_strength;
+        this.straight_strength = straight_strength;
+        this.triple_strength = triple_strength;
+    }
+
     public float heuristicA(Pentago_GameBoard gb)
     {
         float value;
