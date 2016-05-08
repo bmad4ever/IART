@@ -20,12 +20,12 @@ public partial class Pentago_Rules
      float heuristic1dot2_own_strongChances_weigth = 1.0f;
      float heuristic1dot2_oponent_strongChances_weigth = 0.0f;*/
     //highly improves winning rate when playing 2nd (combined with A)
-   /* float heuristic1dot2_own_possibilities_weigth = 0.0f;
-    float heuristic1dot2_oponent_possibilities_weigth = 0.0f;
-    float heuristic1dot2_own_strongChances_weigth = 1.0f;
-    float heuristic1dot2_oponent_strongChances_weigth = 2.0f;*/
+    /* float heuristic1dot2_own_possibilities_weigth = 0.0f;
+     float heuristic1dot2_oponent_possibilities_weigth = 0.0f;
+     float heuristic1dot2_own_strongChances_weigth = 1.0f;
+     float heuristic1dot2_oponent_strongChances_weigth = 2.0f;*/
 
-    void setUpDiagonalHack() 
+    void setUpDiagonalHack()
     {
         HEUR12RELAXED = true;
         diagonal_hack = true;
@@ -126,9 +126,12 @@ public partial class Pentago_Rules
         int[] pluscross_2m = new int[4];
         int[] pluscross_1sm = new int[4];
         int[] pluscross_2sm = new int[4];
-        for (int i = 0; i < 4; i++)
-            available_pluscross_v2(gb, i, out pluscross_1[i], out pluscross_2[i],
-                out pluscross_1m[i], out pluscross_2m[i], out pluscross_1sm[i], out pluscross_2sm[i]);
+        if (!diagonal_hack)
+        {
+            for (int i = 0; i < 4; i++)
+                available_pluscross_v2(gb, i, out pluscross_1[i], out pluscross_2[i],
+                    out pluscross_1m[i], out pluscross_2m[i], out pluscross_1sm[i], out pluscross_2sm[i]);
+        }
 
         //mulcross 1,2,3,4 P1 and P2
         int[] mulcross_1 = new int[4];
@@ -140,6 +143,7 @@ public partial class Pentago_Rules
         for (int i = 0; i < 4; i++)
             available_mulcross_v2(gb, i, out mulcross_1[i], out mulcross_2[i],
                out mulcross_1m[i], out mulcross_2m[i], out mulcross_1sm[i], out mulcross_2sm[i]);
+
 
         //diamond 1,2,3,4 P1 and P2
         int[] diamondcross_1 = new int[4];
@@ -157,9 +161,13 @@ public partial class Pentago_Rules
         int[] box1_2m = new int[4];
         int[] box1_1ms = new int[4];
         int[] box1_2ms = new int[4];
-        for (int i = 0; i < 4; i++)
-            available_box1_v2(gb, i, out box1_1[i], out box1_2[i],
-                out box1_1m[i], out box1_2m[i], out box1_1ms[i], out box1_2ms[i]);
+        if (!diagonal_hack)
+        {
+
+            for (int i = 0; i < 4; i++)
+                available_box1_v2(gb, i, out box1_1[i], out box1_2[i],
+                    out box1_1m[i], out box1_2m[i], out box1_1ms[i], out box1_2ms[i]);
+        }
 
         //box2 1,2,3,4 P1 and P2
         int[] box2_1 = new int[4];
@@ -168,17 +176,23 @@ public partial class Pentago_Rules
         int[] box2_2m = new int[4];
         int[] box2_1ms = new int[4];
         int[] box2_2ms = new int[4];
-        for (int i = 0; i < 4; i++)
-            available_box2_v2(gb, i, out box2_1[i], out box2_2[i],
-                out box2_1m[i], out box2_2m[i], out box2_1ms[i], out box2_2ms[i]);
+        if (!diagonal_hack)
+        {
+            for (int i = 0; i < 4; i++)
+                available_box2_v2(gb, i, out box2_1[i], out box2_2[i],
+                    out box2_1m[i], out box2_2m[i], out box2_1ms[i], out box2_2ms[i]);
+        }
 
         //corners 1,2,3,4 P1 and P2
         int[] corners_1 = new int[4];
         int[] corners_2 = new int[4];
         int[] corners_1m = new int[4];
         int[] corners_2m = new int[4];
-        //for (int i = 0; i < 4; i++)
-        // available_box2_v2(gb, i, out box2_1[i], out box2_2[i]);
+        if (!diagonal_hack)
+        {
+            for (int i = 0; i < 4; i++)
+                available_corners_v2(gb, i, out corners_1[i], out corners_2[i], out corners_1m[i], out corners_2m[i]);
+        }
 
         if (!diagonal_hack)
         {
@@ -279,10 +293,10 @@ public partial class Pentago_Rules
         }
         else
         {
-            available4whites = D_1.Sum();
-            available4blacks = D_2.Sum();
-            strongWhites = D_1M.Sum();
-            strongBlacks = D_2M.Sum();
+            available4whites = D_1[0] + D_1[3];
+            available4blacks = D_2[0] + D_2[3];
+            strongWhites = D_1M[0] + D_1M[3];
+            strongBlacks = D_2M[0] + D_2M[3];
         }
     }
 
