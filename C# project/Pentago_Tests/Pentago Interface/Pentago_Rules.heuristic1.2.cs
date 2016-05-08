@@ -25,22 +25,27 @@ public partial class Pentago_Rules
     float heuristic1dot2_own_strongChances_weigth = 1.0f;
     float heuristic1dot2_oponent_strongChances_weigth = 2.0f;*/
 
+    void setUpDiagonalHack() 
+    {
+        HEUR12RELAXED = true;
+        diagonal_hack = true;
+        if (IA_PIECES == IA_PIECES_WHITES) //if plays first
+        {
+            heuristic1dot2_own_possibilities_weigth = 0.0f;
+            heuristic1dot2_oponent_possibilities_weigth = 0.0f;
+            heuristic1dot2_own_strongChances_weigth = 1.0f;
+            heuristic1dot2_oponent_strongChances_weigth = 0.0f;
+            return;
+        }
+        heuristic1dot2_own_possibilities_weigth = 0.0f;
+        heuristic1dot2_oponent_possibilities_weigth = 0.0f;
+        heuristic1dot2_own_strongChances_weigth = 1.0f;
+        heuristic1dot2_oponent_strongChances_weigth = 2.0f;
+    }
+
+
     bool HEUR12RELAXED = true;
     bool diagonal_hack = false; //only get diagonals info
-
-    //NOT USING DIAGONAL HACK
-    //improves when playing 2nd (combined with A)
-    /* float heuristic1dot2_own_possibilities_weigth=0.0f;
-     float heuristic1dot2_oponent_possibilities_weigth=2.0f;
-     float heuristic1dot2_own_strongChances_weigth=0.0f;
-     float heuristic1dot2_oponent_strongChances_weigth=3.0f;
-     */
-
-    //improves when playing 1st (combined with A)
-    /* float heuristic1dot2_own_possibilities_weigth = 2.0f;
-      float heuristic1dot2_oponent_possibilities_weigth = 1.0f;
-      float heuristic1dot2_own_strongChances_weigth = 4.0f;
-      float heuristic1dot2_oponent_strongChances_weigth = 2.0f;*/
 
 
     /// <summary>
@@ -310,7 +315,7 @@ public partial class Pentago_Rules
         if (h11b && H01 != HOLESTATE.has_white) available4blacks++;
         if (h11b && H21 != HOLESTATE.has_white) available4blacks++;
 
-        if (HEUR12RELAXED)
+        if (!HEUR12RELAXED)
         {
             bool h11hasB = H11 == HOLESTATE.has_black;
             if (h11hasB && H10 == HOLESTATE.has_black) { made4blacks++; if (H12 != HOLESTATE.has_white) stronglymade4blacks++; }
@@ -369,7 +374,7 @@ public partial class Pentago_Rules
 
         bool h11hasB = H11 == HOLESTATE.has_black;
 
-        if (HEUR12RELAXED)
+        if (!HEUR12RELAXED)
         {
             if (h11hasB && H00 == HOLESTATE.has_black) { made4blacks++; if (H22 != HOLESTATE.has_white) stronglymade4blacks++; }
             if (h11hasB && H02 == HOLESTATE.has_black) { made4blacks++; if (H20 != HOLESTATE.has_white) stronglymade4blacks++; }
@@ -494,7 +499,7 @@ public partial class Pentago_Rules
         if (H21 != HOLESTATE.has_white && H22 != HOLESTATE.has_white) available4blacks++;
         if (H02 != HOLESTATE.has_white && H12 != HOLESTATE.has_white) available4blacks++;
 
-        if (HEUR12RELAXED)
+        if (!HEUR12RELAXED)
         {
             if (H00 == HOLESTATE.has_black && H01 == HOLESTATE.has_black) { made4blacks++; if (H02 != HOLESTATE.has_white) stronglymade4blacks++; }
             if (H10 == HOLESTATE.has_black && H20 == HOLESTATE.has_black) { made4blacks++; if (H00 != HOLESTATE.has_white) stronglymade4blacks++; }
@@ -549,7 +554,7 @@ public partial class Pentago_Rules
         if (H22 != HOLESTATE.has_white && H12 != HOLESTATE.has_white) available4blacks++;
         if (H02 != HOLESTATE.has_white && H01 != HOLESTATE.has_white) available4blacks++;
 
-        if (HEUR12RELAXED)
+        if (!HEUR12RELAXED)
         {
             if (H00 == HOLESTATE.has_black && H10 == HOLESTATE.has_black) { made4blacks++; if (H20 != HOLESTATE.has_white) stronglymade4blacks++; }
             if (H20 == HOLESTATE.has_black && H21 == HOLESTATE.has_black) { made4blacks++; if (H22 != HOLESTATE.has_white) stronglymade4blacks++; }

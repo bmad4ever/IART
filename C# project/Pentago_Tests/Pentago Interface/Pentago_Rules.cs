@@ -10,7 +10,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     const float MAX_HEURISTIC_VALUE = 1000000;
     const float MIN_HEURISTIC_VALUE = -1000000;
 
-    public enum EvaluationFunction { controlHeuristic, heuristicA, heuristic1, heuristic1dot2 };
+    public enum EvaluationFunction { controlHeuristic, heuristicA, heuristic1, heuristic1dot2, heuristicAplusDiagonalHack };
     EvaluationFunction ef;
 
     public bool remove_repeated_states_on_nextStates = false;
@@ -24,12 +24,15 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 
     public Pentago_Rules(EvaluationFunction ef = EvaluationFunction.controlHeuristic, NextStatesFunction nsf = NextStatesFunction.all_states , bool iapieces = IA_PIECES_WHITES, bool remove_repeated_states_on_nextStates = false, float draw_value = 0)
     {
-        this.ef = ef;
+        this.ef = ef;		
         this.nsf = nsf;
         this.remove_repeated_states_on_nextStates = remove_repeated_states_on_nextStates;
         this.draw_value = draw_value;
 
         IA_PIECES = iapieces;
+        if (ef == EvaluationFunction.heuristicAplusDiagonalHack)
+            setUpDiagonalHack();
+
 
         //create all possible plays.
         //since we are using a class, there is no need to initialize them again
@@ -122,6 +125,8 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
                 return heuristic1(gb.board);
             case EvaluationFunction.heuristic1dot2:
                 return heuristic1dot2(gb.board);
+			case EvaluationFunction.heuristicAplusDiagonalHack:
+				return heuristicA(gb)*2.0f + heuristic1dot2(gb.board);
             default:
                 return 0;
         }
