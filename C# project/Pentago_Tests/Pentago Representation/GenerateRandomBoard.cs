@@ -8,7 +8,7 @@ public class GenerateRandomBoard
     public Pentago_GameBoard Pentago_gb;
     private int number_of_plays;
     public bool player_turn_to_end;
-    int MAX_COUNT = 1000000;
+    int MAX_COUNT = 100000;
 
     /// <summary>
     /// This is the constructor for the class that generates random board
