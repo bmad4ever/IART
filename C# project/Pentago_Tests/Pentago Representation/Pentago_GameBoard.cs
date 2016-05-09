@@ -19,6 +19,7 @@ public class Pentago_GameBoard
     public const bool whites_turn = false;
     public const bool blacks_turn = true;
     private bool player_turn;
+    public void reset_player_turn() { this.player_turn = whites_turn; }
     public bool get_player_turn() { return player_turn; }//avoids checking board
     public void switch_player_turn() { player_turn = !player_turn; }
 

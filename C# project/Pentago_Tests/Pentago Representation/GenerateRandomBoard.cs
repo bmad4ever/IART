@@ -22,18 +22,19 @@ public class GenerateRandomBoard
         if (last_player_to_play)
         {
             player_turn_to_end = blacks_turn;
-            number_of_plays = num_pieces * 2;
+            number_of_plays = (num_pieces * 2);
         }
         else
         {
             player_turn_to_end = whites_turn;
-            number_of_plays = (num_pieces * 2) - 1;
+            number_of_plays = (num_pieces * 2) -1;
         }
     }
 
     public void generateNewBoard()
     {
         Pentago_gb.board = new hole_state[36];
+        Pentago_gb.reset_player_turn();
         for (int i=0; i<number_of_plays; i++)
         {
             bool test_move = generateNewMove(ref Pentago_gb.board);
