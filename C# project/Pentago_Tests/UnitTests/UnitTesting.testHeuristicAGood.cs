@@ -10,15 +10,9 @@ static partial class UnitTesting
 {
     public const bool testFirst = true;
     public const bool testSecond = false; 
-    static public void testHeuristicAGood(int numberTests, Pentago_Rules.EvaluationFunction ef1, int depth1, Pentago_Rules.EvaluationFunction ef2, int depth2, bool testHeuristic, bool printTies = false, bool printLosses = false)
+    static public void testHeuristicAGood(int numberTests, Pentago_Rules wrules, Pentago_Rules brules, int depth1, int depth2, bool testHeuristic, bool printTies = false, bool printLosses = false)
     {
-        Pentago_Rules wrules = new Pentago_Rules(ef1,
-            Pentago_Rules.NextStatesFunction.check_symmetries,
-            Pentago_Rules.IA_PIECES_WHITES, true/*, -100*/);
         MINMAX alpha_beta_test_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, depth1);
-        Pentago_Rules brules = new Pentago_Rules(ef2,
-            Pentago_Rules.NextStatesFunction.check_symmetries,
-            Pentago_Rules.IA_PIECES_BLACKS, true);
         MINMAX alpha_beta_test_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, depth2);
         int black_wins = 0;
         int black_losses = 0;
@@ -40,7 +34,8 @@ static partial class UnitTesting
                 if (printTies)
                 {
                     initialize_test_gameboards();
-                    printAllMoves(allMoves, emptyBoard);
+                    if (testHeuristic == testFirst) printAllMoves(allMoves, emptyBoard, wrules);
+                    else printAllMoves(allMoves, emptyBoard, brules);
                 }
                 ties++;
             }
@@ -49,7 +44,7 @@ static partial class UnitTesting
                 if (testHeuristic == testFirst && printLosses)
                 {
                     initialize_test_gameboards();
-                    printAllMoves(allMoves, emptyBoard);
+                    printAllMoves(allMoves, emptyBoard, wrules);
                 }
                 black_wins++;
             }
@@ -58,7 +53,7 @@ static partial class UnitTesting
                 if (testHeuristic == testSecond && printLosses)
                 {
                     initialize_test_gameboards();
-                    printAllMoves(allMoves, emptyBoard);
+                    printAllMoves(allMoves, emptyBoard, brules);
                 }
                 black_losses++;
             }
@@ -78,9 +73,10 @@ static partial class UnitTesting
         }
     }
 
-    static void printAllMoves(List<Pentago_Move> allMoves, Pentago_GameBoard board)
+    static void printAllMoves(List<Pentago_Move> allMoves, Pentago_GameBoard board, Pentago_Rules rules)
     {
         int i = 0;
+        float board_value;
         foreach (Pentago_Move move in allMoves)
         {
             if (board.get_player_turn() == Pentago_GameBoard.whites_turn) Console.Write("White ");
@@ -90,6 +86,9 @@ static partial class UnitTesting
             else Console.WriteLine("place");
             move.apply_move2board(board);
             board.print_board();
+//            Pentago_GameBoard gb = board.Clone();
+            board_value = rules.evaluate(board);
+            Console.WriteLine(board_value);
             i++;
             if (i % 2 == 0) Console.WriteLine("|-|-|-|-|-|-|-|-|");
         }

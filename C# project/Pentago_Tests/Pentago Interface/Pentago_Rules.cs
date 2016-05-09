@@ -10,7 +10,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     const float MAX_HEURISTIC_VALUE = 1000000;
     const float MIN_HEURISTIC_VALUE = -1000000;
 
-    public enum EvaluationFunction { controlHeuristic, heuristicA, heuristic1, heuristic1dot2, heuristicAplusDiagonalHack };
+    public enum EvaluationFunction { controlHeuristic, heuristicA, heuristicAstar, heuristic1, heuristic1dot2, heuristicAplusDiagonalHack };
     EvaluationFunction ef;
 
     public bool remove_repeated_states_on_nextStates = false;
@@ -121,6 +121,8 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
                 return ControlHeuristic();
             case EvaluationFunction.heuristicA:
                 return heuristicA(gb);
+            case EvaluationFunction.heuristicAstar:
+                return heuristicAstar(gb);
             case EvaluationFunction.heuristic1:
                 return heuristic1(gb.board);
             case EvaluationFunction.heuristic1dot2:

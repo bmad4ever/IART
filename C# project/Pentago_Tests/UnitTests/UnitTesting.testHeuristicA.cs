@@ -10,8 +10,8 @@ static partial class UnitTesting
     {
         initialize_test_gameboards();
         Pentago_Rules rules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.heuristicA,
-            Pentago_Rules.NextStatesFunction.all_states,
-            Pentago_Rules.IA_PIECES_WHITES, false);
+            Pentago_Rules.NextStatesFunction.check_symmetries,
+            Pentago_Rules.IA_PIECES_WHITES, true);
         Console.WriteLine(rules.heuristicA(boardHeuristicA));
     }
 }

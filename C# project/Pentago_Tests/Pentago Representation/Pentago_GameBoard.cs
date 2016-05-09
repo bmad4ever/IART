@@ -29,7 +29,6 @@ public class Pentago_GameBoard
     public bool get_turn_state() { return turn_state; }
     public void switch_turn_state() { turn_state = !turn_state; }
 
-
     public Pentago_GameBoard()
     {
         board = new hole_state[36];
@@ -337,7 +336,7 @@ public class Pentago_GameBoard
         if (white_made_a_line && !black_made_a_line) player = whites_turn;
         else if (!white_made_a_line && black_made_a_line) player = blacks_turn;
         else player = null;
-
+        if (turn_state == turn_state_rotate) board_full = false;
         return board_full || black_made_a_line || white_made_a_line;
     }
 
