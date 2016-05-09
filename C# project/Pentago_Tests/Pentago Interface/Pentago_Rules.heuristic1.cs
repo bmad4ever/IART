@@ -13,6 +13,14 @@ using HOLESTATE = Pentago_GameBoard.hole_state;
 public partial class Pentago_Rules
 {
     float heuristic1_bias = .5f;
+
+    float h1_middle = 2.2f;
+    float h1_inner = 1.5f;
+    float h1_outer = 1.0f;
+    float h1_main_Diag = 1.9f; 
+    float h1_other_Diag = .3f;//can only make one (one possible five), should weight lees*/
+    float[] weights;
+
     /// <summary>
     /// <para>set a bias to better define heuristic's 1 priorities (default is 0.5) </para>
     /// <para>set a value towards 0 to prioritize minimization of adversary possible lines</para>
@@ -31,25 +39,26 @@ public partial class Pentago_Rules
     /// <returns></returns>
     public float heuristic1(HOLESTATE[] gb)
     {
-        int whites, blacks;
-        calculate_available_classes(gb, out whites, out blacks);
+        if(weights == null) weights = new float[] { h1_middle, h1_inner, h1_outer, h1_main_Diag, h1_other_Diag };
+        float whites, blacks;
+        calculate_available_classes(gb, out whites, out blacks, weights);
 
         float value;
        
-        if (IA_PIECES == IA_PIECES_BLACKS) value = ((float)blacks) * heuristic1_bias - ((float)whites) * (1.0f - heuristic1_bias);
-        else value = ((float)whites) * heuristic1_bias - ((float)blacks) * (1.0f - heuristic1_bias);
+        if (IA_PIECES == IA_PIECES_BLACKS) value = (blacks) * heuristic1_bias - (whites) * (1.0f - heuristic1_bias);
+        else value = (whites) * heuristic1_bias - (blacks) * (1.0f - heuristic1_bias);
 
         return value;
     }
 
 
 
-    public static void calculate_available_classes(Pentago_GameBoard gb, out int available4whites, out int available4blacks)
+    public static void calculate_available_classes(Pentago_GameBoard gb, out float available4whites, out float available4blacks,float[] weights)
     {
-        calculate_available_classes(gb.board, out available4whites, out available4blacks);
+        calculate_available_classes(gb.board, out available4whites, out available4blacks, weights);
     }
 
-    static void calculate_available_classes(HOLESTATE[] gb, out int available4whites, out int available4blacks)
+    static void calculate_available_classes(HOLESTATE[] gb, out float available4whites, out float available4blacks, float[] weights)
     {
         //int[] allsquares = new int[] { 0, 1, 2, 3 };
         available4whites = 0;
@@ -147,8 +156,21 @@ public partial class Pentago_Rules
         D_2[4] = select_min(diamondcross_2[1], diamondcross_2[2], corners_2[3]);
         D_2[5] = select_min(diamondcross_2[1], diamondcross_2[2], corners_2[0]);
 
-        available4whites = L_P1.Sum() + R_P1.Sum() + D_1.Sum(); ;
-        available4blacks = L_P2.Sum() + R_P2.Sum() + D_2.Sum(); ;
+        available4whites =
+        (L_P1[1] + L_P1[4] + R_P1[1] + R_P1[1]) * weights[0]//middle
+                + (L_P1[2] + L_P1[3] + R_P1[2] + R_P1[3]) * weights[1]//inner 
+        + (L_P1[0] + L_P1[5] + R_P1[0] + R_P1[5]) * weights[2]//outer 
+           + (D_1[0] + D_1[3]) * weights[3]//main diags
+        + (D_1[1] + D_1[2] + D_1[4] + D_1[5] ) * weights[4];//other diags
+                                        //old L_P1.Sum() + R_P1.Sum() + D_1.Sum(); 
+
+        available4blacks =
+                    (L_P2[1] + L_P2[4] + R_P2[1] + R_P2[1]) * weights[0]//middle
+                + (L_P2[2] + L_P2[3] + R_P2[2] + R_P2[3]) * weights[1]//inner 
+        + (L_P2[0] + L_P2[5] + R_P2[0] + R_P2[5]) * weights[2]//outer 
+           + (D_2[0] + D_2[3]) * weights[3]//main diags
+        + (D_2[1] + D_2[2] + D_2[4] + D_2[5]) * weights[4];//other diags 
+                                                           //old L_P2.Sum() + R_P2.Sum() + D_2.Sum(); ;
 
         //maybe max could be relevant 2 ?
     }

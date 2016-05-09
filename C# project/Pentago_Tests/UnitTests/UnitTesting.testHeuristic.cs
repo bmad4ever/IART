@@ -22,6 +22,7 @@ static partial class UnitTesting
         {
             List<Pentago_Move> allMoves = new List<Pentago_Move>();
             Pentago_GameBoard board = boards[i].Clone();
+            Pentago_GameBoard endDisplay = boards[i].Clone();
             bool? player;
             while (!board.game_ended(out player))
             {
@@ -34,7 +35,7 @@ static partial class UnitTesting
                 if (printTies)
                 {
                     initialize_test_gameboards();
-                    printAllMoves(allMoves, board);
+                    printAllMoves(allMoves, endDisplay);
                 }
                 ties++;
             }
@@ -43,7 +44,7 @@ static partial class UnitTesting
                 if (testHeuristic == testFirst && printLosses)
                 {
                     initialize_test_gameboards();
-                    printAllMoves(allMoves, board);
+                    printAllMoves(allMoves, endDisplay);
                 }
                 black_wins++;
             }
@@ -52,14 +53,13 @@ static partial class UnitTesting
                 if (testHeuristic == testSecond && printLosses)
                 {
                     initialize_test_gameboards();
-                    printAllMoves(allMoves, board);
+                    printAllMoves(allMoves, endDisplay);
                 }
                 black_losses++;
             }
 
             if (!print_onend_only)
             {
-                System.Console.WriteLine("RESULT");
                 if (testHeuristic == testFirst) 
                     Console.WriteLine("it: " + (i + 1) + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties);
                 else
@@ -90,6 +90,7 @@ static partial class UnitTesting
         {
             List<Pentago_Move> allMoves = new List<Pentago_Move>();
             Pentago_GameBoard board = emptyBoard.Clone();
+            Pentago_GameBoard endDisplay = emptyBoard.Clone();
             bool? player;
             while (!board.game_ended(out player))
             {
@@ -102,7 +103,7 @@ static partial class UnitTesting
                 if (printTies)
                 {
                     initialize_test_gameboards();
-                    printAllMoves(allMoves, board);
+                    printAllMoves(allMoves, endDisplay);
                 }
                 ties++;
             }
@@ -111,7 +112,7 @@ static partial class UnitTesting
                 if (testHeuristic == testFirst && printLosses)
                 {
                     initialize_test_gameboards();
-                    printAllMoves(allMoves, board);
+                    printAllMoves(allMoves, endDisplay);
                 }
                 black_wins++;
             }
@@ -120,14 +121,13 @@ static partial class UnitTesting
                 if (testHeuristic == testSecond && printLosses)
                 {
                     initialize_test_gameboards();
-                    printAllMoves(allMoves, board);
+                    printAllMoves(allMoves, endDisplay);
                 }
                 black_losses++;
             }
 
             if (!print_onend_only)
             {
-                System.Console.WriteLine("RESULT");
                 if (testHeuristic == testFirst)
                     Console.WriteLine("it: " + (i + 1) + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties);
                 else

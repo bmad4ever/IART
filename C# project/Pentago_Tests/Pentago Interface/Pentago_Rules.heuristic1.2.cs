@@ -8,11 +8,56 @@ using HOLESTATE = Pentago_GameBoard.hole_state;
 public partial class Pentago_Rules
 {
     //std
-    float heuristic1dot2_own_possibilities_weigth = 1.0f;
-    float heuristic1dot2_oponent_possibilities_weigth = 2.0f;
-    float heuristic1dot2_own_strongChances_weigth = 2.0f;
-    float heuristic1dot2_oponent_strongChances_weigth = 4.0f;
+    /*float heuristic1dot2_own_possibilities_weigth = 1.0f;
+    float heuristic1dot2_oponent_possibilities_weigth = 4.0f;
+    float heuristic1dot2_own_strongChances_weigth = 4.0f;
+    float heuristic1dot2_oponent_strongChances_weigth = 7.5f;*/
+    float heuristic1dot2_own_possibilities_weigth = 6.0f;
+    float heuristic1dot2_oponent_possibilities_weigth = 6.0f;
+    float heuristic1dot2_own_strongChances_weigth = 10.0f;
+    float heuristic1dot2_oponent_strongChances_weigth = 8.0f;
 
+    //SETUPS:
+    //active defensive and passive offense //will only focus on attacks when the chance appears
+    public void setHeur12_AD_PO()
+    {
+        heuristic1dot2_own_possibilities_weigth = 4.0f;
+        heuristic1dot2_oponent_possibilities_weigth = 3.0f;
+        heuristic1dot2_own_strongChances_weigth = 2.0f;
+        heuristic1dot2_oponent_strongChances_weigth = 8.0f;
+    }
+    //passive defense and active ofense (counter plays) //will focus on ofense unless the board looks pretty bad
+    public void setHeur12_PD_AO()
+    {
+        heuristic1dot2_own_possibilities_weigth = 3.0f;
+        heuristic1dot2_oponent_possibilities_weigth = 4.0f;
+        heuristic1dot2_own_strongChances_weigth = 8.0f;
+        heuristic1dot2_oponent_strongChances_weigth = 3.0f;
+    }
+    //ultra defensive //just try to defend everything
+    public void setHeur12_UD()
+    {
+        heuristic1dot2_own_possibilities_weigth = 1.0f;
+        heuristic1dot2_oponent_possibilities_weigth = 5.0f;
+        heuristic1dot2_own_strongChances_weigth = 3.0f;
+        heuristic1dot2_oponent_strongChances_weigth = 20.1f;
+    }
+    //ultra ofensive //just try to attack
+    public void setHeur12_UO()
+    {
+        heuristic1dot2_own_possibilities_weigth = 5.0f;
+        heuristic1dot2_oponent_possibilities_weigth = 1.0f;
+        heuristic1dot2_own_strongChances_weigth = 8.1f;
+        heuristic1dot2_oponent_strongChances_weigth = 3.0f;
+    }
+    //passive //priorityze possibilities
+    public void setHeur12_P()
+    {
+        heuristic1dot2_own_possibilities_weigth = 10.0f;
+        heuristic1dot2_oponent_possibilities_weigth = 10.0f;
+        heuristic1dot2_own_strongChances_weigth = 6.0f;
+        heuristic1dot2_oponent_strongChances_weigth = 4.0f;
+    }
     //USING DIAGONAL HACK(no longer the 1.2 heuristic if used
     //highly improves winning rate when playing 1st (combined with A)
     /* float heuristic1dot2_own_possibilities_weigth = 0.0f;
@@ -70,16 +115,17 @@ public partial class Pentago_Rules
     /// <returns></returns>
     public float heuristic1dot2(HOLESTATE[] gb)
     {
-        int whites, blacks, whitesS, blacksS;
-        calculate_available_classes2(gb, out whites, out blacks, out whitesS, out blacksS);
+        if (weights == null) weights = new float[] { h1_middle, h1_inner, h1_outer, h1_main_Diag, h1_other_Diag };
+        float whites, blacks, whitesS, blacksS;
+        calculate_available_classes2(gb, out whites, out blacks, out whitesS, out blacksS, weights);
 
         float value;
         if (IA_PIECES == IA_PIECES_WHITES) value =
-            ((float)whites) * heuristic1dot2_own_possibilities_weigth - ((float)blacks) * heuristic1dot2_oponent_possibilities_weigth
-            + ((float)whitesS) * heuristic1dot2_own_strongChances_weigth - ((float)blacksS) * heuristic1dot2_oponent_strongChances_weigth;
+            (whites) * heuristic1dot2_own_possibilities_weigth - (blacks) * heuristic1dot2_oponent_possibilities_weigth
+            + (whitesS) * heuristic1dot2_own_strongChances_weigth - (blacksS) * heuristic1dot2_oponent_strongChances_weigth;
         else value =
-           -((float)whites) * heuristic1dot2_oponent_possibilities_weigth + ((float)blacks) * heuristic1dot2_own_possibilities_weigth
-            - ((float)whitesS) * heuristic1dot2_oponent_strongChances_weigth + ((float)blacksS) * heuristic1dot2_own_strongChances_weigth;
+           -(whites) * heuristic1dot2_oponent_possibilities_weigth + (blacks) * heuristic1dot2_own_possibilities_weigth
+            - (whitesS) * heuristic1dot2_oponent_strongChances_weigth + (blacksS) * heuristic1dot2_own_strongChances_weigth;
 
         value = value / (
             heuristic1dot2_own_possibilities_weigth + heuristic1dot2_oponent_possibilities_weigth +
@@ -90,12 +136,12 @@ public partial class Pentago_Rules
 
 
 
-    public void calculate_available_classes2(Pentago_GameBoard gb, out int available4whites, out int available4blacks, out int strongWhites, out int strongBlacks)
+    public void calculate_available_classes2(Pentago_GameBoard gb, out float available4whites, out float available4blacks, out float strongWhites, out float strongBlacks, float[] weights)
     {
-        calculate_available_classes2(gb.board, out available4whites, out available4blacks, out strongWhites, out strongBlacks);
+        calculate_available_classes2(gb.board, out available4whites, out available4blacks, out strongWhites, out strongBlacks, weights);
     }
 
-    void calculate_available_classes2(HOLESTATE[] gb, out int available4whites, out int available4blacks, out int strongWhites, out int strongBlacks)
+    void calculate_available_classes2(HOLESTATE[] gb, out float available4whites, out float available4blacks, out float strongWhites, out float strongBlacks, float[] weights)
     {
         //int[] allsquares = new int[] { 0, 1, 2, 3 };
         /* available4whites = 0;
@@ -286,10 +332,40 @@ public partial class Pentago_Rules
 
         if (!diagonal_hack)
         {
-            available4whites = L_P1.Sum() + R_P1.Sum() + D_1.Sum();
-            available4blacks = L_P2.Sum() + R_P2.Sum() + D_2.Sum();
+            //old
+            //available4whites = L_P1.Sum() + R_P1.Sum() + D_1.Sum();
+            //available4blacks = L_P2.Sum() + R_P2.Sum() + D_2.Sum();
             strongWhites = L_P1M.Sum() + R_P1M.Sum() + D_1M.Sum();
             strongBlacks = L_P2M.Sum() + R_P2M.Sum() + D_2M.Sum();
+
+            available4whites =
+                        (L_P1[1] + L_P1[4] + R_P1[1] + R_P1[1]) * weights[0]//middle
+                + (L_P1[2] + L_P1[3] + R_P1[2] + R_P1[3]) * weights[1]//inner 
+        + (L_P1[0] + L_P1[5] + R_P1[0] + R_P1[5]) * weights[2]//outer 
+           + (D_1[0] + D_1[3]) * weights[3]//main diags
+        + (D_1[1] + D_1[2] + D_1[4] + D_1[5]) * weights[4];//other diags
+
+
+            available4blacks = (L_P2[1] + L_P2[4] + R_P2[1] + R_P2[1]) * weights[0]//middle
+                + (L_P2[2] + L_P2[3] + R_P2[2] + R_P2[3]) * weights[1]//inner 
+        + (L_P2[0] + L_P2[5] + R_P2[0] + R_P2[5]) * weights[2]//outer 
+           + (D_2[0] + D_2[3]) * weights[3]//main diags
+        + (D_2[1] + D_2[2] + D_2[4] + D_2[5]) * weights[4];
+
+        /*     strongWhites =
+                 (L_P1M[1] + L_P1M[4] + R_P1M[1] + R_P1M[1]) * weights[0]//middle
+                 + (L_P1M[2] + L_P1M[3] + R_P1M[2] + R_P1M[3]) * weights[1]//inner 
+                 + (L_P1M[0] + L_P1M[5] + R_P1M[0] + R_P1M[5]) * weights[2]//outer 
+                 + (D_1M[0] + D_1M[3]) * weights[3]//main diags
+                 + (D_1M[1] + D_1M[2] + D_1M[4] + D_1M[5]) * weights[4];//other diags
+
+             strongBlacks =
+             (L_P2M[1] + L_P2M[4] + R_P2M[1] + R_P2M[1]) * weights[0]//middle
+         + (L_P2M[2] + L_P2M[3] + R_P2M[2] + R_P2M[3]) * weights[1]//inner 
+         + (L_P2M[0] + L_P2M[5] + R_P2M[0] + R_P2M[5]) * weights[2]//outer 
+         + (D_2M[0] + D_2M[3]) * weights[3]//main diags
+         + (D_2M[1] + D_2M[2] + D_2M[4] + D_2M[5]) * weights[4];//other diags*/
+
         }
         else
         {
