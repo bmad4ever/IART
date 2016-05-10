@@ -10,7 +10,7 @@ static partial class UnitTesting
 {
     public const bool testFirst = true;
     public const bool testSecond = false;
-    static public void testHeuristic(Pentago_GameBoard[] boards, MINMAX M_W, MINMAX M_B, bool testHeuristic, bool print_onend_only = false, bool printTies = false, bool printLosses = false)
+    static public int[] testHeuristic(Pentago_GameBoard[] boards, MINMAX M_W, MINMAX M_B, bool testHeuristic, bool print_onend_only = false, bool printTies = false, bool printLosses = false)
     {
         int numberTests = boards.Length;
 
@@ -75,10 +75,11 @@ static partial class UnitTesting
                 Console.WriteLine(numberTests + " - wins: " + black_wins + ", losses: " + black_losses + ", ties: " + ties + ", avg rounds: " + (totalrounds / numberTests));
         }
 
-        System.Console.WriteLine();
+       // System.Console.WriteLine();
+        return testHeuristic == testFirst ? new int[] { black_losses, black_wins, ties } : new int[] { black_wins, black_losses, ties };
     }
 
-    static public void testHeuristic(int numberTests , MINMAX M_W, MINMAX M_B, bool testHeuristic, bool print_onend_only = false, bool printTies = false, bool printLosses = false)
+    static public int[] testHeuristic(int numberTests , MINMAX M_W, MINMAX M_B, bool testHeuristic, bool print_onend_only = false, bool printTies = false, bool printLosses = false)
     {
 
         int black_wins = 0;
@@ -138,12 +139,13 @@ static partial class UnitTesting
         if (print_onend_only)
         {
             if (testHeuristic == testFirst)
-                Console.WriteLine(numberTests + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties + "avg rounds: " + (totalrounds / numberTests));
+                Console.WriteLine(numberTests + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties + ", avg rounds: " + (totalrounds / numberTests));
             else
-                Console.WriteLine(numberTests + " - wins: " + black_wins + ", losses: " + black_losses + ", ties: " + ties + "avg rounds: " + (totalrounds / numberTests));
+                Console.WriteLine(numberTests + " - wins: " + black_wins + ", losses: " + black_losses + ", ties: " + ties + ", avg rounds: " + (totalrounds / numberTests));
         }
 
-        System.Console.WriteLine();
+        //System.Console.WriteLine();
+        return testHeuristic == testFirst ? new int[] { black_losses , black_wins, ties } : new int[] { black_wins, black_losses, ties } ;
     }
 
 

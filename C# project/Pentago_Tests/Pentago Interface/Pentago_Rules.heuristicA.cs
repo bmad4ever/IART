@@ -66,6 +66,15 @@ public partial class Pentago_Rules
         this.triple_strength = triple_strength;
     }
 
+    public void setHeurARANDOM()
+    {
+        System.Random random = new System.Random();
+        this.monica_strength =      .9f + ((float)random.Next(0, 400000)) / 1000000.0f; 
+        this.middle_strength =      .9f + ((float)random.Next(0, 400000)) / 1000000.0f;
+        this.straight_strength =    .9f + ((float)random.Next(0, 400000)) / 1000000.0f;
+        this.triple_strength =      .9f + ((float)random.Next(0, 400000)) / 1000000.0f;
+    }
+
     public float heuristicA(Pentago_GameBoard gb)
     {
         float value;

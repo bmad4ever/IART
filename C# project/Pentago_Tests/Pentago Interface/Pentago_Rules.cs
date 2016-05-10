@@ -172,19 +172,43 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
             case EvaluationFunction.controlHeuristic:
                 break;
             case EvaluationFunction.heuristicA:
+                result += " bias: "
+                + " mon=" + monica_strength
+                + " mid=" + middle_strength
+                + " stra=" + straight_strength
+                + " tri=" + triple_strength;
+                break;
+            case EvaluationFunction.heuristicAstar:
+                result += " bias: "
+                + " mon=" + monica_strength
+                + " mid=" + middle_strength
+                + " stra=" + straight_strength
+                + " tri=" + triple_strength
+                + " rots=" + (study_rotations_on_rotate?"Y":"N");
                 break;
             case EvaluationFunction.heuristic1:
                 result += " - bias = " + heuristic1_bias;
                 break;
             case EvaluationFunction.heuristic1dot2:
                 result += " - rel:" + (HEUR12RELAXED ? "Y" : "N") + " | D_HACK:" + (diagonal_hack ? "Y" : "N");
-                result += "\n biases: "
+                result += "\n bias: "
                     + " bow=" + heuristic1dot2_own_possibilities_weigth
                     + " bop=" + heuristic1dot2_oponent_possibilities_weigth
                     + " bowS=" + heuristic1dot2_own_strongChances_weigth
                     + " bopS=" + heuristic1dot2_oponent_strongChances_weigth;
                 break;
             case EvaluationFunction.heuristicAplusDiagonalHack:
+                result += " - rel:" + (HEUR12RELAXED ? "Y" : "N") + " | D_HACK:" + (diagonal_hack ? "Y" : "N");
+                result += "\n bias: "
+                    + " bow=" + heuristic1dot2_own_possibilities_weigth
+                    + " bop=" + heuristic1dot2_oponent_possibilities_weigth
+                    + " bowS=" + heuristic1dot2_own_strongChances_weigth
+                    + " bopS=" + heuristic1dot2_oponent_strongChances_weigth
+                    + " mon=" + monica_strength
+                    + " mid=" + middle_strength
+                    + " stra=" + straight_strength
+                     +  "tri=" + triple_strength
+                    ;
                 break;
             default:
                 break;

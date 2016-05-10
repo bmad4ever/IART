@@ -58,6 +58,48 @@ public partial class Pentago_Rules
         heuristic1dot2_own_strongChances_weigth = 6.0f;
         heuristic1dot2_oponent_strongChances_weigth = 4.0f;
     }
+    public void setHeur12RANDOM()
+    {
+        System.Random random = new System.Random();        
+
+        heuristic1dot2_own_possibilities_weigth = ( (float)random.Next(0, 1500)) / 100f;
+        heuristic1dot2_oponent_possibilities_weigth = ( (float)random.Next(0, 1500)) / 100;
+        heuristic1dot2_own_strongChances_weigth = ( (float)random.Next(0, 1500)) / 100;
+        heuristic1dot2_oponent_strongChances_weigth = ( (float)random.Next(0, 1500)) / 100;
+        h1_middle = ( (float)random.Next(0, 700)) / 100;
+        h1_inner = ( (float)random.Next(0, 700)) / 100;
+        h1_outer = ( (float)random.Next(0, 700)) / 100;
+        h1_main_Diag = ( (float)random.Next(0, 700)) / 100;
+        h1_other_Diag = ( (float)random.Next(0, 700)) / 100;
+        System.Console.WriteLine(
+            heuristic1dot2_own_possibilities_weigth
+            + " , " + heuristic1dot2_oponent_possibilities_weigth
+            + " , " + heuristic1dot2_own_strongChances_weigth
+            + " , " + heuristic1dot2_oponent_strongChances_weigth
+            + " , " + h1_middle
+            + " , " + h1_inner
+            + " , " + h1_outer
+            + " , " + h1_main_Diag
+            + " , " + h1_other_Diag
+            );
+
+    }
+
+        public void setcustom()
+    {
+        //-9,49 , 8,38 , 5,58 , -1,88 , 2,3 , 0,85 , -0,36 , 1,85 , -0,09
+
+        heuristic1dot2_own_possibilities_weigth = -9.49f;
+        heuristic1dot2_oponent_possibilities_weigth = 8.38f;
+        heuristic1dot2_own_strongChances_weigth = 5.58f;
+        heuristic1dot2_oponent_strongChances_weigth = -1.88f;
+        h1_middle = 12.3f;
+        h1_inner = 0.85f;
+        h1_outer = -0.36f;
+        h1_main_Diag = 1.85f;
+        h1_other_Diag = -0.09f;
+    }
+
     //USING DIAGONAL HACK(no longer the 1.2 heuristic if used
     //highly improves winning rate when playing 1st (combined with A)
     /* float heuristic1dot2_own_possibilities_weigth = 0.0f;

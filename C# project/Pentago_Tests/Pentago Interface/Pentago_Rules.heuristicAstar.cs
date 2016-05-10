@@ -65,13 +65,24 @@ public partial class Pentago_Rules
 
     bool study_rotations_on_rotate = true;
 
-    public void determineAstarSettings(float monica_strength, float middle_strength, float straight_strength, float triple_strength, bool study_rotations)
+    public void setAstarSettings(float monica_strength, float middle_strength, float straight_strength, float triple_strength, bool study_rotations)
     {
-        this.monica_strength = monica_strength;
-        this.middle_strength = middle_strength;
-        this.straight_strength = straight_strength;
-        this.triple_strength = triple_strength;
+        setHeuristicAStrengths(monica_strength,middle_strength,straight_strength,triple_strength);
         study_rotations_on_rotate = study_rotations;
+    }
+
+    public void setRandomAstar()
+    {
+        setHeurARANDOM();
+        System.Random random = new System.Random();
+        study_rotations_on_rotate = random.Next(100) < 50;
+        Console.WriteLine(
+        " mon=" + monica_strength
+        + " mid=" + middle_strength
+        + " stra=" + straight_strength
+        + " tri=" + triple_strength
+        + " rots=" + (study_rotations_on_rotate ? "Y" : "N")
+            );
     }
 
     public float heuristicAstar(Pentago_GameBoard gb)
