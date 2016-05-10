@@ -58,11 +58,6 @@ using HOLESTATE = Pentago_GameBoard.hole_state;
 public partial class Pentago_Rules
 {
 
-    float monica_strength = 1.13f;
-    float middle_strength = 1.15f;
-    float straight_strength = 1.17f;
-    float triple_strength = 1.19f;
-
     public void setHeuristicAStrengths(float monica_strength, float middle_strength, float straight_strength, float triple_strength)
     {
         this.monica_strength = monica_strength;

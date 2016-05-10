@@ -58,19 +58,19 @@ using HOLESTATE = Pentago_GameBoard.hole_state;
 public partial class Pentago_Rules
 {
 
-    float monica_star_strength = 1.13f;
-    float middle_star_strength = 1.15f;
-    float straight_star_strength = 1.17f;
-    float triple_star_strength = 1.19f;
+    float monica_strength = 1.13f;
+    float middle_strength = 1.15f;
+    float straight_strength = 1.17f;
+    float triple_strength = 1.19f;
 
     bool study_rotations_on_rotate = true;
 
     public void determineAstarSettings(float monica_strength, float middle_strength, float straight_strength, float triple_strength, bool study_rotations)
     {
-        monica_star_strength = monica_strength;
-        middle_star_strength = middle_strength;
-        straight_star_strength = straight_strength;
-        triple_star_strength = triple_strength;
+        this.monica_strength = monica_strength;
+        this.middle_strength = middle_strength;
+        this.straight_strength = straight_strength;
+        this.triple_strength = triple_strength;
         study_rotations_on_rotate = study_rotations;
     }
 
