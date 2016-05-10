@@ -60,10 +60,10 @@ static partial class UnitTesting
         boardHeuristicA = new Pentago_GameBoard(
           new HOLESTATE[]{
                 E,E,E,E,E,E,
-                E,W,E,E,E,E,
+                E,B,E,E,E,E,
+                E,B,E,E,E,E,
                 E,E,E,E,E,E,
-                E,E,E,E,E,E,
-                E,E,E,E,E,E,
+                E,E,B,E,E,E,
                 E,E,E,E,E,E }
           , Pentago_GameBoard.whites_turn, Pentago_GameBoard.turn_state_rotate);
 
@@ -81,7 +81,7 @@ static partial class UnitTesting
 
     #endregion
 
-
+/*
     public static void test_auxiliar_methods()
     {
         Console.WriteLine("test_auxiliar_methods()");
@@ -99,12 +99,12 @@ static partial class UnitTesting
         Console.WriteLine(pr_110.next_states(board1r).Length);//expected 8
         Console.WriteLine(pr_111.next_states(board1r).Length);//expected 1+2+1+2 = 6
 
-        /*Console.WriteLine("test2 a)");
-          foreach (Pentago_GameBoard gb in pr_110.next_states(board1r))
-              gb.print_board();
-          Console.WriteLine("test2 b)");
-          foreach (Pentago_GameBoard gb in pr_111.next_states(board1r))
-              gb.print_board();*/
+//        Console.WriteLine("test2 a)");
+//          foreach (Pentago_GameBoard gb in pr_110.next_states(board1r))
+//              gb.print_board();
+//          Console.WriteLine("test2 b)");
+//          foreach (Pentago_GameBoard gb in pr_111.next_states(board1r))
+//              gb.print_board();
 
         //RAW test... time is not measured... just 2 have a practical perception
         int a, b;
@@ -113,28 +113,27 @@ static partial class UnitTesting
             Pentago_Rules.calculate_available_classes(board1, out a, out b);
         Console.WriteLine("test3-ended 1e5");
 
-        /* Console.WriteLine("test3-time 1e6");
-         for (int i = 0; i < 1000000; i++)
-             Pentago_Rules.calculate_available_classes(board1, out a, out b);
-         Console.WriteLine("test3-ended 1e6");
-
-         Console.WriteLine("test3-time 1e7");
-         for (int i = 0; i < 10000000; i++)
-             Pentago_Rules.calculate_available_classes(board1, out a, out b);
-         Console.WriteLine("test3-ended 1e7");
-
-         Console.WriteLine("test3-time 1e8");
-         for (int i = 0; i < 100000000; i++)
-             Pentago_Rules.calculate_available_classes(board1, out a, out b);
-         Console.WriteLine("test3-ended 1e8");*/
+//         Console.WriteLine("test3-time 1e6");
+//         for (int i = 0; i < 1000000; i++)
+//             Pentago_Rules.calculate_available_classes(board1, out a, out b);
+//         Console.WriteLine("test3-ended 1e6");
+//
+//         Console.WriteLine("test3-time 1e7");
+//         for (int i = 0; i < 10000000; i++)
+//             Pentago_Rules.calculate_available_classes(board1, out a, out b);
+//         Console.WriteLine("test3-ended 1e7");
+//
+//         Console.WriteLine("test3-time 1e8");
+//         for (int i = 0; i < 100000000; i++)
+//             Pentago_Rules.calculate_available_classes(board1, out a, out b);
+//         Console.WriteLine("test3-ended 1e8");
 
         Pentago_Rules rulestest = new Pentago_Rules();
         for (int i = 0; i < 100; i++)
             Console.WriteLine(rulestest.ControlHeuristic());
 
     }
-
-    
+*/
 
 
 

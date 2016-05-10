@@ -63,19 +63,15 @@ public partial class Pentago_Rules
     float straight_star_strength = 1.17f;
     float triple_star_strength = 1.19f;
 
-/*    int almost_count = 10;
+    bool study_rotations_on_rotate = true;
 
-    int monica_count = 31;
-    int middle_count = 27;
-    int straight_count = 24;
-    int triple_count = 22;*/
-
-    public void setHeuristicAStarStrengths(float monica_strength, float middle_strength, float straight_strength, float triple_strength)
+    public void determineAstarSettings(float monica_strength, float middle_strength, float straight_strength, float triple_strength, bool study_rotations)
     {
-        this.monica_star_strength = monica_strength;
-        this.middle_star_strength = middle_strength;
-        this.straight_star_strength = straight_strength;
-        this.triple_star_strength = triple_strength;
+        monica_star_strength = monica_strength;
+        middle_star_strength = middle_strength;
+        straight_star_strength = straight_strength;
+        triple_star_strength = triple_strength;
+        study_rotations_on_rotate = study_rotations;
     }
 
     public float heuristicAstar(Pentago_GameBoard gb)
@@ -87,27 +83,29 @@ public partial class Pentago_Rules
         if (turn_state == Pentago_GameBoard.turn_state_rotate)
         {
             player_turn = !player_turn;
-            player = boardValueStar(gb, out value);
-            if (player != null)
-                return (player == IA_PIECES) ? 100 : -100;
-            return value;
+            if (!study_rotations_on_rotate)
+            {
+                player = boardValueStar(gb, out value);
+#if DEBUG_HEURISTIC_A_STAR
+            gb.print_board();
+            Console.WriteLine(printPlayerTurn(gb.get_player_turn()));
+            Console.WriteLine(printTurnState(gb.get_turn_state()));
+            Console.WriteLine(value + " " + player);
+#endif
+                if (player != null)
+                    return (player == IA_PIECES) ? 100 : -100;
+                return value;
+            }
         }
         float result = player_turn == IA_PIECES ? float.NegativeInfinity : float.PositiveInfinity;
-//        if (turn_state == Pentago_GameBoard.turn_state_addpiece)
+        if (turn_state == Pentago_GameBoard.turn_state_addpiece)
             gb.switch_turn_state();
-        /*        Pentago_Move[] nplays = possible_plays(gb);
-                if (turn_state == Pentago_GameBoard.turn_state_addpiece)
-                    gb.switch_turn_state();
-                Pentago_GameBoard ngb;
-                foreach (Pentago_Move move in nplays)
-                {
-                    ngb = after_rotate(gb, move);*/
         Pentago_GameBoard[] ngbs = next_states(gb);
-//        if (turn_state == Pentago_GameBoard.turn_state_addpiece)
+        if (turn_state == Pentago_GameBoard.turn_state_addpiece)
             gb.switch_turn_state();
         foreach (Pentago_GameBoard ngb in ngbs)
         {
-//            if (turn_state == Pentago_GameBoard.turn_state_addpiece)
+            if (turn_state == Pentago_GameBoard.turn_state_addpiece)
                 ngb.switch_player_turn();
             player = boardValueStar(ngb, out value);
 #if DEBUG_HEURISTIC_A_STAR
@@ -178,14 +176,15 @@ public partial class Pentago_Rules
         int whiteAlmost = 0;
         int blackAlmost = 0;
         bool? playerWin = null;
+        bool whiteDanger = false;
+        bool blackDanger = false;
         foreach (int[] monica in monicas)
         {
-            player = countLineStar(gb, monica, out whiteCount, out blackCount);
+            player = countLineStar(gb, monica, out whiteCount, out blackCount, ref whiteDanger, ref blackDanger);
             player = checkAlmostStar(player, gb, ref whiteCount, ref blackCount, ref whiteAlmost, ref blackAlmost);
             if (player == gb.get_player_turn()) return player;
+            else if ((playerWin = checkNear(gb, whiteAlmost, blackAlmost)) != null) return playerWin;
             else if (player != null) playerWin = player;
-            //            if (whiteCount == almost_count) whiteCount = monica_count;
-            //            if (blackCount == almost_count) blackCount = monica_count;
             else value += (float)(Math.Pow(monica_strength, whiteCount) - Math.Pow(monica_strength, blackCount));
         }
 #if DEBUG_HEURISTIC_A_STAR
@@ -193,12 +192,11 @@ public partial class Pentago_Rules
 #endif
         foreach (int[] middle in middles)
         {
-            player = countLineStar(gb, middle, out whiteCount, out blackCount);
+            player = countLineStar(gb, middle, out whiteCount, out blackCount, ref whiteDanger, ref blackDanger);
             player = checkAlmostStar(player, gb, ref whiteCount, ref blackCount, ref whiteAlmost, ref blackAlmost);
             if (player == gb.get_player_turn()) return player;
+            else if ((playerWin = checkNear(gb, whiteAlmost, blackAlmost)) != null) return playerWin;
             else if (player != null) playerWin = player;
-            //            if (whiteCount == almost_count) whiteCount = middle_count;
-            //            if (blackCount == almost_count) blackCount = middle_count;
             else value += (float)(Math.Pow(middle_strength, whiteCount) - Math.Pow(middle_strength, blackCount));
         }
 #if DEBUG_HEURISTIC_A_STAR
@@ -206,12 +204,11 @@ public partial class Pentago_Rules
 #endif
         foreach (int[] straight in straights)
         {
-            player = countLineStar(gb, straight, out whiteCount, out blackCount);
+            player = countLineStar(gb, straight, out whiteCount, out blackCount, ref whiteDanger, ref blackDanger);
             player = checkAlmostStar(player, gb, ref whiteCount, ref blackCount, ref whiteAlmost, ref blackAlmost);
             if (player == gb.get_player_turn()) return player;
+            else if ((playerWin = checkNear(gb, whiteAlmost, blackAlmost)) != null) return playerWin;
             else if (player != null) playerWin = player;
-            //            if (whiteCount == almost_count) whiteCount = straight_count;
-            //            if (blackCount == almost_count) blackCount = straight_count;
             else value += (float)(Math.Pow(straight_strength, whiteCount) - Math.Pow(straight_strength, blackCount));
         }
 #if DEBUG_HEURISTIC_A_STAR
@@ -221,13 +218,14 @@ public partial class Pentago_Rules
         {
             countShortLineStar(gb, triple, out whiteCount, out blackCount);
             player = checkAlmostStar(null, gb, ref whiteCount, ref blackCount, ref whiteAlmost, ref blackAlmost);
-            if (player != null) return player;
+            if (player == gb.get_player_turn()) return player;
+            else if ((playerWin = checkNear(gb, whiteAlmost, blackAlmost)) != null) return playerWin;
             else if (player != null) playerWin = player;
-            //            if (whiteCount == almost_count) whiteCount = triple_count;
-            //            if (blackCount == almost_count) blackCount = triple_count;
             else value += (float)(Math.Pow(triple_strength, whiteCount) - Math.Pow(triple_strength, blackCount));
         }
         if (IA_PIECES == IA_PIECES_BLACKS) value *= -1;
+        if ((whiteDanger && IA_PIECES == IA_PIECES_BLACKS) || (blackDanger && IA_PIECES == IA_PIECES_WHITES)) value -= 50;
+        if ((whiteDanger && IA_PIECES == IA_PIECES_WHITES) || (blackDanger && IA_PIECES == IA_PIECES_BLACKS)) value += 50;
         return playerWin;
     }
 
@@ -253,15 +251,16 @@ public partial class Pentago_Rules
         bool blackWin = false;
         if (blackAlmost >= 2) blackWin = true;
         return checkWinStar(whiteWin, blackWin, gb.get_player_turn());
-        /*        if (whiteAlmost >= 2 && gb.get_player_turn() == IA_PIECES_WHITES) return IA_PIECES_WHITES;
-                else if (whiteAlmost >=2) whiteCount = almost_count;
-                if (blackAlmost >= 2 && gb.get_player_turn() == IA_PIECES_BLACKS) return IA_PIECES_BLACKS;
-                else if (blackAlmost >= 2) blackCount = almost_count;
-
-        return null;*/
     }
 
-    bool? countLineStar(Pentago_GameBoard gb, int[] line, out int whiteCount, out int blackCount)
+    bool? checkNear(Pentago_GameBoard gb, int whiteAlmost, int blackAlmost)
+    {
+        if (whiteAlmost >= 1 && gb.get_player_turn() == IA_PIECES_WHITES) return IA_PIECES_WHITES;
+        if (blackAlmost >= 1 && gb.get_player_turn() == IA_PIECES_BLACKS) return IA_PIECES_BLACKS;
+        return null;
+    }
+
+    bool? countLineStar(Pentago_GameBoard gb, int[] line, out int whiteCount, out int blackCount, ref bool whiteDanger, ref bool blackDanger)
     {
         int interiorWhites = 0;
         int interiorBlacks = 0;
@@ -287,19 +286,24 @@ public partial class Pentago_Rules
 #endif
         bool whiteWin = false;
         if (interiorWhites == 4 && (borderBlacks == 0 || borderWhites >= 1))
-        {
             whiteWin = true;
-//            if (gb.get_player_turn() == IA_PIECES_WHITES) return IA_PIECES_WHITES;
-//            else whiteCount = almost_count;
+        else if (interiorWhites == 3 && borderBlacks == 0) {
+            whiteDanger = true;
+#if DEBUG_HEURISTIC_A_STAR
+            Console.WriteLine("White Danger");
+#endif
         }
         else if (whiteCount == 4 && borderWhites < 2) whiteCount++;
         else if (whiteCount > 0 && whiteCount < 5 && borderWhites == 0) whiteCount += 1 - borderBlacks;
         bool blackWin = false;
         if (interiorBlacks == 4 && (borderWhites == 0 || borderBlacks >= 1))
-        {
             blackWin = true;
-//            if (gb.get_player_turn() == IA_PIECES_BLACKS) return IA_PIECES_BLACKS;
-//            else blackCount = almost_count;
+        else if (interiorBlacks == 3 && borderWhites == 0)
+        {
+            blackDanger = true;
+#if DEBUG_HEURISTIC_A_STAR
+            Console.WriteLine("Black Danger");
+#endif
         }
         else if (blackCount == 4 && blackCount < 5 && borderBlacks < 2) blackCount++;
         else if (blackCount > 0 && borderBlacks == 0) blackCount += 1 - borderWhites;
