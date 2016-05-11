@@ -1,0 +1,590 @@
+IMPORTANT NOTE:
+THE A STAR HEURISTIC TESTED HAD A BUG
+THE TESTS IN THIS LOG REGARDING HEURISTIC A STAR
+DO NOT REFLECT THE CURRENT A STAR'S PERFORMANCE CAPABILITIES
+
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym Y | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym Y | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 2903, losses: 2096, ties: 1, avg rounds: 16
+from mid game
+5000 - wins: 2874, losses: 2126, ties: 0, avg rounds: 6
+TOTAL W = 5777   L = 4222   D = 1
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1 - bias = 0,5
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 3532, losses: 1426, ties: 42, avg rounds: 15
+from mid game
+5000 - wins: 3018, losses: 1955, ties: 27, avg rounds: 6
+TOTAL W = 6550   L = 3381   D = 69
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1 - bias = 0,5
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 3104, losses: 1847, ties: 49, avg rounds: 15
+from mid game
+5000 - wins: 2336, losses: 2631, ties: 33, avg rounds: 6
+TOTAL W = 5440   L = 4478   D = 82
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1 - bias = 0
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 3389, losses: 1507, ties: 104, avg rounds: 15
+from mid game
+5000 - wins: 2865, losses: 2087, ties: 48, avg rounds: 6
+TOTAL W = 6254   L = 3594   D = 152
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1 - bias = 0
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 2972, losses: 1954, ties: 74, avg rounds: 15
+from mid game
+5000 - wins: 2238, losses: 2713, ties: 49, avg rounds: 6
+TOTAL W = 5210   L = 4667   D = 123
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1 - bias = 1
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 3309, losses: 1691, ties: 0, avg rounds: 16
+from mid game
+5000 - wins: 3160, losses: 1840, ties: 0, avg rounds: 6
+TOTAL W = 6469   L = 3531   D = 0
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1 - bias = 1
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 2650, losses: 2350, ties: 0, avg rounds: 16
+from mid game
+5000 - wins: 2435, losses: 2565, ties: 0, avg rounds: 6
+TOTAL W = 5085   L = 4915   D = 0
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1dot2 - rel:Y | D_HACK:N
+ bias:  bow=6 bop=6 bowS=10 bopS=8
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 4174, losses: 821, ties: 5, avg rounds: 14
+from mid game
+5000 - wins: 3112, losses: 1868, ties: 20, avg rounds: 6
+TOTAL W = 7286   L = 2689   D = 25
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1dot2 - rel:Y | D_HACK:N
+ bias:  bow=6 bop=6 bowS=10 bopS=8
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 3184, losses: 1807, ties: 9, avg rounds: 16
+from mid game
+5000 - wins: 2568, losses: 2424, ties: 8, avg rounds: 6
+TOTAL W = 5752   L = 4231   D = 17
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1dot2 - rel:Y | D_HACK:N
+ bias:  bow=4 bop=3 bowS=2 bopS=8
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 3984, losses: 978, ties: 38, avg rounds: 16
+from mid game
+5000 - wins: 3119, losses: 1848, ties: 33, avg rounds: 7
+TOTAL W = 7103   L = 2826   D = 71
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1dot2 - rel:Y | D_HACK:N
+ bias:  bow=4 bop=3 bowS=2 bopS=8
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 2648, losses: 2299, ties: 53, avg rounds: 18
+from mid game
+5000 - wins: 2343, losses: 2629, ties: 28, avg rounds: 7
+TOTAL W = 4991   L = 4928   D = 81
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1dot2 - rel:Y | D_HACK:N
+ bias:  bow=3 bop=4 bowS=8 bopS=3
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 3968, losses: 1031, ties: 1, avg rounds: 14
+from mid game
+5000 - wins: 3094, losses: 1899, ties: 7, avg rounds: 6
+TOTAL W = 7062   L = 2930   D = 8
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristic1dot2 - rel:Y | D_HACK:N
+ bias:  bow=3 bop=4 bowS=8 bopS=3
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 3079, losses: 1919, ties: 2, avg rounds: 15
+from mid game
+5000 - wins: 2548, losses: 2448, ties: 4, avg rounds: 6
+TOTAL W = 5627   L = 4367   D = 6
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicA bias:  mon=1,13 mid=1,15 stra=1,17 tri=1,19
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 4725, losses: 260, ties: 15, avg rounds: 17
+from mid game
+5000 - wins: 4214, losses: 765, ties: 21, avg rounds: 7
+TOTAL W = 8939   L = 1025   D = 36
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicA bias:  mon=1,23308 mid=1,26326 stra=1,11807 tri=0,99693
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 4756, losses: 244, ties: 0, avg rounds: 13
+from mid game
+5000 - wins: 4063, losses: 919, ties: 18, avg rounds: 6
+TOTAL W = 8819   L = 1163   D = 18
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicA bias:  mon=0,946981 mid=1,120938 stra=1,126149 tri=1,23813
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 4900, losses: 99, ties: 1, avg rounds: 12
+from mid game
+5000 - wins: 4262, losses: 719, ties: 19, avg rounds: 6
+TOTAL W = 9162   L = 818   D = 20
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicA bias:  mon=1,13 mid=1,15 stra=1,17 tri=1,19
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 432, losses: 4470, ties: 98, avg rounds: 19
+from mid game
+5000 - wins: 1172, losses: 3741, ties: 87, avg rounds: 8
+TOTAL W = 1604   L = 8211   D = 185
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicA bias:  mon=1,23308 mid=1,26326 stra=1,11807 tri=0,99693
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 458, losses: 4536, ties: 6, avg rounds: 14
+from mid game
+5000 - wins: 1402, losses: 3565, ties: 33, avg rounds: 7
+TOTAL W = 1860   L = 8101   D = 39
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicA bias:  mon=0,946981 mid=1,120938 stra=1,126149 tri=1,23813
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 251, losses: 4742, ties: 7, avg rounds: 14
+from mid game
+5000 - wins: 1141, losses: 3796, ties: 63, avg rounds: 7
+TOTAL W = 1392   L = 8538   D = 70
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAstar bias:  mon=1,13 mid=1,15 stra=1,17 tri=1,19 rots=Y
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 4494, losses: 506, ties: 0, avg rounds: 14
+from mid game
+5000 - wins: 3924, losses: 1076, ties: 0, avg rounds: 5
+TOTAL W = 8418   L = 1582   D = 0
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAstar bias:  mon=1,23308 mid=1,26326 stra=1,11807 tri=0,99693 rots=Y
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 4617, losses: 383, ties: 0, avg rounds: 13
+from mid game
+5000 - wins: 3960, losses: 1040, ties: 0, avg rounds: 5
+TOTAL W = 8577   L = 1423   D = 0
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAstar bias:  mon=0,946981 mid=1,120938 stra=1,126149 tri=1,23813 rots=Y
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 4821, losses: 179, ties: 0, avg rounds: 11
+from mid game
+5000 - wins: 3939, losses: 1061, ties: 0, avg rounds: 5
+TOTAL W = 8760   L = 1240   D = 0
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAstar bias:  mon=1,13 mid=1,15 stra=1,17 tri=1,19 rots=Y
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 807, losses: 4193, ties: 0, avg rounds: 14
+from mid game
+5000 - wins: 1595, losses: 3405, ties: 0, avg rounds: 5
+TOTAL W = 2402   L = 7598   D = 0
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAstar bias:  mon=1,23308 mid=1,26326 stra=1,11807 tri=0,99693 rots=Y
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 601, losses: 4399, ties: 0, avg rounds: 13
+from mid game
+5000 - wins: 1543, losses: 3457, ties: 0, avg rounds: 5
+TOTAL W = 2144   L = 7856   D = 0
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAstar bias:  mon=0,946981 mid=1,120938 stra=1,126149 tri=1,23813 rots=Y
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 397, losses: 4603, ties: 0, avg rounds: 12
+from mid game
+5000 - wins: 1540, losses: 3460, ties: 0, avg rounds: 5
+TOTAL W = 1937   L = 8063   D = 0
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAplusDiagonalHack - rel:Y | D_HACK:Y
+ bias:  bow=0 bop=0 bowS=1 bopS=0 mon=1,13 mid=1,15 stra=1,17tri=1,19
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 4895, losses: 103, ties: 2, avg rounds: 13
+from mid game
+5000 - wins: 4229, losses: 760, ties: 11, avg rounds: 7
+TOTAL W = 9124   L = 863   D = 13
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAplusDiagonalHack - rel:Y | D_HACK:Y
+ bias:  bow=0 bop=0 bowS=1 bopS=0 mon=1,23308 mid=1,26326 stra=1,11807tri=0,99693
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 4862, losses: 135, ties: 3, avg rounds: 13
+from mid game
+5000 - wins: 4139, losses: 850, ties: 11, avg rounds: 6
+TOTAL W = 9001   L = 985   D = 14
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAplusDiagonalHack - rel:Y | D_HACK:Y
+ bias:  bow=0 bop=0 bowS=1 bopS=0 mon=0,946981 mid=1,120938 stra=1,126149tri=1,23813
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 4910, losses: 90, ties: 0, avg rounds: 12
+from mid game
+5000 - wins: 4270, losses: 710, ties: 20, avg rounds: 6
+TOTAL W = 9180   L = 800   D = 20
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAplusDiagonalHack - rel:Y | D_HACK:Y
+ bias:  bow=0 bop=0 bowS=1 bopS=2 mon=1,13 mid=1,15 stra=1,17tri=1,19
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 268, losses: 4691, ties: 41, avg rounds: 16
+from mid game
+5000 - wins: 1160, losses: 3786, ties: 54, avg rounds: 7
+TOTAL W = 1428   L = 8477   D = 95
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAplusDiagonalHack - rel:Y | D_HACK:Y
+ bias:  bow=0 bop=0 bowS=1 bopS=2 mon=1,23308 mid=1,26326 stra=1,11807tri=0,99693
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 424, losses: 4572, ties: 4, avg rounds: 14
+from mid game
+5000 - wins: 1324, losses: 3645, ties: 31, avg rounds: 6
+TOTAL W = 1748   L = 8217   D = 35
+
+=======================================================
+
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval controlHeuristic
+sym N | rdt N |draw :0
+       --- --- ---VS --- --- ---
+Version: alphabeta
+Depth: Using Smart Depth
+RULES> eval heuristicAplusDiagonalHack - rel:Y | D_HACK:Y
+ bias:  bow=0 bop=0 bowS=1 bopS=2 mon=0,946981 mid=1,120938 stra=1,126149tri=1,23813
+sym N | rdt N |draw :0
+ ---  --- --- --- --- --- --- ---
+from start
+5000 - wins: 366, losses: 4589, ties: 45, avg rounds: 18
+from mid game
+5000 - wins: 1142, losses: 3799, ties: 59, avg rounds: 8
+TOTAL W = 1508   L = 8388   D = 104
