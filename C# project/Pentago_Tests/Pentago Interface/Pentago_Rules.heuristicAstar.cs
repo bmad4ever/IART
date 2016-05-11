@@ -90,6 +90,7 @@ public partial class Pentago_Rules
         float value;
         bool? player;
         bool player_turn = gb.get_player_turn();
+        bool? player_win = null;
         bool turn_state = gb.get_turn_state();
         if (turn_state == Pentago_GameBoard.turn_state_rotate)
         {
@@ -125,12 +126,15 @@ public partial class Pentago_Rules
             Console.WriteLine(printTurnState(gb.get_turn_state()) + " " + printTurnState(ngb.get_turn_state()));
             Console.WriteLine(value + " " + player);
 #endif
-            if (player != null)
+            if (player == player_turn)
                 return (player == IA_PIECES) ? 100 : -100;
+            if (player != null) player_win = player;
             if ((player_turn == IA_PIECES && value > result)
                 || (player_turn != IA_PIECES && value < result))
                 result = value;
         }
+        if (player_win != null)
+            return (player_win == IA_PIECES) ? 100 : -100;
         return result;
     }
 
