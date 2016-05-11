@@ -34,7 +34,7 @@ public partial class Pentago_Rules
         heuristic1dot2_own_strongChances_weigth = 8.0f;
         heuristic1dot2_oponent_strongChances_weigth = 3.0f;
     }
-    //ultra defensive //just try to defend everything
+    //ultra defensive //focus on defend
     public void setHeur12_UD()
     {
         heuristic1dot2_own_possibilities_weigth = 1.0f;
@@ -42,7 +42,7 @@ public partial class Pentago_Rules
         heuristic1dot2_own_strongChances_weigth = 3.0f;
         heuristic1dot2_oponent_strongChances_weigth = 20.1f;
     }
-    //ultra ofensive //just try to attack
+    //ultra ofensive //focus on attack
     public void setHeur12_UO()
     {
         heuristic1dot2_own_possibilities_weigth = 5.0f;

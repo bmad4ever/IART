@@ -75,6 +75,29 @@ public partial class Pentago_Rules
         this.triple_strength =      .9f + ((float)random.Next(0, 400000)) / 1000000.0f;
     }
 
+    public void setA_setup1()
+    {
+        monica_strength = 1.13f;
+        middle_strength = 1.15f;
+        straight_strength = 1.17f;
+        triple_strength = 1.19f;
+    }
+
+    public void setA_setup2()
+    {
+        monica_strength = 1.23308f; middle_strength = 1.26326f; straight_strength = 1.11807f; triple_strength = 0.99693f;
+    }
+
+    public void setA_setup3()
+    {
+        monica_strength = 0.946981f; middle_strength = 1.120938f; straight_strength = 1.126149f; triple_strength = 1.23813f;
+    }
+
+    public void setA_setup4()
+    {
+        monica_strength = 0.917492f; middle_strength = 1.138074f; straight_strength = 1.259564f; triple_strength = 1.168299f;
+    }
+
     public float heuristicA(Pentago_GameBoard gb)
     {
         float value;
