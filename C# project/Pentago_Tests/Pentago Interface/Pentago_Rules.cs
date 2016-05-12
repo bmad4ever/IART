@@ -10,7 +10,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     const float MAX_HEURISTIC_VALUE = 1000000;
     const float MIN_HEURISTIC_VALUE = -1000000;
 
-    public enum EvaluationFunction { controlHeuristic, heuristicA, heuristicAstar, heuristic1, heuristic1dot2, heuristicAplusDiagonalHack };
+    public enum EvaluationFunction { control, A, Astar, one, oneDotTwo, AplusDiagHack };
     EvaluationFunction ef;
 
     public bool remove_repeated_states_on_nextStates = false;
@@ -22,7 +22,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 
     float draw_value;
 
-    public Pentago_Rules(EvaluationFunction ef = EvaluationFunction.controlHeuristic, NextStatesFunction nsf = NextStatesFunction.all_states, bool iapieces = IA_PIECES_WHITES, bool remove_repeated_states_on_nextStates = false, float draw_value = 0)
+    public Pentago_Rules(EvaluationFunction ef = EvaluationFunction.control, NextStatesFunction nsf = NextStatesFunction.all_states, bool iapieces = IA_PIECES_WHITES, bool remove_repeated_states_on_nextStates = false, float draw_value = 0)
     {
         this.ef = ef;
         this.nsf = nsf;
@@ -30,7 +30,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         this.draw_value = draw_value;
 
         IA_PIECES = iapieces;
-        if (ef == EvaluationFunction.heuristicAplusDiagonalHack)
+        if (ef == EvaluationFunction.AplusDiagHack)
             setUpDiagonalHack();
 
 
@@ -117,17 +117,17 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     {
         switch (ef)
         {
-            case EvaluationFunction.controlHeuristic:
+            case EvaluationFunction.control:
                 return ControlHeuristic();
-            case EvaluationFunction.heuristicA:
+            case EvaluationFunction.A:
                 return heuristicA(gb);
-            case EvaluationFunction.heuristicAstar:
+            case EvaluationFunction.Astar:
                 return heuristicAstar(gb);
-            case EvaluationFunction.heuristic1:
+            case EvaluationFunction.one:
                 return heuristic1(gb.board);
-            case EvaluationFunction.heuristic1dot2:
+            case EvaluationFunction.oneDotTwo:
                 return heuristic1dot2(gb.board);
-            case EvaluationFunction.heuristicAplusDiagonalHack:
+            case EvaluationFunction.AplusDiagHack:
                 return heuristicA(gb) * 2.0f + heuristic1dot2(gb.board);
             default:
                 return 0;
@@ -169,16 +169,16 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         result += "eval " + ef.ToString();
         switch (ef)
         {
-            case EvaluationFunction.controlHeuristic:
+            case EvaluationFunction.control:
                 break;
-            case EvaluationFunction.heuristicA:
+            case EvaluationFunction.A:
                 result += " bias: "
                 + " mon=" + monica_strength
                 + " mid=" + middle_strength
                 + " stra=" + straight_strength
                 + " tri=" + triple_strength;
                 break;
-            case EvaluationFunction.heuristicAstar:
+            case EvaluationFunction.Astar:
                 result += " bias: "
                 + " mon=" + monica_strength
                 + " mid=" + middle_strength
@@ -186,10 +186,10 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
                 + " tri=" + triple_strength
                 + " rots=" + (study_rotations_on_rotate?"Y":"N");
                 break;
-            case EvaluationFunction.heuristic1:
+            case EvaluationFunction.one:
                 result += " - bias = " + heuristic1_bias;
                 break;
-            case EvaluationFunction.heuristic1dot2:
+            case EvaluationFunction.oneDotTwo:
                 result += " - rel:" + (HEUR12RELAXED ? "Y" : "N") + " | D_HACK:" + (diagonal_hack ? "Y" : "N");
                 result += "\n bias: "
                     + " bow=" + heuristic1dot2_own_possibilities_weigth
@@ -197,7 +197,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
                     + " bowS=" + heuristic1dot2_own_strongChances_weigth
                     + " bopS=" + heuristic1dot2_oponent_strongChances_weigth;
                 break;
-            case EvaluationFunction.heuristicAplusDiagonalHack:
+            case EvaluationFunction.AplusDiagHack:
                 result += " - rel:" + (HEUR12RELAXED ? "Y" : "N") + " | D_HACK:" + (diagonal_hack ? "Y" : "N");
                 result += "\n bias: "
                     + " bow=" + heuristic1dot2_own_possibilities_weigth
@@ -216,6 +216,64 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         result += "\nsym " + (nsf == NextStatesFunction.all_states ? "N" : "Y");
         result += " | rdt " + (remove_repeated_states_on_nextStates ? "Y" : "N");//remove duplicate rotations
         result += " |draw :" + draw_value.ToString();
+        return result;
+    }
+
+
+    public string getHeurName()
+    {
+        return ef.ToString();
+    }
+
+    public string getHeurConfigs()
+    {
+        string result="";
+        switch (ef)
+        {
+            case EvaluationFunction.control:
+                break;
+            case EvaluationFunction.A:
+                result +=
+                 monica_strength
+                + " ; " + middle_strength
+                + " ; " + straight_strength
+                + " ; " + triple_strength;
+                break;
+            case EvaluationFunction.Astar:
+                result += 
+                monica_strength
+                + " ; " + middle_strength
+                + " ; " + straight_strength
+                + " ; " + triple_strength
+                + " ; " + (study_rotations_on_rotate ? "Y" : "N");
+                break;
+            case EvaluationFunction.one:
+                result += heuristic1_bias.ToString();
+                break;
+            case EvaluationFunction.oneDotTwo:
+                result += "R:" + (HEUR12RELAXED ? "Y" : "N") + " ; DH:" + (diagonal_hack ? "Y" : "N");
+                result +=
+                     " ; " + heuristic1dot2_own_possibilities_weigth
+                    + " ; " + heuristic1dot2_oponent_possibilities_weigth
+                    + " ; " + heuristic1dot2_own_strongChances_weigth
+                    + " ; " + heuristic1dot2_oponent_strongChances_weigth;
+                break;
+            case EvaluationFunction.AplusDiagHack:
+                //result += "R:" + (HEUR12RELAXED ? "Y" : "N") + " ; DH:" + (diagonal_hack ? "Y" : "N");
+                result += 
+                    heuristic1dot2_own_possibilities_weigth
+                    + " ; "  + heuristic1dot2_oponent_possibilities_weigth
+                    + " ; "  + heuristic1dot2_own_strongChances_weigth
+                    + " ; "  + heuristic1dot2_oponent_strongChances_weigth
+                    + " ; "  + monica_strength
+                    + " ; "  + middle_strength
+                    + " ; "  + straight_strength
+                    + " ; " + triple_strength
+                    ;
+                break;
+            default:
+                break;
+        }
         return result;
     }
 

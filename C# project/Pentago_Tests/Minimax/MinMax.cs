@@ -63,7 +63,7 @@ public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
     public enum VERSION { minmax , alphabeta };
     VERSION version;
-    IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules;
+    public IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules;
     const bool MAX_NODE = true;
     const bool MIN_NODE = false;
 
