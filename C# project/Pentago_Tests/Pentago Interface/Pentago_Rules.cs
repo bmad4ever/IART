@@ -152,13 +152,15 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         return thisnode_gb.get_turn_state() == Pentago_GameBoard.turn_state_rotate ? !currentIterationNode : currentIterationNode;
     }
 
+    public int smart_depth_offset = 0;
     public int smart_depth(Pentago_GameBoard gb)
     {
         int emptyholes = gb.board.Count(o => o == Pentago_GameBoard.hole_state.is_empty);
-        if (emptyholes <= 5) return 5;
-        if (emptyholes <= 8) return 4;
-        if (emptyholes <= 25) return 3;
-        return 2;
+        if (emptyholes <= 5) return 2 * 5 + smart_depth_offset;
+        if (emptyholes <= 9) return 2 * 4 + smart_depth_offset;
+        if (emptyholes <= 14) return 2 * 3 + smart_depth_offset;
+        return 2 * 2 + smart_depth_offset;
+        //return 2 + smart_depth_offset;
     }
 
 

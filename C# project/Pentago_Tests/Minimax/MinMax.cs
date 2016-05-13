@@ -61,13 +61,13 @@ public interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION> {
 
 public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
-    public enum VERSION { minmax , alphabeta };
+    public enum VERSION { minmax , alphabeta,cut_alphabeta,multithread_alphabeta };
     VERSION version;
     public IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules;
     const bool MAX_NODE = true;
     const bool MIN_NODE = false;
 
-    int USE_SMART_DEPTH = 0;
+    const int USE_SMART_DEPTH = 0;
     bool useSmartDepth;
     int max_depth;
     
@@ -88,6 +88,10 @@ public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
                 return minmax_init(gb);
             case VERSION.alphabeta:
                 return alpha_beta_minmax_init(gb);
+            case VERSION.cut_alphabeta:
+                return CUT_alpha_beta_minmax_init(gb);
+            case VERSION.multithread_alphabeta:
+                return alpha_beta_minmax_initMT(gb);
             default:
                 return null;
         }
