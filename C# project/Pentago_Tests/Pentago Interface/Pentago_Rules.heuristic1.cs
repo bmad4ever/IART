@@ -14,11 +14,11 @@ public partial class Pentago_Rules
 {
     float heuristic1_bias = .5f;
 
-    float h1_middle = 2.2f;
-    float h1_inner = 1.5f;
+    float h1_middle = 1.0f;
+    float h1_inner = 1.0f;
     float h1_outer = 1.0f;
-    float h1_main_Diag = 1.9f; 
-    float h1_other_Diag = .3f;//can only make one (one possible five), should weight lees*/
+    float h1_main_Diag = 1.0f; 
+    float h1_other_Diag = .7f;//can only make one (one possible five), should weight lees*/
     float[] weights;
 
     /// <summary>
@@ -238,15 +238,25 @@ public partial class Pentago_Rules
         HOLESTATE H01 = gb[Pentago_GameBoard.board_position_to_index(0, 1, square)];
         HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1, square)];
 
-        if (H10 != HOLESTATE.has_black) available4whites++;
-        if (H12 != HOLESTATE.has_black) available4whites++;
-        if (H01 != HOLESTATE.has_black) available4whites++;
-        if (H21 != HOLESTATE.has_black) available4whites++;
+        /* if (H10 != HOLESTATE.has_black) available4whites++;
+         if (H12 != HOLESTATE.has_black) available4whites++;
+         if (H01 != HOLESTATE.has_black) available4whites++;
+         if (H21 != HOLESTATE.has_black) available4whites++;
 
-        if (H10 != HOLESTATE.has_white) available4blacks++;
-        if (H12 != HOLESTATE.has_white) available4blacks++;
-        if (H01 != HOLESTATE.has_white) available4blacks++;
-        if (H21 != HOLESTATE.has_white) available4blacks++;
+         if (H10 != HOLESTATE.has_white) available4blacks++;
+         if (H12 != HOLESTATE.has_white) available4blacks++;
+         if (H01 != HOLESTATE.has_white) available4blacks++;
+         if (H21 != HOLESTATE.has_white) available4blacks++;*/
+
+        if (H10 != HOLESTATE.has_black && H21 != HOLESTATE.has_black) available4whites++;
+        if (H12 != HOLESTATE.has_black && H01 != HOLESTATE.has_black) available4whites++;
+        if (H01 != HOLESTATE.has_black && H10 != HOLESTATE.has_black) available4whites++;
+        if (H21 != HOLESTATE.has_black && H12 != HOLESTATE.has_black) available4whites++;
+
+        if (H10 != HOLESTATE.has_white && H21 != HOLESTATE.has_white) available4blacks++;
+        if (H12 != HOLESTATE.has_white && H01 != HOLESTATE.has_white) available4blacks++;
+        if (H01 != HOLESTATE.has_white && H10 != HOLESTATE.has_white) available4blacks++;
+        if (H21 != HOLESTATE.has_white && H12 != HOLESTATE.has_white) available4blacks++;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

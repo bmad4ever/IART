@@ -8,14 +8,10 @@ using HOLESTATE = Pentago_GameBoard.hole_state;
 public partial class Pentago_Rules
 {
     //std
-    /*float heuristic1dot2_own_possibilities_weigth = 1.0f;
-    float heuristic1dot2_oponent_possibilities_weigth = 4.0f;
-    float heuristic1dot2_own_strongChances_weigth = 4.0f;
-    float heuristic1dot2_oponent_strongChances_weigth = 7.5f;*/
-    float heuristic1dot2_own_possibilities_weigth = 6.0f;
-    float heuristic1dot2_oponent_possibilities_weigth = 6.0f;
-    float heuristic1dot2_own_strongChances_weigth = 10.0f;
-    float heuristic1dot2_oponent_strongChances_weigth = 8.0f;
+    float heuristic1dot2_own_possibilities_weigth = 1.0f;
+    float heuristic1dot2_oponent_possibilities_weigth = 1.0f;
+    float heuristic1dot2_own_strongChances_weigth = 1.0f;
+    float heuristic1dot2_oponent_strongChances_weigth = 1.0f;
 
     //SETUPS:
     //active defensive and passive offense //will only focus on attacks when the chance appears
@@ -40,7 +36,7 @@ public partial class Pentago_Rules
         heuristic1dot2_own_possibilities_weigth = 1.0f;
         heuristic1dot2_oponent_possibilities_weigth = 5.0f;
         heuristic1dot2_own_strongChances_weigth = 3.0f;
-        heuristic1dot2_oponent_strongChances_weigth = 20.1f;
+        heuristic1dot2_oponent_strongChances_weigth = 10.1f;
     }
     //ultra ofensive //focus on attack
     public void setHeur12_UO()
@@ -85,7 +81,7 @@ public partial class Pentago_Rules
 
     }
 
-        public void setcustom()
+   /*     public void setcustom()
     {
         //-9,49 , 8,38 , 5,58 , -1,88 , 2,3 , 0,85 , -0,36 , 1,85 , -0,09
 
@@ -98,7 +94,7 @@ public partial class Pentago_Rules
         h1_outer = -0.36f;
         h1_main_Diag = 1.85f;
         h1_other_Diag = -0.09f;
-    }
+    }*/
 
     //USING DIAGONAL HACK(no longer the 1.2 heuristic if used
     //highly improves winning rate when playing 1st (combined with A)
@@ -131,7 +127,7 @@ public partial class Pentago_Rules
     }
 
 
-    bool HEUR12RELAXED = true;
+    public bool HEUR12RELAXED = true;
     bool diagonal_hack = false; //only get diagonals info
 
 
@@ -163,15 +159,19 @@ public partial class Pentago_Rules
 
         float value;
         if (IA_PIECES == IA_PIECES_WHITES) value =
-            (whites) * heuristic1dot2_own_possibilities_weigth - (blacks) * heuristic1dot2_oponent_possibilities_weigth
-            + (whitesS) * heuristic1dot2_own_strongChances_weigth - (blacksS) * heuristic1dot2_oponent_strongChances_weigth;
+           + (whites) * heuristic1dot2_own_possibilities_weigth - (blacks) * heuristic1dot2_oponent_possibilities_weigth
+            + (whitesS) * heuristic1dot2_own_strongChances_weigth - (blacksS) * heuristic1dot2_oponent_strongChances_weigth
+            ;
         else value =
            -(whites) * heuristic1dot2_oponent_possibilities_weigth + (blacks) * heuristic1dot2_own_possibilities_weigth
-            - (whitesS) * heuristic1dot2_oponent_strongChances_weigth + (blacksS) * heuristic1dot2_own_strongChances_weigth;
+            - (whitesS) * heuristic1dot2_oponent_strongChances_weigth + (blacksS) * heuristic1dot2_own_strongChances_weigth
+            ;
 
+        
         value = value / (
-            heuristic1dot2_own_possibilities_weigth + heuristic1dot2_oponent_possibilities_weigth +
-            heuristic1dot2_own_strongChances_weigth + heuristic1dot2_oponent_strongChances_weigth);
+            heuristic1dot2_own_possibilities_weigth + heuristic1dot2_oponent_possibilities_weigth 
+           + heuristic1dot2_own_strongChances_weigth + heuristic1dot2_oponent_strongChances_weigth
+           );
 
         return value;
     }
@@ -377,8 +377,8 @@ public partial class Pentago_Rules
             //old
             //available4whites = L_P1.Sum() + R_P1.Sum() + D_1.Sum();
             //available4blacks = L_P2.Sum() + R_P2.Sum() + D_2.Sum();
-            strongWhites = L_P1M.Sum() + R_P1M.Sum() + D_1M.Sum();
-            strongBlacks = L_P2M.Sum() + R_P2M.Sum() + D_2M.Sum();
+            //strongWhites = L_P1M.Sum() + R_P1M.Sum() + D_1M.Sum();
+           // strongBlacks = L_P2M.Sum() + R_P2M.Sum() + D_2M.Sum();
 
             available4whites =
                         (L_P1[1] + L_P1[4] + R_P1[1] + R_P1[1]) * weights[0]//middle
@@ -387,14 +387,13 @@ public partial class Pentago_Rules
            + (D_1[0] + D_1[3]) * weights[3]//main diags
         + (D_1[1] + D_1[2] + D_1[4] + D_1[5]) * weights[4];//other diags
 
-
             available4blacks = (L_P2[1] + L_P2[4] + R_P2[1] + R_P2[1]) * weights[0]//middle
                 + (L_P2[2] + L_P2[3] + R_P2[2] + R_P2[3]) * weights[1]//inner 
         + (L_P2[0] + L_P2[5] + R_P2[0] + R_P2[5]) * weights[2]//outer 
            + (D_2[0] + D_2[3]) * weights[3]//main diags
         + (D_2[1] + D_2[2] + D_2[4] + D_2[5]) * weights[4];
 
-        /*     strongWhites =
+             strongWhites =
                  (L_P1M[1] + L_P1M[4] + R_P1M[1] + R_P1M[1]) * weights[0]//middle
                  + (L_P1M[2] + L_P1M[3] + R_P1M[2] + R_P1M[3]) * weights[1]//inner 
                  + (L_P1M[0] + L_P1M[5] + R_P1M[0] + R_P1M[5]) * weights[2]//outer 
@@ -547,15 +546,25 @@ public partial class Pentago_Rules
         HOLESTATE H01 = gb[Pentago_GameBoard.board_position_to_index(0, 1, square)];
         HOLESTATE H21 = gb[Pentago_GameBoard.board_position_to_index(2, 1, square)];
 
-        if (H10 != HOLESTATE.has_black) available4whites++;
-        if (H12 != HOLESTATE.has_black) available4whites++;
-        if (H01 != HOLESTATE.has_black) available4whites++;
-        if (H21 != HOLESTATE.has_black) available4whites++;
+        /* if (H10 != HOLESTATE.has_black) available4whites++;
+         if (H12 != HOLESTATE.has_black) available4whites++;
+         if (H01 != HOLESTATE.has_black) available4whites++;
+         if (H21 != HOLESTATE.has_black) available4whites++;
 
-        if (H10 != HOLESTATE.has_white) available4blacks++;
-        if (H12 != HOLESTATE.has_white) available4blacks++;
-        if (H01 != HOLESTATE.has_white) available4blacks++;
-        if (H21 != HOLESTATE.has_white) available4blacks++;
+         if (H10 != HOLESTATE.has_white) available4blacks++;
+         if (H12 != HOLESTATE.has_white) available4blacks++;
+         if (H01 != HOLESTATE.has_white) available4blacks++;
+         if (H21 != HOLESTATE.has_white) available4blacks++;*/
+
+        if (H10 != HOLESTATE.has_black && H21 != HOLESTATE.has_black) available4whites++;
+        if (H12 != HOLESTATE.has_black && H01 != HOLESTATE.has_black) available4whites++;
+        if (H01 != HOLESTATE.has_black && H10 != HOLESTATE.has_black) available4whites++;
+        if (H21 != HOLESTATE.has_black && H12 != HOLESTATE.has_black) available4whites++;
+
+        if (H10 != HOLESTATE.has_white && H21 != HOLESTATE.has_white) available4blacks++;
+        if (H12 != HOLESTATE.has_white && H01 != HOLESTATE.has_white) available4blacks++;
+        if (H01 != HOLESTATE.has_white && H10 != HOLESTATE.has_white) available4blacks++;
+        if (H21 != HOLESTATE.has_white && H12 != HOLESTATE.has_white) available4blacks++;
 
         if (H10 == HOLESTATE.has_black) made4blacks++;
         if (H12 == HOLESTATE.has_black) made4blacks++;

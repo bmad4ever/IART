@@ -10,7 +10,7 @@ static partial class UnitTesting
 {
     public const bool testFirst = true;
     public const bool testSecond = false;
-    public const bool noprintbuild = true;
+    public const bool noprintbuild = false;
 
     static public int[] testHeuristic(Pentago_GameBoard[] boards, MINMAX M_W, MINMAX M_B, bool testHeuristic, bool print_onend_only = false, bool printTies = false, bool printLosses = false)
     {
@@ -63,7 +63,7 @@ static partial class UnitTesting
             if (!print_onend_only)
             {
                 if (testHeuristic == testFirst)
-                    if (!noprintbuild) Console.WriteLine("it: " + (i + 1) + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties);
+                { if (!noprintbuild) Console.WriteLine("it: " + (i + 1) + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties); }
                 else
                      if (!noprintbuild) Console.WriteLine("it: " + (i + 1) + " - wins: " + black_wins + ", losses: " + black_losses + ", ties: " + ties);
             }
@@ -72,7 +72,7 @@ static partial class UnitTesting
         if (print_onend_only)
         {
             if (testHeuristic == testFirst)
-                if(!noprintbuild) Console.WriteLine(numberTests + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties + ", avg rounds: " + (totalrounds / numberTests));
+            { if (!noprintbuild) Console.WriteLine(numberTests + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties + ", avg rounds: " + (totalrounds / numberTests)); }
             else
                  if (!noprintbuild) Console.WriteLine(numberTests + " - wins: " + black_wins + ", losses: " + black_losses + ", ties: " + ties + ", avg rounds: " + (totalrounds / numberTests));
         }
@@ -132,7 +132,7 @@ static partial class UnitTesting
             if (!print_onend_only)
             {
                 if (testHeuristic == testFirst)
-                    if (!noprintbuild) Console.WriteLine("it: " + (i + 1) + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties);
+                { if (!noprintbuild) Console.WriteLine("it: " + (i + 1) + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties); }
                 else
                     if (!noprintbuild) Console.WriteLine("it: " + (i + 1) + " - wins: " + black_wins + ", losses: " + black_losses + ", ties: " + ties);
             }
@@ -141,8 +141,8 @@ static partial class UnitTesting
         if (print_onend_only)
         {
             if (testHeuristic == testFirst)
-                if (!noprintbuild) Console.WriteLine(numberTests + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties + ", avg rounds: " + (totalrounds / numberTests));
-            else
+            {  if (!noprintbuild) Console.WriteLine(numberTests + " - wins: " + black_losses + ", losses: " + black_wins + ", ties: " + ties + ", avg rounds: " + (totalrounds / numberTests)); }
+        else
                 if (!noprintbuild) Console.WriteLine(numberTests + " - wins: " + black_wins + ", losses: " + black_losses + ", ties: " + ties + ", avg rounds: " + (totalrounds / numberTests));
         }
 
