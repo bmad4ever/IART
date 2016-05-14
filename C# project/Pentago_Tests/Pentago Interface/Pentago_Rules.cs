@@ -145,6 +145,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         }
     }
 
+    const int number_of_empty_holes_symmetries_soft_spot = 36 / 2 + 36/4;
     public Pentago_Move[] sucessor(Pentago_GameBoard gb, int depth=0)
     {
         switch (nsf)
@@ -152,10 +153,16 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
             case NextStatesFunction.all_states:
                 return all_possible_place_piece_moves;
             case NextStatesFunction.check_symmetries:
-                //if (depth%4==0&&IA_PIECES==IA_PIECES_WHITES
-                //    ||depth%4==2&&IA_PIECES==IA_PIECES_BLACKS)
-                if (depth == 0 && IA_PIECES == IA_PIECES_WHITES
-                || depth == 2 && IA_PIECES == IA_PIECES_BLACKS)
+               
+                if(!emptyholes.HasValue) emptyholes = gb.board.Count(o => o == Pentago_GameBoard.hole_state.is_empty);
+                
+                if (emptyholes > number_of_empty_holes_symmetries_soft_spot 
+                    &&(
+                    depth % 4 == 0 && IA_PIECES == IA_PIECES_WHITES
+                   ||depth%4==2&&IA_PIECES==IA_PIECES_BLACKS)
+                //    depth == 0 && IA_PIECES == IA_PIECES_WHITES
+                //|| depth == 2 && IA_PIECES == IA_PIECES_BLACKS)
+                    )
                     return check_symmetries(gb.board);
                 else return all_possible_place_piece_moves;
             default:
@@ -169,9 +176,10 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
     }
 
     public int smart_depth_offset = 0;
+    int? emptyholes=null;
     public int smart_depth(Pentago_GameBoard gb)
     {
-        int emptyholes = gb.board.Count(o => o == Pentago_GameBoard.hole_state.is_empty);
+        emptyholes = gb.board.Count(o => o == Pentago_GameBoard.hole_state.is_empty);
         if (emptyholes <= 5) return 2 * 5 + smart_depth_offset;
         if (emptyholes <= 9) return 2 * 4 + smart_depth_offset;
         if (emptyholes <= 14) return 2 * 3 + smart_depth_offset;
