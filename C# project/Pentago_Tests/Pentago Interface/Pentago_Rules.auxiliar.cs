@@ -11,37 +11,56 @@ public partial class Pentago_Rules
         {
             if (check_rotation_90_after_180_ok(board))
             {
-                if (square0_has_maindiagonal_symmetry(board)) return getMovesSquare0Triang(); // check main diag and above in square 0
-                else return getMoves(new int[1]{ 0 }); // check square 0
+                if (square0_has_maindiagonal_symmetry(board)) return MovesSquare0Triang; // check main diag and above in square 0
+                else return MovesSquare0; // check square 0
             }
             else if (check_reflection_ver_lef(board))
             {
-                if (square0_has_maindiagonal_symmetry(board)) return getMovesSquare0Triang(); // check main diag and above in square 0
-                else return getMoves(new int[1] { 0 }); // check square 0
+                if (square0_has_maindiagonal_symmetry(board)) return MovesSquare0Triang; // check main diag and above in square 0
+                else return MovesSquare0; // check square 0
             }
             /* there is no point in checking horizontal reflection, because 180 + horizontal => vertical */
-            else if (check_reflection_main(board)) return getMovesTopTriang(); // check top triangle
+            else if (check_reflection_main(board)) return MovesTopTriang; // check top triangle
             /* there is no point in checking antidiagonal reflection, because 180 + antidiagnoal => maindiagonal */
-            else return getMoves(new int[2] { 0, 1 }); // check squares 0 and 1
+            else return MovesSquare0n1; // check squares 0 and 1
         }
         if (check_reflection_ver(board))
         {
             /* there is no point in checking horizontal reflection, because vertical + horizontal => 180 */
             /* there is no point in checking maindiagonal reflection, because vertical + maindiagonal => 90 */
-            return getMoves(new int[2] { 0, 1 }); // check squares 0 and 1
+            return MovesSquare0n1; // check squares 0 and 1
         }
         else if (check_reflection_hor(board))
         {
             /* there is no point in checking maindiagonal reflection, because horizontal + maindiagonal => 90 */
-            return getMoves(new int[2] { 0, 2 }); // check squares 0 and 2
+            return MovesSquare0n2; // check squares 0 and 2
         }
         else if (check_reflection_main(board))
         {
             /* there is no point in checking antidiagonal reflection, because maindiagonal + antidiagonal => 180 */
-            return getMovesMainDiagAbove(); // check maindiagonal and above
+            return MovesMainDiagAbove; // check maindiagonal and above
         }
-        else if (check_reflection_anti(board)) return getMovesAntiDiagAbove(); // check antidiagonal and above
-        return getMoves(new int[4] { 0, 1, 2, 3 }); // check all squares
+        else if (check_reflection_anti(board)) return MovesAntiDiagAbove; // check antidiagonal and above
+        return all_possible_place_piece_moves;//getMoves(new int[4] { 0, 1, 2, 3 }); // check all squares
+    }
+
+
+    Pentago_Move[] MovesSquare0; 
+    void bakeSquare0()
+    {
+        MovesSquare0=getMoves(new int[] { 0 });
+    }
+
+    Pentago_Move[] MovesSquare0n1;
+    void bakeSquare0n1()
+    {
+        MovesSquare0n1 = getMoves(new int[] { 0,1 });
+    }
+
+    Pentago_Move[] MovesSquare0n2;
+    void bakeSquare0n2()
+    {
+        MovesSquare0n2 = getMoves(new int[] { 0,2 });
     }
 
     Pentago_Move[] getMoves(int[] squares)
@@ -54,84 +73,88 @@ public partial class Pentago_Rules
             {
                 for (int y = 0; y < 3; y++)
                 {
-                    moves[i] = new Pentago_Move(s, x, y);
-                    i++;
+                    moves[i] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(x,y,s)];
+                    //moves[i] = new Pentago_Move(s, x, y);
+                   i++;
                 }
             }
         }
+
         return moves;
     }
 
-    Pentago_Move[] getMovesSquare0Triang()
+    Pentago_Move[] MovesSquare0Triang;
+    void bakeMovesSquare0Triang()
     {
-        return new Pentago_Move[6] {
-            new Pentago_Move(0, 0, 0),
-            new Pentago_Move(0, 1, 0),
-            new Pentago_Move(0, 2, 0),
-            new Pentago_Move(0, 1, 1),
-            new Pentago_Move(0, 2, 1),
-            new Pentago_Move(0, 2, 2) };
+        MovesSquare0Triang = new Pentago_Move[6] {
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(0, 0,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 0,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 0,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 1,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 1,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 2,0)]};
     }
 
-    Pentago_Move[] getMovesTopTriang()
+    Pentago_Move[] MovesTopTriang;
+    void bakeMovesTopTriang()
     {
-        return new Pentago_Move[12] {
-            new Pentago_Move(0, 0, 0),
-            new Pentago_Move(0, 1, 0),
-            new Pentago_Move(0, 2, 0),
-            new Pentago_Move(0, 1, 1),
-            new Pentago_Move(0, 2, 1),
-            new Pentago_Move(0, 2, 2),
-            new Pentago_Move(1, 0, 0),
-            new Pentago_Move(1, 1, 0),
-            new Pentago_Move(1, 2, 0),
-            new Pentago_Move(1, 0, 1),
-            new Pentago_Move(1, 1, 1),
-            new Pentago_Move(1, 0, 2) };
+        MovesTopTriang = new Pentago_Move[12] {
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(0, 0,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 0,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 0,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 1,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 1,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 2,0)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(0, 0,1)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 0,1)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 0,1)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(0, 1,1)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 1,1)],
+            all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(0, 2,1)] };
     }
 
-    Pentago_Move[] getMovesMainDiagAbove()
+    Pentago_Move[] MovesMainDiagAbove;
+    void bakeMovesMainDiagAbove()
     {
-        Pentago_Move[] moves = new Pentago_Move[21];
-        moves[0] = new Pentago_Move(0, 0, 0);
-        moves[1] = new Pentago_Move(0, 1, 0);
-        moves[2] = new Pentago_Move(0, 2, 0);
-        moves[3] = new Pentago_Move(0, 1, 1);
-        moves[4] = new Pentago_Move(0, 2, 1);
-        moves[5] = new Pentago_Move(0, 2, 2);
+        MovesMainDiagAbove = new Pentago_Move[21];
+        MovesMainDiagAbove[0] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(0, 0, 0)];
+        MovesMainDiagAbove[1] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 0,0)];
+        MovesMainDiagAbove[2] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 0,0)];
+        MovesMainDiagAbove[3] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 1,0)];
+        MovesMainDiagAbove[4] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 1,0)];
+        MovesMainDiagAbove[5] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 2,0)];
         for (int i = 6; i < 15; i++)
             for (int x = 0; x < 3; x++)
                 for (int y = 0; y < 3; y++)
-                    moves[i] = new Pentago_Move(1, x, y);
-        moves[15] = new Pentago_Move(3, 0, 0);
-        moves[16] = new Pentago_Move(3, 1, 0);
-        moves[17] = new Pentago_Move(3, 2, 0);
-        moves[18] = new Pentago_Move(3, 1, 1);
-        moves[19] = new Pentago_Move(3, 2, 1);
-        moves[20] = new Pentago_Move(3, 2, 2);
-        return moves;
+                    MovesMainDiagAbove[i] = new Pentago_Move(x, y,1);
+        MovesMainDiagAbove[15] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(0, 0, 3)];
+        MovesMainDiagAbove[16] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 0,3)];
+        MovesMainDiagAbove[17] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 0,3)];
+        MovesMainDiagAbove[18] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 1,3)];
+        MovesMainDiagAbove[19] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 1,3)];
+        MovesMainDiagAbove[20] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 2,3)];
     }
 
-    Pentago_Move[] getMovesAntiDiagAbove()
+    Pentago_Move[] MovesAntiDiagAbove;
+    void bakeMovesAntiDiagAbove()
     {
-        Pentago_Move[] moves = new Pentago_Move[21];
+        MovesAntiDiagAbove = new Pentago_Move[21];
         for (int i = 0; i < 9; i++)
             for (int x = 0; x < 3; x++)
                 for (int y = 0; y < 3; y++)
-                    moves[i] = new Pentago_Move(0, x, y);
-        moves[9] = new Pentago_Move(1, 0, 0);
-        moves[10] = new Pentago_Move(1, 1, 0);
-        moves[11] = new Pentago_Move(1, 2, 0);
-        moves[12] = new Pentago_Move(1, 1, 1);
-        moves[13] = new Pentago_Move(1, 2, 1);
-        moves[14] = new Pentago_Move(1, 2, 2);
-        moves[15] = new Pentago_Move(2, 0, 0);
-        moves[16] = new Pentago_Move(2, 1, 0);
-        moves[17] = new Pentago_Move(2, 2, 0);
-        moves[18] = new Pentago_Move(2, 1, 1);
-        moves[19] = new Pentago_Move(2, 2, 1);
-        moves[20] = new Pentago_Move(2, 2, 2);
-        return moves;
+                    MovesAntiDiagAbove[i] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(x, y, 0)];
+        MovesAntiDiagAbove[9] =  all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(0, 0, 1)];
+        MovesAntiDiagAbove[10] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 0,1)];
+        MovesAntiDiagAbove[11] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 0,1)];
+        MovesAntiDiagAbove[12] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 1,1)];
+        MovesAntiDiagAbove[13] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 1,1)];
+        MovesAntiDiagAbove[14] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 2,1)];
+        MovesAntiDiagAbove[15] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(0, 0,2)];
+        MovesAntiDiagAbove[16] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 0,2)];
+        MovesAntiDiagAbove[17] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 0,2)];
+        MovesAntiDiagAbove[18] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(1, 1,2)];
+        MovesAntiDiagAbove[19] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 1,2)];
+        MovesAntiDiagAbove[20] = all_possible_place_piece_moves[Pentago_GameBoard.board_position_to_index(2, 2,2)];
     }
 
     bool check_rotation_180(HOLESTATE[] board)

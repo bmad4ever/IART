@@ -27,7 +27,7 @@ public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
             return gover.Value;
         }
         if (depth >= max_depth) return rules.evaluate(gb);
-        GAME_BOARD[] nstates = rules.next_states(gb);
+        GAME_BOARD[] nstates = rules.next_states(gb, depth);
         bool nminmax = rules.selectMINMAX(gb, node);
         float next_value;
         foreach (int i in Enumerable.Range(0, nstates.Length).OrderBy(x => random.Next()))
@@ -57,7 +57,7 @@ public partial class MinMax <GAME_BOARD, GAME_MOVE_DESCRIPTION>
         if (gover != null) return gover.Value;
         if (depth >= max_depth) return rules.evaluate(gb);
 
-        GAME_MOVE_DESCRIPTION[] nplays = rules.possible_plays(gb);
+        GAME_MOVE_DESCRIPTION[] nplays = rules.possible_plays(gb, depth);
         bool nminmax = rules.selectMINMAX(gb, MAX_NODE);
         GAME_MOVE_DESCRIPTION[] temp_moves = new GAME_MOVE_DESCRIPTION[0];
         float next_value;

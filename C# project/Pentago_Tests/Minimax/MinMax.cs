@@ -10,11 +10,11 @@
 /// <typeparam name="GAME_MOVE_DESCRIPTION">Class with that is used to represent the game's player allowed moves/plays</typeparam>
 public interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION> { 
 	
-	GAME_MOVE_DESCRIPTION[] possible_plays(GAME_BOARD gb);
+	GAME_MOVE_DESCRIPTION[] possible_plays(GAME_BOARD gb, int depth = 0);
 	
 	GAME_BOARD board_after_play(GAME_BOARD gb, GAME_MOVE_DESCRIPTION gmd);
 
-	GAME_BOARD[] next_states(GAME_BOARD gb);
+	GAME_BOARD[] next_states(GAME_BOARD gb,int depth=0);
 
     /// <summary>
     /// checks if the game has ended.

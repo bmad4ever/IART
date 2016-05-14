@@ -33,7 +33,6 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         if (ef == EvaluationFunction.AplusDiagHack)
             setUpDiagonalHack();
 
-
         //create all possible plays.
         //since we are using a class, there is no need to initialize them again
         //when we are getting possible moves in a board
@@ -51,6 +50,18 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
                         i++;
                     }
         }
+
+        if (nsf == NextStatesFunction.check_symmetries)
+        {
+            bakeMovesAntiDiagAbove();
+            bakeMovesMainDiagAbove();
+            bakeMovesSquare0Triang();
+            bakeMovesTopTriang();
+            bakeSquare0();
+            bakeSquare0n1();
+            bakeSquare0n2();
+        }
+
         if (all_possible_rotate_squares_moves == null)
         {
             all_possible_rotate_squares_moves = new Pentago_Move[8];
@@ -67,11 +78,11 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 
     #region Interface Related XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-    public Pentago_Move[] possible_plays(Pentago_GameBoard gb)
+    public Pentago_Move[] possible_plays(Pentago_GameBoard gb,int depth=0)
     {
         if (gb.get_turn_state() == Pentago_GameBoard.turn_state_addpiece)
         {
-            return sucessor(gb).Where(move => move.is_move_possible(gb)).ToArray();
+            return sucessor(gb, depth).Where(move => move.is_move_possible(gb)).ToArray();
         }
         else
         {
@@ -91,9 +102,9 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         return gmd.state_after_move(gb);
     }
 
-    public Pentago_GameBoard[] next_states(Pentago_GameBoard gb)
+    public Pentago_GameBoard[] next_states(Pentago_GameBoard gb, int depth=0)
     {
-        Pentago_Move[] moves = possible_plays(gb);
+        Pentago_Move[] moves = possible_plays(gb, depth);
 
         if (remove_repeated_states_on_nextStates && gb.get_turn_state() == Pentago_GameBoard.turn_state_rotate)
             return removeDuplicates(moves.Select(m => m.state_after_move(gb)).ToArray());//.Distinct().ToArray();
@@ -134,14 +145,19 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
         }
     }
 
-    public Pentago_Move[] sucessor(Pentago_GameBoard gb)
+    public Pentago_Move[] sucessor(Pentago_GameBoard gb, int depth=0)
     {
         switch (nsf)
         {
             case NextStatesFunction.all_states:
                 return all_possible_place_piece_moves;
             case NextStatesFunction.check_symmetries:
-                return check_symmetries(gb.board);
+                //if (depth%4==0&&IA_PIECES==IA_PIECES_WHITES
+                //    ||depth%4==2&&IA_PIECES==IA_PIECES_BLACKS)
+                if (depth == 0 && IA_PIECES == IA_PIECES_WHITES
+                || depth == 2 && IA_PIECES == IA_PIECES_BLACKS)
+                    return check_symmetries(gb.board);
+                else return all_possible_place_piece_moves;
             default:
                 return null;
         }
