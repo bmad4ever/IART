@@ -157,9 +157,11 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
                 if(!emptyholes.HasValue) emptyholes = gb.board.Count(o => o == Pentago_GameBoard.hole_state.is_empty);
                 
                 if (emptyholes > number_of_empty_holes_symmetries_soft_spot 
-                    &&(
-                    depth % 4 == 0 && IA_PIECES == IA_PIECES_WHITES
-                   ||depth%4==2&&IA_PIECES==IA_PIECES_BLACKS)
+                    &&
+                    //(
+                  //depth % 4 == 0 && IA_PIECES == IA_PIECES_WHITES
+                  // ||depth%4==2&&IA_PIECES==IA_PIECES_BLACKS)
+                  emptyholes%2==0//same as above but faster
                 //    depth == 0 && IA_PIECES == IA_PIECES_WHITES
                 //|| depth == 2 && IA_PIECES == IA_PIECES_BLACKS)
                     )
