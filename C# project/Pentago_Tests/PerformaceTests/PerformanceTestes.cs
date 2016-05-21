@@ -108,7 +108,6 @@ static class PerformanceTests
         else {
             for (int i = 0; i < numOfBorads; i++)
             {
-                int numPieces = GenerateRandomBoard.GetRandomNumber(0, 16);
                 GenerateRandomBoard rndBoard = new GenerateRandomBoard((numpieces + 1) / 2, false);
                 rndBoard.generateNewBoard();
                 testBoards[i] = rndBoard.Pentago_gb;
@@ -120,8 +119,8 @@ static class PerformanceTests
             if (numpieces % 2 == 0) ((Pentago_Rules)toTest[i].rules).IA_PIECES = Pentago_Rules.IA_PIECES_WHITES;
             else ((Pentago_Rules)toTest[i].rules).IA_PIECES = Pentago_Rules.IA_PIECES_BLACKS;
 
-            TimeSpan test = Performance.PerformanceTimes(toTest[i], testBoards);
-            string timeStr = test.Milliseconds.ToString();
+            long test = Performance.PerformanceTimeMilisecs(toTest[i], testBoards);
+            string timeStr = test.ToString();
 
             String vers = toTest[i].version.ToString() + "_" + ((Pentago_Rules)toTest[i].rules).nsf.ToString() + "_" + ((Pentago_Rules)toTest[i].rules).remove_repeated_states_on_nextStates.ToString();
             String filename_depth = "CheckComplexityPieces/" + vers + "_D" + depth.ToString();
@@ -131,7 +130,7 @@ static class PerformanceTests
             add2File(filename_pieces, depth.ToString() + ";"+timeStr);
             add2File(filename_compareP, ";" + timeStr,false);
         }
-        add2File(filename_compareP,"");
+        //add2File(filename_compareP,"");
 
     }
 
@@ -174,10 +173,16 @@ static class PerformanceTests
 
     }
 
-    static int numTests = 60;
+    static int numTests = 30;
     public static void allTests()
     {
-        
+        using (Process p = Process.GetCurrentProcess())
+        {
+            p.PriorityClass = ProcessPriorityClass.High;
+        }
+
+        Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
+
         if (!Directory.Exists("CompareMinmaxsWithEqualPieces"))     Directory.CreateDirectory("CompareMinmaxsWithEqualPieces");
         if (!Directory.Exists("CheckComplexityPieces")) Directory.CreateDirectory("CheckComplexityPieces");
         if (!Directory.Exists("CheckComplexityDepth")) Directory.CreateDirectory("CheckComplexityDepth");
