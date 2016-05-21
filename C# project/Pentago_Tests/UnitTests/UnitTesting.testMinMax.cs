@@ -12,11 +12,11 @@ static partial class UnitTesting
     static public void testMinMax()
     {
         initialize_test_gameboards();
-        Pentago_Rules wrules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic,
+        Pentago_Rules wrules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.control,
             Pentago_Rules.NextStatesFunction.all_states,
             Pentago_Rules.IA_PIECES_WHITES, false);
         MINMAX test_w = new MINMAX(MINMAX.VERSION.minmax, wrules, 6);
-        Pentago_Rules brules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.controlHeuristic,
+        Pentago_Rules brules = new Pentago_Rules(Pentago_Rules.EvaluationFunction.control,
             Pentago_Rules.NextStatesFunction.all_states,
             Pentago_Rules.IA_PIECES_BLACKS, false);
         MINMAX test_b = new MINMAX(MINMAX.VERSION.minmax, brules, 6);

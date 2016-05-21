@@ -62,14 +62,14 @@ public interface IGameRules<GAME_BOARD,GAME_MOVE_DESCRIPTION> {
 public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
     public enum VERSION { minmax , alphabeta,cut_alphabeta,multithread_alphabeta };
-    VERSION version;
+    public VERSION version;
     public IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules;
     const bool MAX_NODE = true;
     const bool MIN_NODE = false;
 
     const int USE_SMART_DEPTH = 0;
     bool useSmartDepth;
-    int max_depth;
+    public int max_depth;
     
     public MinMax(VERSION version, IGameRules<GAME_BOARD, GAME_MOVE_DESCRIPTION> rules, int max_depth = 0)
     {
@@ -81,6 +81,7 @@ public partial class MinMax <GAME_BOARD,GAME_MOVE_DESCRIPTION>{
 
     public GAME_MOVE_DESCRIPTION[] run(GAME_BOARD gb)
     {
+        //System.Threading.Thread.CurrentThread.Priority = (System.Threading.ThreadPriority)4;
         if(useSmartDepth) max_depth = rules.smart_depth(gb);
         switch (version)
         {

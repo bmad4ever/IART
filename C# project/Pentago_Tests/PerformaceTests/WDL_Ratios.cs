@@ -10,12 +10,13 @@ using EVFC = Pentago_Rules.EvaluationFunction;
 public static class WDL_Ratios
 {
 
-    const bool test_with_control_auto = true;
-    const bool test_with_others_auto = false;
+    const bool test_with_control_auto = false;
+    const bool test_with_others_auto_suite1 = false;
+    const bool test_with_others_auto_suite2 = true;
     const bool test_with_control_d6 = false;
     const bool test_with_others_d6 = false;
 
-    const int number_of_games_div4_pertest = 2500;
+    const int number_of_games_div4_pertest = 100;
     //assuming we use prev var with 2500;
     //total of 10.000 games per test... 
     //lets supose we have 40 tests of 1 second each -> 40.000 secs = 11.11... hours
@@ -25,6 +26,8 @@ public static class WDL_Ratios
 
     static void printLatexTableHeader()
     {
+        Console.WriteLine("dv4 tests:" + number_of_games_div4_pertest);
+        Console.WriteLine();
         Console.WriteLine("\\begin{table}[]");
         Console.WriteLine("\\centering");
         Console.WriteLine("\\resizebox{\\columnwidth}{!} {");
@@ -40,9 +43,9 @@ public static class WDL_Ratios
     {
         Console.WriteLine(
 "\\end{tabular}" + "}"
-+" \\caption{ My caption}"
-+" \\label{ my - label}"
-+" \\end{table}"
++ " \\caption{ My caption}"
++ " \\label{ my - label}"
++ " \\end{table}"
             );
     }
 
@@ -103,7 +106,7 @@ public static class WDL_Ratios
             test1dot2vsC_0(3);
             test1dot2vsC_0(4);
             test1dot2vsC_0(5);
-            test1dot2vsC_0(0);
+            test1dot2vsC_1(0);
             test1dot2vsC_1(1);
             test1dot2vsC_1(2);
             test1dot2vsC_1(3);
@@ -111,6 +114,9 @@ public static class WDL_Ratios
             test1dot2vsC_1(5);
 
             printLatexTableFooter();
+            Console.WriteLine();
+            Console.WriteLine("%===========================================");
+            Console.WriteLine();
             printLatexTableHeader();
 
             System.Threading.Thread.Sleep(1000);
@@ -152,26 +158,27 @@ public static class WDL_Ratios
             printLatexTableFooter();
         }
 
-        if (test_with_others_auto)
+
+        if (test_with_others_auto_suite1)
         {
-            System.Threading.Thread.Sleep(1000);
-            printseparator();
-            //1.2 relaxed vs A
+            printLatexTableHeader();
 
-            System.Threading.Thread.Sleep(1000);
-            printseparator();
-            //1.2 vs 1.2
+            test_versus();
 
-            System.Threading.Thread.Sleep(1000);
-            printseparator();
-            //A vs A
-
-            System.Threading.Thread.Sleep(1000);
-            printseparator();
-            //A vs Ahacked
-
+            printLatexTableFooter();
         }
 
+        if (test_with_others_auto_suite2)
+        {
+            printLatexTableHeader();
+
+            test_h12_notrelaxed1();
+            test_h12_notrelaxed2();
+            test_AstarNoRot1();
+            test_AstarNoRot2();
+
+            printLatexTableFooter();
+        }
 
         //using depth 6 - - - - - - - - - - - 
         //NOT SO SURE ABOUT USING 6
@@ -237,10 +244,10 @@ public static class WDL_Ratios
 
         String names;
         if (testFirst) names = "\\cellcolor{blue!15}\\textbf{" + ((Pentago_Rules)M_W.rules).getHeurName() + "} & " + ((Pentago_Rules)M_B.rules).getHeurName();
-        else names = names = ((Pentago_Rules)M_W.rules).getHeurName() + " & \\cellcolor{blue!15}\\textbf{" + ((Pentago_Rules)M_B.rules).getHeurName() + "}" ;
+        else names = names = ((Pentago_Rules)M_W.rules).getHeurName() + " & \\cellcolor{blue!15}\\textbf{" + ((Pentago_Rules)M_B.rules).getHeurName() + "}";
         Console.WriteLine(names + "& {\\color[HTML]{00009B} } & {\\color[HTML]{9A0000} } & {\\color[HTML]{009901} } &  & {\\color[HTML]{00009B} } & {\\color[HTML]{9A0000} } & {\\color[HTML]{009901} } &  & {\\color[HTML]{00009B} } & {\\color[HTML]{9A0000} } & {\\color[HTML]{009901} } &  \\\\ ");//\\cline{1-2}");
-        Console.WriteLine(  (testFirst?"\\cellcolor{ blue!15}":"") + ((Pentago_Rules)M_W.rules).getHeurConfigs() + " & " + (!testFirst ? "\\cellcolor{ blue!15}" : "") + ((Pentago_Rules)M_B.rules).getHeurConfigs() 
-            + " & \\multirow{-2}{*}{{\\color[HTML]{00009B} " + test_start[0]*1000/(number_of_games_div4_pertest*2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{9A0000} "+ test_start[1] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{009901} "+ test_start[2] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{"+ test_start[3] + "} & \\multirow{-2}{*}{{\\color[HTML]{00009B} " + test_mid[0] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{9A0000} " + test_mid[1] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{009901} " + test_mid[2] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{" + test_mid[3] + "} & \\multirow{-2}{*}{{\\color[HTML]{00009B} " + (test_start[0] + test_mid[0])*1000/(number_of_games_div4_pertest*4) + "}} & \\multirow{-2}{*}{{\\color[HTML]{9A0000} " + (test_start[1] + test_mid[1]) * 1000 / (number_of_games_div4_pertest * 4) + "}} & \\multirow{-2}{*}{{\\color[HTML]{009901} " + (test_start[2] + test_mid[2]) * 1000 / (number_of_games_div4_pertest * 4) + "}} & \\multirow{-2}{*}{" + (test_start[3] + test_mid[3])/2 + "} \\\\ \\hline");
+        Console.WriteLine((testFirst ? "\\cellcolor{ blue!15}" : "") + ((Pentago_Rules)M_W.rules).getHeurConfigs() + " & " + (!testFirst ? "\\cellcolor{ blue!15}" : "") + ((Pentago_Rules)M_B.rules).getHeurConfigs()
+            + " & \\multirow{-2}{*}{{\\color[HTML]{00009B} " + test_start[0] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{9A0000} " + test_start[1] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{009901} " + test_start[2] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{" + test_start[3] + "} & \\multirow{-2}{*}{{\\color[HTML]{00009B} " + test_mid[0] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{9A0000} " + test_mid[1] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{009901} " + test_mid[2] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{" + test_mid[3] + "} & \\multirow{-2}{*}{{\\color[HTML]{00009B} " + (test_start[0] + test_mid[0]) * 1000 / (number_of_games_div4_pertest * 4) + "}} & \\multirow{-2}{*}{{\\color[HTML]{9A0000} " + (test_start[1] + test_mid[1]) * 1000 / (number_of_games_div4_pertest * 4) + "}} & \\multirow{-2}{*}{{\\color[HTML]{009901} " + (test_start[2] + test_mid[2]) * 1000 / (number_of_games_div4_pertest * 4) + "}} & \\multirow{-2}{*}{" + (test_start[3] + test_mid[3]) / 2 + "} \\\\ \\hline");
         //Console.WriteLine(12 + " & " + 12 + " & \\multirow{-2}{*}{{\\color[HTML]{00009B} " + test_start[0] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{9A0000} " + test_start[1] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{009901} " + test_start[2] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{" + test_start[3] + "} & \\multirow{-2}{*}{{\\color[HTML]{00009B} " + test_mid[0] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{9A0000} " + test_mid[1] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{{\\color[HTML]{009901} " + test_mid[2] * 1000 / (number_of_games_div4_pertest * 2) + "}} & \\multirow{-2}{*}{" + test_mid[3] + "} & \\multirow{-2}{*}{{\\color[HTML]{00009B} " + (test_start[0] + test_mid[0]) * 1000 / (number_of_games_div4_pertest * 4) + "}} & \\multirow{-2}{*}{{\\color[HTML]{9A0000} " + (test_start[1] + test_mid[1]) * 1000 / (number_of_games_div4_pertest * 4) + "}} & \\multirow{-2}{*}{{\\color[HTML]{009901} " + (test_start[2] + test_mid[2]) * 1000 / (number_of_games_div4_pertest * 4) + "}} & \\multirow{-2}{*}{" + (test_start[3] + test_mid[3]) / 2 + "} \\\\ \\hline");
     }
 
@@ -258,7 +265,7 @@ public static class WDL_Ratios
         test_aux(minmax_w, minmax_b, true);
     }
 
-#region with auto depth
+    #region with auto depth
 
 
 
@@ -417,11 +424,11 @@ public static class WDL_Ratios
 
     static void testAvsC_1(EVFC heur, int config)
     {
-        Pentago_Rules wrules = new Pentago_Rules(EVFC.control ,
+        Pentago_Rules wrules = new Pentago_Rules(EVFC.control,
                 Pentago_Rules.NextStatesFunction.all_states,
                 Pentago_Rules.IA_PIECES_WHITES, false);
         MINMAX minmax_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, 0);
-        Pentago_Rules brules = new Pentago_Rules(heur ,
+        Pentago_Rules brules = new Pentago_Rules(heur,
                 Pentago_Rules.NextStatesFunction.all_states,
                 Pentago_Rules.IA_PIECES_BLACKS, false);
 
@@ -446,6 +453,108 @@ public static class WDL_Ratios
     #endregion
 
     #endregion with auto depth
+
+
+    static void test_versus()
+    {
+        foreach (EVFC evfc1 in Enum.GetValues(typeof(EVFC)))
+            foreach (EVFC evfc2 in Enum.GetValues(typeof(EVFC)))
+            {
+                if (evfc1 == EVFC.control
+                || evfc2 == EVFC.control
+                    ) continue;
+
+                Pentago_Rules wrules = new Pentago_Rules(evfc1,
+                Pentago_Rules.NextStatesFunction.all_states,
+                Pentago_Rules.IA_PIECES_WHITES, false);
+                MINMAX minmax_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, 0);
+                Pentago_Rules brules = new Pentago_Rules(evfc2,
+                        Pentago_Rules.NextStatesFunction.all_states,
+                        Pentago_Rules.IA_PIECES_BLACKS, false);
+                MINMAX minmax_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 0);
+
+                test_aux(minmax_w, minmax_b, true);
+            }
+    }
+
+    static void test_h12_notrelaxed1()
+    {
+        Pentago_Rules wrules = new Pentago_Rules(EVFC.oneDotTwo,
+        Pentago_Rules.NextStatesFunction.all_states,
+        Pentago_Rules.IA_PIECES_WHITES, false);
+        wrules.HEUR12RELAXED = false;
+        MINMAX minmax_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, 0);
+
+        foreach (EVFC evfc2 in Enum.GetValues(typeof(EVFC)))
+        {
+            Pentago_Rules brules = new Pentago_Rules(evfc2,
+                    Pentago_Rules.NextStatesFunction.all_states,
+                    Pentago_Rules.IA_PIECES_BLACKS, false);
+            MINMAX minmax_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 0);
+
+            test_aux(minmax_w, minmax_b, true);
+        }
+    }
+
+    static void test_AstarNoRot1()
+    {
+        Pentago_Rules wrules = new Pentago_Rules(EVFC.Astar,
+        Pentago_Rules.NextStatesFunction.all_states,
+        Pentago_Rules.IA_PIECES_WHITES, false);
+        ;
+        wrules.setAstarSettings(1.13f, 1.15f, 1.17f, 1.19f, false);
+        MINMAX minmax_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, 0);
+
+        foreach (EVFC evfc2 in Enum.GetValues(typeof(EVFC)))
+        {
+            Pentago_Rules brules = new Pentago_Rules(evfc2,
+                    Pentago_Rules.NextStatesFunction.all_states,
+                    Pentago_Rules.IA_PIECES_BLACKS, false);
+            MINMAX minmax_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 0);
+
+            test_aux(minmax_w, minmax_b, true);
+        }
+    }
+
+    static void test_h12_notrelaxed2()
+    {
+        Pentago_Rules brules = new Pentago_Rules(EVFC.oneDotTwo,
+        Pentago_Rules.NextStatesFunction.all_states,
+        Pentago_Rules.IA_PIECES_BLACKS, false);
+        brules.HEUR12RELAXED = false;
+        MINMAX minmax_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 0);
+
+        foreach (EVFC evfc2 in Enum.GetValues(typeof(EVFC)))
+        {
+            Pentago_Rules wrules = new Pentago_Rules(evfc2,
+            Pentago_Rules.NextStatesFunction.all_states,
+            Pentago_Rules.IA_PIECES_WHITES, false);
+
+            MINMAX minmax_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, 0);
+
+            test_aux(minmax_w, minmax_b, false);
+        }
+    }
+
+    static void test_AstarNoRot2()
+    {
+        Pentago_Rules brules = new Pentago_Rules(EVFC.Astar ,
+        Pentago_Rules.NextStatesFunction.all_states,
+        Pentago_Rules.IA_PIECES_BLACKS, false);
+        brules.setAstarSettings(1.13f, 1.15f, 1.17f, 1.19f, false);
+        MINMAX minmax_b = new MINMAX(MINMAX.VERSION.alphabeta, brules, 0);
+
+        foreach (EVFC evfc2 in Enum.GetValues(typeof(EVFC)))
+        {
+            Pentago_Rules wrules = new Pentago_Rules(evfc2,
+            Pentago_Rules.NextStatesFunction.all_states,
+            Pentago_Rules.IA_PIECES_WHITES, false);
+            ;
+            MINMAX minmax_w = new MINMAX(MINMAX.VERSION.alphabeta, wrules, 0);
+
+            test_aux(minmax_w, minmax_b, false);
+        }
+    }
 
 
 }

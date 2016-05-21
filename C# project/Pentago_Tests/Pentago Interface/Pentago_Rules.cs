@@ -5,7 +5,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 {
     public const bool IA_PIECES_WHITES = Pentago_GameBoard.whites_turn;
     public const bool IA_PIECES_BLACKS = Pentago_GameBoard.blacks_turn;
-    bool IA_PIECES;
+    public bool IA_PIECES;
 
     const float MAX_HEURISTIC_VALUE = 1000000;
     const float MIN_HEURISTIC_VALUE = -1000000;
@@ -15,7 +15,7 @@ public partial class Pentago_Rules : IGameRules<Pentago_GameBoard, Pentago_Move>
 
     public bool remove_repeated_states_on_nextStates = false;
     public enum NextStatesFunction { all_states, check_symmetries, removeSym_A_B, removeSym_A_B_C, someotherxpto };
-    NextStatesFunction nsf;
+    public NextStatesFunction nsf;
 
     public static Pentago_Move[] all_possible_place_piece_moves = null;
     public static Pentago_Move[] all_possible_rotate_squares_moves = null;
