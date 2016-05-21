@@ -94,7 +94,7 @@ static class PerformanceTests
     {
         Pentago_GameBoard[] testBoards = new Pentago_GameBoard[numOfBorads];
         String filename_compareP = "CompareMinmaxsWithEqualPieces/comp_D" + depth.ToString();
-        add2File(filename_compareP, numpieces.ToString());
+        add2File(filename_compareP, numpieces.ToString(),false);
 
         if (numpieces % 2 == 0)
         {
@@ -130,7 +130,7 @@ static class PerformanceTests
             add2File(filename_pieces, depth.ToString() + ";"+timeStr);
             add2File(filename_compareP, ";" + timeStr,false);
         }
-        //add2File(filename_compareP,"");
+        add2File(filename_compareP,"");
 
     }
 
@@ -173,7 +173,7 @@ static class PerformanceTests
 
     }
 
-    static int numTests = 30;
+    static int numTests = 100;
     public static void allTests()
     {
         using (Process p = Process.GetCurrentProcess())
