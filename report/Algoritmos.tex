@@ -7,7 +7,7 @@
 Quando o jogador computador tem que efetuar uma jogada, o algoritmo Minmax determina quais as jogadas possíveis. Cada uma destas jogadas é analisada da seguinte forma:
 \begin{itemize}
 	\item se tiver sido atingido o nível de profundidade especificado para o algoritmo, é calculado um valor para o tabuleiro, usando uma heurística do ponto de vista do computador;
-	\item se a jogada conduzir ao final do jogo, é atribuído um valor ao tabuleiro tendo em conta quem ganhou, isto é, $+\infty$ se ganha o computador, $-\infty$ se ganha o adversário, $0$ em caso de empate;
+	\item se a jogada conduzir ao final do jogo, é atribuído um valor ao tabuleiro tendo em conta quem ganhou, isto é, um valor positivo muito alto se ganha o computador ou um valor negativo muito baixo se ganha o adversário. Estes valores, assim como o valor atribuído em caso de empate, podem ser definidos por quem utilize a nossa implementação do Minimax e podem não ser constantes. No caso do Pentado implementado, fazemos uso do valor da profundidade para distinguir entre derrotas e vitórias que ocorrem em diferentes profundidades;
 	\item se nenhuma das condições anteriores se verificar, são calculadas todas as jogadas seguintes possíveis e o processo repete-se.
 \end{itemize}
 Para determinar o valor da jogada original (a decisão que o computador tem que tomar no momento), entra a parte do Minmax propriamente dita:
