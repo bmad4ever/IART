@@ -6,6 +6,8 @@ Foram realizados 2 tipos de experiências distintas. As primeiras experiências 
 
 \subsection{Qualidade das Heurísticas}
 
+Para averiguar a qualidade das heurísticas implementadas foram realizados testes automatizados de computador contra computador e implementada uma heurística de controlo, cujo valor de utilidade que devolve é aleatório. 
+
 As estatísticas apresentadas nesta secção referem-se ao jogador destacado a negrito. Por exemplo, o número de vitórias refere-se a vitórias desse jogador. As vitórias, derrotas, empates e número médio de turnos são representados respetivamente pelas cores azul, vermelha, verde e preta. As três primeiras são apresentadas em permilagem. Todos valores originais foram arredondados para baixo pelo que o somatório das componentes pode n\~ao igualar 1000\perthousand. 
 
 O jogador artificial que jogar com as brancas inicia a partida (ao contrário do Pentago original). 
@@ -29,6 +31,8 @@ Além de testes automáticos foram realizadas também alguns jogos de humano con
 
 Cada teste consiste em 400 partidas com tabuleiro inicial vazio e 400 com tabuleiros aleatórios. Dos 400 tabuleiros aleatórios uma metade são com um número de peças ímpares (jogador com pretas a iniciar a primeira jogada) e a outra metade com um número de peças par (jogador com brancas a iniciar a primeira jogada). 
 
+Repare-se que o valores de referencia para os testes em que a heurística testada joga com as peças pretas devem ser os da heurística de controlo que joga com as peças pretas. Ou seja, para comparar o número de vitórias das heurísticas nestes testes com as de controlo é necessário olhar para as derrotas apresentadas na primeira linha de teste (de controlo contra controlo).
+
 \input{tables/WDL_controlonly.tex}
 \input{tables/WDL_VScontrol.tex}
 
@@ -42,7 +46,7 @@ Cada teste consiste em 200 partidas com tabuleiro inicial vazio e 200 com tabule
 
 \subsection{Eficiência dos Algoritmos}
 
-Para testar a eficiência de cada um dos algoritmos, realizamos dois tipos de testes. Primeiro determinamos o tempo que cada algoritmo demora a efetuar uma jogada em função da nível de profundidade. Depois testamos o tempo que cada algoritmo demora a efetuar uma jogada em função do número de peças no tabuleiro.
+Para averiguar a eficiência de cada um dos algoritmos, agruparam-se os resultados dos testes em dois tipos. Primeiro o tempo que cada algoritmo demora a efetuar uma jogada em função do nível de profundidade. Depois o tempo que cada algoritmo demora a efetuar uma jogada em função do número de peças no tabuleiro. 
 
 Cada teste individual realizado varia no algoritmo usado, profundidade usada e número de peças no tabuleiro. Para um só teste são iterados 100 tabuleiros aleatórios, os mesmos tabuleiros são usados para cada algoritmo para profundidade e número de peças iguais.
 
@@ -59,7 +63,7 @@ Relativamente à profundidade 8 e outras acima, n\~ao nos foi possível apresent
 \includegraphics[height=11cm]{performance/tempP0depthComparison.jpg}
 \end{table}
 
-O gráfico tem escala logarítmica no eixo dos tempos, daí as retas aproximadas. Isto significa, como já era de esperar, que todos os algoritmos apresentam complexidade logarítmica. Também de esperar é a ordenação destes gráficos, sendo a melhor performance do alpha-beta com verificação de simetrias e remoção de duplicados e a pior do minmax sem qualquer melhoria.
+O gráfico tem escala logarítmica no eixo dos tempos, daí as retas aproximadas. Isto significa, como já era de esperar, que todos os algoritmos apresentam complexidade exponencial. Também de esperar é a ordenação destes gráficos, sendo a melhor performance do alfa-beta com verificação de simetrias e remoção de duplicados e a pior do minimax sem qualquer melhoria.
 
 \subsubsection{Variação do número de peças}
 
